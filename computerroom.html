@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Room · TechPro B Digital Yearbook</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .lab-floor{
+    position:relative; border-radius:28px; padding:40px clamp(16px,4vw,50px); overflow:hidden;
+    background:
+      radial-gradient(circle at 20% 0%, rgba(138,99,255,.25), transparent 55%),
+      radial-gradient(circle at 80% 100%, rgba(56,189,248,.22), transparent 55%),
+      #0a0e1f;
+    border:1px solid var(--glass-border);
+  }
+  .lab-floor::before{
+    content:''; position:absolute; inset:0; opacity:.15; pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+    background-size:36px 36px; mask-image:radial-gradient(circle at 50% 30%, black, transparent 75%);
+  }
+  .stations{ display:grid; gap:22px; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); position:relative; z-index:1; }
+  .monitor{
+    background:linear-gradient(160deg,#141b33,#0a0f22); border-radius:16px; padding:14px; border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 0 0 1px rgba(255,255,255,.03), 0 14px 30px rgba(0,0,0,.5); cursor:pointer; transition:transform .3s var(--ease);
+  }
+  .monitor:hover{ transform:translateY(-6px); }
+  .screen{
+    aspect-ratio:16/10; border-radius:10px; background:#020616; position:relative; overflow:hidden;
+    box-shadow:inset 0 0 30px rgba(56,189,248,.15);
+  }
+  .screen .glow-line{ position:absolute; left:0; right:0; height:2px; background:var(--cyan); opacity:.6; box-shadow:0 0 10px var(--cyan); animation:scanMove 3.2s linear infinite; }
+  @keyframes scanMove{ 0%{ top:0; } 100%{ top:100%; } }
+  .screen pre{ margin:0; padding:10px; font-family:var(--font-mono); font-size:10px; color:var(--green); white-space:pre-wrap; opacity:.85; }
+  .station-label{ margin-top:10px; font-size:13px; font-weight:600; text-align:center; }
+  .station-sub{ text-align:center; font-family:var(--font-mono); font-size:11px; color:var(--text-lo); }
+  .stand{ width:16px; height:16px; margin:0 auto; background:#1c2440; }
+  .neon-strip{ height:3px; border-radius:3px; background:var(--grad-primary); box-shadow:0 0 16px var(--cyan); margin:26px 0; }
+</style>
+</head>
+<body>
+<canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+<nav class="topnav">
+  <a href="main.html" class="brand"><span class="mark">◈</span> TechPro B</a>
+  <ul class="navlinks">
+    <li><a href="main.html">Menu</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="gallery/index.html">Gallery</a></li>
+    <li><a href="halloffame.html">Hall of Fame</a></li>
+    <li><a href="messages.html">Messages</a></li>
+    <li><a href="computerroom.html" class="active">Computer Room</a></li>
+    <li><a href="Luminara.html">Luminara</a></li>
+  </ul>
+  <button id="navToggle" class="btn btn-ghost" aria-label="Open menu" style="padding:10px 14px;">☰</button>
+</nav>
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+<aside class="mobile-drawer" id="mobileDrawer">
+  <a href="main.html">Menu</a><a href="about.html">About</a><a href="gallery/index.html">Gallery</a>
+  <a href="halloffame.html">Hall of Fame</a><a href="messages.html">Messages</a>
+  <a href="computerroom.html">Computer Room</a><a href="Luminara.html">Luminara</a>
+  <a href="secret-archive.html">Secret Archive</a>
+</aside>
+
+<main class="container">
+  <section class="page-hero reveal">
+    <div class="eyebrow">Computer Room</div>
+    <h1 class="section-title">The lab where it all got built</h1>
+    <p class="section-lead" style="margin:0 auto;">Click a station to see what it was running.</p>
+  </section>
+
+  <section class="lab-floor reveal mt-lg" style="margin-bottom:90px;">
+    <div class="neon-strip"></div>
+    <div class="stations" id="stationsGrid"></div>
+  </section>
+</main>
+
+<footer class="site-footer">TechPro B Digital Yearbook · Built for the Class Archive · <span class="mono">v2026.1</span></footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+const STATIONS = [
+  {name:'Station 01', sub:'Web Dev Bench', code:'$ npm run build\n✓ compiled in 812ms\n✓ 0 errors, 0 warnings'},
+  {name:'Station 02', sub:'Robotics Rig', code:'> calibrating servo[3]\n> torque OK\n> ready for test run'},
+  {name:'Station 03', sub:'AI Training Node', code:'epoch 42/50\nloss: 0.081\naccuracy: 97.4%'},
+  {name:'Station 04', sub:'Network Ops', code:'ping archive.techprob.local\n64 bytes: time=2ms\nstatus: stable'},
+  {name:'Station 05', sub:'Design Studio', code:'render layer_07.psd\nexport: 4K\ndone in 3.2s'},
+  {name:'Station 06', sub:'Security Console', code:'scanning ports...\n0 vulnerabilities found\nfirewall: active'},
+];
+document.getElementById('stationsGrid').innerHTML = STATIONS.map(s=>`
+  <div class="monitor" tabindex="0" role="button" aria-label="${s.name}: ${s.sub}">
+    <div class="screen"><div class="glow-line"></div><pre>${s.code}</pre></div>
+    <div class="stand"></div>
+    <div class="station-label">${s.name}</div>
+    <div class="station-sub">${s.sub}</div>
+  </div>`).join('');
+</script>
+</body>
+</html>

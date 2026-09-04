@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messages · TechPro B Digital Yearbook</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .msg-card{ position:relative; }
+  .msg-card .quote-mark{ font-size:34px; color:var(--purple); opacity:.5; line-height:1; }
+  .msg-card .from{ font-family:var(--font-mono); font-size:12px; color:var(--cyan); margin-top:10px; }
+  #newMsgForm{ display:grid; gap:12px; max-width:520px; }
+  #msgWall{ column-count:1; column-gap:18px; }
+  @media(min-width:720px){ #msgWall{ column-count:2; } }
+  @media(min-width:1080px){ #msgWall{ column-count:3; } }
+  #msgWall .glass{ break-inside:avoid; margin-bottom:18px; }
+</style>
+</head>
+<body>
+<canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+<nav class="topnav">
+  <a href="main.html" class="brand"><span class="mark">◈</span> TechPro B</a>
+  <ul class="navlinks">
+    <li><a href="main.html">Menu</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="gallery/index.html">Gallery</a></li>
+    <li><a href="halloffame.html">Hall of Fame</a></li>
+    <li><a href="messages.html" class="active">Messages</a></li>
+    <li><a href="computerroom.html">Computer Room</a></li>
+    <li><a href="Luminara.html">Luminara</a></li>
+  </ul>
+  <button id="navToggle" class="btn btn-ghost" aria-label="Open menu" style="padding:10px 14px;">☰</button>
+</nav>
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+<aside class="mobile-drawer" id="mobileDrawer">
+  <a href="main.html">Menu</a><a href="about.html">About</a><a href="gallery/index.html">Gallery</a>
+  <a href="halloffame.html">Hall of Fame</a><a href="messages.html">Messages</a>
+  <a href="computerroom.html">Computer Room</a><a href="Luminara.html">Luminara</a>
+  <a href="secret-archive.html">Secret Archive</a>
+</aside>
+
+<main class="container">
+  <section class="page-hero reveal">
+    <div class="eyebrow">Messages</div>
+    <h1 class="section-title">The wall of appreciation</h1>
+    <p class="section-lead" style="margin:0 auto;">Notes left by classmates. Add your own below — it's saved right in your browser.</p>
+  </section>
+
+  <section class="glass card reveal mt-lg" style="max-width:600px; margin-left:auto; margin-right:auto;">
+    <h3 style="margin-bottom:14px;">Leave a note</h3>
+    <form id="newMsgForm">
+      <input id="msgFrom" placeholder="Your name" required>
+      <textarea id="msgText" rows="3" placeholder="Say something kind…" required></textarea>
+      <button class="btn btn-primary" type="submit">Post to the wall</button>
+    </form>
+  </section>
+
+  <section id="msgWall" class="mt-lg reveal" style="padding-bottom:90px;"></section>
+</main>
+
+<footer class="site-footer">TechPro B Digital Yearbook · Built for the Class Archive · <span class="mono">v2026.1</span></footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/messages.js"></script>
+</body>
+</html>

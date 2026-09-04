@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hall of Fame · TechPro B Digital Yearbook</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .fame-card{ text-align:center; }
+  .fame-card img{ width:96px; height:96px; border-radius:50%; margin:0 auto 14px; object-fit:cover; border:2px solid var(--glass-border); }
+  .fame-card:hover img{ box-shadow:0 0 26px rgba(56,189,248,.5); }
+  .fame-award{ font-family:var(--font-mono); font-size:12px; color:var(--yellow); margin:4px 0 10px; }
+</style>
+</head>
+<body>
+<canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+<nav class="topnav">
+  <a href="main.html" class="brand"><span class="mark">◈</span> TechPro B</a>
+  <ul class="navlinks">
+    <li><a href="main.html">Menu</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="gallery/index.html">Gallery</a></li>
+    <li><a href="halloffame.html" class="active">Hall of Fame</a></li>
+    <li><a href="messages.html">Messages</a></li>
+    <li><a href="computerroom.html">Computer Room</a></li>
+    <li><a href="Luminara.html">Luminara</a></li>
+  </ul>
+  <button id="navToggle" class="btn btn-ghost" aria-label="Open menu" style="padding:10px 14px;">☰</button>
+</nav>
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+<aside class="mobile-drawer" id="mobileDrawer">
+  <a href="main.html">Menu</a><a href="about.html">About</a><a href="gallery/index.html">Gallery</a>
+  <a href="halloffame.html">Hall of Fame</a><a href="messages.html">Messages</a>
+  <a href="computerroom.html">Computer Room</a><a href="Luminara.html">Luminara</a>
+  <a href="secret-archive.html">Secret Archive</a>
+</aside>
+
+<main class="container">
+  <section class="page-hero reveal">
+    <div class="eyebrow">Hall of Fame</div>
+    <h1 class="section-title">This year's standouts</h1>
+  </section>
+
+  <section class="grid grid-3 mt-lg" id="fameGrid" style="padding-bottom:90px;"></section>
+</main>
+
+<footer class="site-footer">TechPro B Digital Yearbook · Built for the Class Archive · <span class="mono">v2026.1</span></footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+const FAME = [
+  {name:'Sam Whitfield', award:'Editor of the Year', img:'https://i.pravatar.cc/300?img=11', desc:'Led the yearbook committee from concept to launch.'},
+  {name:'Riley Chen', award:'Athlete of the Year', img:'https://i.pravatar.cc/300?img=25', desc:'Two-time regional track champion, 400m.'},
+  {name:'Yuki Tanaka', award:'Artist of the Year', img:'https://i.pravatar.cc/300?img=48', desc:'Painted the east-wing mural, won regional art fair.'},
+  {name:'Marcus Webb', award:'Innovator of the Year', img:'https://i.pravatar.cc/300?img=13', desc:'Founded the chess club, grew it to 40 members.'},
+  {name:'Sofia Ibrahim', award:'Performer of the Year', img:'https://i.pravatar.cc/300?img=44', desc:'Best Actress, Regional One-Act Festival.'},
+  {name:'Ethan Cole', award:'Engineer of the Year', img:'https://i.pravatar.cc/300?img=33', desc:'Captained the robotics team to regional finals.'},
+];
+document.getElementById('fameGrid').innerHTML = FAME.map(f=>`
+  <div class="glass card fame-card reveal">
+    <img src="${f.img}" alt="Portrait of ${f.name}" loading="lazy">
+    <h3>${f.name}</h3>
+    <div class="fame-award">🏆 ${f.award}</div>
+    <p style="color:var(--text-mid); font-size:14px;">${f.desc}</p>
+  </div>`).join('');
+document.querySelectorAll('.reveal').forEach(el=>{
+  new IntersectionObserver((es,o)=>es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('visible'); o.unobserve(e.target);} }),{threshold:.15}).observe(el);
+});
+</script>
+</body>
+</html>
