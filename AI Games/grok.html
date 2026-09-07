@@ -1,0 +1,2764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#07081a" />
+  <meta name="description" content="The Path of Wisdom — a journey through choices in the Archive of Wisdom." />
+  <title>THE PATH OF WISDOM</title>
+  <style>
+/* ============================================================
+   THE PATH OF WISDOM — Mysterious Digital Archive
+   Palette: deep navy, near-black blue, muted purple, soft cyan
+   ============================================================ */
+
+:root {
+  --navy-0: #050612;
+  --navy-1: #07081a;
+  --navy-2: #0c1028;
+  --navy-3: #14183a;
+  --purple: #6b5b8a;
+  --purple-soft: #8a78a8;
+  --cyan: #7ec8d4;
+  --cyan-dim: #4a8f9a;
+  --cyan-glow: rgba(126, 200, 212, 0.35);
+  --text: #e8eef2;
+  --text-dim: #b7c2cc;
+  --text-mute: #8a96a3;
+  --glass: rgba(16, 20, 48, 0.62);
+  --glass-border: rgba(126, 200, 212, 0.22);
+  --danger: #c9a0a8;
+  --focus: #9be7f0;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  --radius: 18px;
+  --font-serif: Georgia, "Palatino Linotype", Palatino, "Times New Roman", serif;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+  --reduce-motion: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --reduce-motion: 1; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--navy-0);
+  color: var(--text);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100dvh;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(90, 60, 130, 0.22), transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(40, 90, 110, 0.18), transparent 55%),
+    linear-gradient(180deg, #050612 0%, #090b1e 50%, #07081a 100%);
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  z-index: 100;
+  background: var(--navy-3);
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+.skip-link:focus { top: 12px; }
+
+#particle-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.fog {
+  position: fixed;
+  inset: -20%;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(circle at 30% 40%, rgba(80, 70, 120, 0.14), transparent 45%);
+  animation: drift 48s ease-in-out infinite alternate;
+}
+.fog-b {
+  background: radial-gradient(circle at 70% 70%, rgba(50, 100, 120, 0.12), transparent 50%);
+  animation-duration: 62s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes drift {
+  from { transform: translate3d(-3%, -2%, 0) scale(1); }
+  to { transform: translate3d(4%, 3%, 0) scale(1.08); }
+}
+
+.sigil-field {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(rgba(126, 200, 212, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(126, 200, 212, 0.06) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 78%);
+}
+
+.app {
+  position: relative;
+  z-index: 2;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 16px 18px 40px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 8px 4px 18px;
+}
+.topbar[hidden] { display: none !important; }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: 0.22em;
+  font-size: 0.72rem;
+  color: var(--cyan);
+}
+.brand-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--glass-border);
+  color: var(--cyan);
+  font-size: 12px;
+}
+.brand-title { font-family: var(--font-serif); font-weight: 400; }
+
+.progress {
+  margin: 0 auto 0 8px;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: var(--text-mute);
+}
+
+.top-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.icon-btn, .path-btn, .primary-btn, .ghost-btn, .text-btn {
+  font-family: var(--font-sans);
+  cursor: pointer;
+  border: 1px solid var(--glass-border);
+  background: rgba(12, 16, 40, 0.55);
+  color: var(--text);
+  letter-spacing: 0.12em;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.icon-btn {
+  font-size: 0.65rem;
+  padding: 8px 10px;
+  border-radius: 999px;
+  color: var(--cyan);
+}
+
+.icon-btn:hover, .ghost-btn:hover, .path-btn:hover, .primary-btn:hover {
+  border-color: rgba(126, 200, 212, 0.55);
+  box-shadow: 0 0 0 1px rgba(126, 200, 212, 0.12), 0 0 24px rgba(126, 200, 212, 0.08);
+}
+
+.icon-btn:focus-visible,
+.path-btn:focus-visible,
+.primary-btn:focus-visible,
+.ghost-btn:focus-visible,
+.text-btn:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.screen {
+  animation: rise 0.7s ease both;
+}
+.screen.fade-out {
+  animation: fadeOut 0.45s ease both;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateY(-8px); }
+}
+
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+}
+
+/* Title */
+.title-screen {
+  text-align: center;
+  padding: 48px 18px 24px;
+}
+.sigil {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 28px;
+  position: relative;
+}
+.sigil::before, .sigil::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(126, 200, 212, 0.45);
+  transform: rotate(45deg);
+}
+.sigil::after {
+  inset: 12px;
+  border-color: rgba(138, 120, 168, 0.6);
+  animation: pulseRing 6s ease-in-out infinite;
+}
+.sigil span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--cyan);
+  font-size: 22px;
+}
+@keyframes pulseRing {
+  0%, 100% { opacity: 0.45; transform: rotate(45deg) scale(1); }
+  50% { opacity: 1; transform: rotate(45deg) scale(1.06); }
+}
+
+.game-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(2rem, 7vw, 3.6rem);
+  letter-spacing: 0.18em;
+  margin: 0 0 10px;
+  line-height: 1.2;
+  text-shadow: 0 0 40px rgba(126, 200, 212, 0.18);
+}
+.subtitle {
+  letter-spacing: 0.34em;
+  font-size: 0.78rem;
+  color: var(--cyan);
+  margin: 0 0 28px;
+}
+.epigraph {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--text-dim);
+  max-width: 28rem;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+}
+
+.btn-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.primary-btn {
+  min-width: min(320px, 86vw);
+  padding: 16px 22px;
+  border-radius: 999px;
+  letter-spacing: 0.22em;
+  font-size: 0.78rem;
+  background: linear-gradient(180deg, rgba(40, 60, 90, 0.7), rgba(16, 20, 48, 0.8));
+  color: var(--text);
+}
+.ghost-btn {
+  min-width: min(320px, 86vw);
+  padding: 12px 22px;
+  border-radius: 999px;
+  letter-spacing: 0.2em;
+  font-size: 0.72rem;
+  background: transparent;
+  color: var(--text-dim);
+}
+.text-btn {
+  background: none;
+  border: none;
+  color: var(--cyan);
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  padding: 8px;
+}
+
+.voice-dock {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+/* Intro */
+.intro-screen {
+  text-align: center;
+  padding: 64px 16px;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.intro-line {
+  font-family: var(--font-serif);
+  letter-spacing: 0.28em;
+  font-size: clamp(0.95rem, 3vw, 1.25rem);
+  color: var(--cyan);
+  min-height: 2em;
+  opacity: 0;
+}
+.intro-line.show { animation: rise 0.9s ease both; }
+.oracle-name {
+  font-family: var(--font-serif);
+  letter-spacing: 0.4em;
+  font-size: clamp(1.4rem, 5vw, 2.2rem);
+  margin: 8px 0 28px;
+}
+.oracle-speech {
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+  line-height: 1.75;
+  color: var(--text);
+  max-width: 34rem;
+  margin: 0 auto 18px;
+}
+.oracle-speech + .oracle-speech { color: var(--text-dim); }
+
+/* Scenario */
+.location {
+  text-align: center;
+  letter-spacing: 0.32em;
+  font-size: 0.78rem;
+  color: var(--cyan);
+  margin: 8px 0 22px;
+}
+.scene-card {
+  padding: 28px 26px 22px;
+  margin-bottom: 22px;
+}
+.scene-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.02rem, 2.4vw, 1.2rem);
+  line-height: 1.75;
+  color: var(--text);
+  margin: 0 0 16px;
+}
+.scene-text p { margin: 0 0 14px; }
+.scene-text p:last-child { margin-bottom: 0; }
+.choose-label {
+  text-align: center;
+  letter-spacing: 0.28em;
+  font-size: 0.68rem;
+  color: var(--text-mute);
+  margin: 8px 0 14px;
+}
+.choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.path-btn {
+  text-align: left;
+  padding: 18px 18px 16px;
+  border-radius: 14px;
+  min-height: 118px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.path-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.path-kicker {
+  font-size: 0.66rem;
+  letter-spacing: 0.22em;
+  color: var(--cyan);
+}
+.path-label {
+  font-family: var(--font-serif);
+  letter-spacing: 0.01em;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.consequence-card .chosen {
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  color: var(--cyan);
+  margin-bottom: 10px;
+}
+.oracle-box {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(126, 200, 212, 0.16);
+}
+.oracle-kicker {
+  letter-spacing: 0.3em;
+  font-size: 0.64rem;
+  color: var(--purple-soft);
+  margin-bottom: 8px;
+}
+.oracle-line {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: var(--text-dim);
+}
+
+/* Oracle Sphere + circular waveform */
+.oracle-presence {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 4px auto 14px;
+  width: min(320px, 86vw);
+  min-height: 210px;
+}
+.oracle-presence[hidden] { display: none !important; }
+.oracle-wave {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 210px;
+  pointer-events: none;
+}
+.oracle-sphere {
+  position: relative;
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  margin-top: 46px;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(180, 220, 230, 0.28), transparent 38%),
+    radial-gradient(circle at 50% 55%, rgba(70, 50, 110, 0.55), rgba(8, 10, 28, 0.92) 70%);
+  border: 1px solid rgba(126, 200, 212, 0.38);
+  box-shadow:
+    0 0 24px rgba(126, 200, 212, 0.16),
+    0 0 48px rgba(90, 70, 140, 0.16),
+    inset 0 0 22px rgba(126, 200, 212, 0.12);
+  overflow: hidden;
+}
+.oracle-sphere::before,
+.oracle-sphere::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(126, 200, 212, 0.18);
+  inset: 14px;
+}
+.oracle-sphere::after {
+  inset: 28px;
+  border-color: rgba(138, 120, 168, 0.35);
+}
+.oracle-core {
+  position: absolute;
+  inset: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(190, 230, 236, 0.55), rgba(80, 60, 130, 0.15) 62%, transparent 70%);
+  animation: sphereBreath 4.6s ease-in-out infinite;
+}
+.oracle-glyph {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(196, 236, 240, 0.72);
+  font-size: 20px;
+  letter-spacing: 0;
+  text-shadow: 0 0 12px rgba(126, 200, 212, 0.45);
+}
+.oracle-presence[data-state="speaking"] .oracle-sphere {
+  box-shadow:
+    0 0 36px rgba(126, 200, 212, 0.34),
+    0 0 70px rgba(90, 70, 140, 0.28),
+    inset 0 0 28px rgba(126, 200, 212, 0.2);
+}
+.oracle-presence[data-state="speaking"] .oracle-core {
+  animation: sphereSpeak 0.9s ease-in-out infinite;
+}
+.oracle-presence[data-state="thinking"] .oracle-sphere {
+  box-shadow:
+    0 0 28px rgba(138, 120, 168, 0.28),
+    inset 0 0 24px rgba(126, 200, 212, 0.1);
+}
+.oracle-presence[data-state="choose"] .oracle-sphere {
+  animation: sphereChoose 1.4s ease-out 1;
+}
+@keyframes sphereBreath {
+  0%, 100% { transform: scale(1); opacity: 0.72; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+@keyframes sphereSpeak {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.16); opacity: 1; }
+}
+@keyframes sphereChoose {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.08); box-shadow: 0 0 50px rgba(126, 200, 212, 0.45); }
+  100% { transform: scale(1); }
+}
+.reflect-box {
+  margin-top: 8px;
+  min-height: 38px;
+  text-align: center;
+}
+.reflect-box[hidden] { display: none !important; }
+.reflect-label {
+  margin: 0 0 6px;
+  letter-spacing: 0.34em;
+  font-size: 0.68rem;
+  color: var(--purple-soft);
+}
+.reflect-track {
+  width: 120px;
+  height: 2px;
+  margin: 0 auto;
+  background: rgba(126, 200, 212, 0.16);
+  overflow: hidden;
+}
+.reflect-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--purple-soft), var(--cyan));
+  animation: reflectFill 3s linear forwards;
+}
+@keyframes reflectFill {
+  from { width: 0; }
+  to { width: 100%; }
+}
+.choose-line {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--cyan);
+  letter-spacing: 0.06em;
+  margin: 4px 0 0;
+  min-height: 1.4em;
+}
+.choice-panel[hidden] { display: none !important; }
+.choice-panel.is-locked .path-btn {
+  pointer-events: none;
+  opacity: 0.38;
+}
+
+@media (max-width: 720px) {
+  .oracle-presence { width: min(260px, 92vw); min-height: 180px; }
+  .oracle-wave { height: 180px; }
+  .oracle-sphere { width: 96px; height: 96px; margin-top: 38px; }
+}
+
+.continue-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+/* Ending */
+.ending-screen { text-align: center; padding: 20px 8px 40px; }
+.ending-sigil {
+  width: 96px;
+  height: 96px;
+  margin: 10px auto 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(126, 200, 212, 0.4);
+  box-shadow: 0 0 40px rgba(126, 200, 212, 0.18), inset 0 0 30px rgba(126, 200, 212, 0.08);
+  display: grid;
+  place-items: center;
+  color: var(--cyan);
+  font-size: 28px;
+  animation: glow 4.5s ease-in-out infinite;
+}
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 24px rgba(126, 200, 212, 0.12); }
+  50% { box-shadow: 0 0 48px rgba(126, 200, 212, 0.28); }
+}
+.ending-name {
+  font-family: var(--font-serif);
+  letter-spacing: 0.28em;
+  font-size: clamp(1.2rem, 4vw, 1.7rem);
+  margin: 0 0 18px;
+}
+.final-q {
+  letter-spacing: 0.3em;
+  color: var(--cyan);
+  font-size: 0.78rem;
+  margin-bottom: 10px;
+}
+
+/* Modal */
+.modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+.modal-root[hidden] { display: none !important; }
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 4, 12, 0.72);
+}
+.modal {
+  position: relative;
+  width: min(640px, 100%);
+  max-height: min(82vh, 760px);
+  overflow: auto;
+  padding: 18px 18px 22px;
+}
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.modal-head h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  font-size: 1rem;
+}
+.modal-body { color: var(--text-dim); line-height: 1.65; font-size: 0.95rem; }
+
+.settings-grid {
+  display: grid;
+  gap: 16px;
+}
+.setting {
+  display: grid;
+  gap: 8px;
+}
+.setting label {
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  color: var(--cyan);
+}
+.setting select, .setting input[type="range"] {
+  width: 100%;
+  accent-color: var(--cyan);
+}
+.setting select {
+  background: var(--navy-2);
+  color: var(--text);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  padding: 10px;
+}
+.toggle-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.toggle-row button[aria-pressed="true"] {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(126, 200, 212, 0.1);
+}
+
+.journal-entry {
+  border-top: 1px solid rgba(126, 200, 212, 0.12);
+  padding: 14px 0;
+}
+.journal-entry h3 {
+  margin: 0 0 6px;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  color: var(--cyan);
+  font-weight: 500;
+}
+.journal-empty { font-family: var(--font-serif); font-style: italic; }
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 40;
+  background: rgba(12, 16, 40, 0.92);
+  border: 1px solid var(--glass-border);
+  color: var(--text);
+  padding: 10px 16px;
+  border-radius: 999px;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+}
+.toast[hidden] { display: none !important; }
+
+.confirm-row {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.credits p { margin: 0 0 10px; }
+.credits .quiet { color: var(--text-mute); font-size: 0.86rem; }
+
+@media (max-width: 720px) {
+  .choices { grid-template-columns: 1fr; }
+  .path-btn { min-height: 0; }
+  .progress { margin: 0; width: 100%; order: 3; }
+  .topbar { align-items: flex-start; }
+  .scene-card { padding: 20px 16px; }
+}
+
+@media (max-width: 420px) {
+  .app { padding: 10px 12px 28px; }
+  .game-title { letter-spacing: 0.1em; }
+  .top-actions .icon-btn { padding: 8px 8px; letter-spacing: 0.08em; }
+}
+
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#app">Skip to game</a>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+  <div class="fog fog-a" aria-hidden="true"></div>
+  <div class="fog fog-b" aria-hidden="true"></div>
+  <div class="sigil-field" aria-hidden="true"></div>
+
+  <div id="app" class="app">
+    <header class="topbar" id="topbar" hidden>
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">◇</span>
+        <span class="brand-title">THE PATH OF WISDOM</span>
+      </div>
+      <p class="progress" id="progress-label" aria-live="polite">TRIAL — / 20</p>
+      <nav class="top-actions" aria-label="Game actions">
+        <button type="button" class="icon-btn" id="btn-journal" aria-label="Open journal">JOURNAL</button>
+        <button type="button" class="icon-btn" id="btn-save" aria-label="Save journey">SAVE</button>
+        <button type="button" class="icon-btn" id="btn-settings" aria-label="Open settings">SETTINGS</button>
+      </nav>
+    </header>
+
+    <div id="oracle-presence" class="oracle-presence" data-state="idle" hidden>
+      <canvas id="oracle-wave" class="oracle-wave" aria-hidden="true"></canvas>
+      <div class="oracle-sphere" aria-hidden="true">
+        <div class="oracle-core"></div>
+        <div class="oracle-glyph">◇</div>
+      </div>
+      <div class="reflect-box" id="reflect-box" hidden>
+        <p class="reflect-label">Reflect...</p>
+        <div class="reflect-track"><div class="reflect-fill" id="reflect-fill"></div></div>
+      </div>
+      <p class="choose-line" id="choose-line" hidden>Choose carefully.</p>
+    </div>
+
+    <main class="stage" id="stage" tabindex="-1"></main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <div id="modal-root" class="modal-root" hidden>
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="modal-title" id="modal">
+      <div class="modal-head">
+        <h2 id="modal-title">Panel</h2>
+        <button type="button" class="icon-btn" id="modal-close" aria-label="Close">CLOSE</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <script>
+/* =============================================================================
+   THE PATH OF WISDOM
+   A journey through choices in the Archive of Wisdom.
+
+   HOW TO ADD A NEW SCENARIO
+   -------------------------
+   1. Copy an object in SCENARIOS and append it before the closing ].
+   2. Give it a unique id (string).
+   3. Fill location, story, situation, and two choices (a, b).
+   4. Each choice needs: label, journal, consequence, oracle, stats.
+   5. stats may include: wisdom, compassion, courage, honesty, selfishness.
+      Missing keys default to 0. Use positive or negative integers.
+   6. Optional memoryFlag is stored if that choice is taken.
+   7. Optional oracleMemory: [{ flag, text }] replaces the default oracle line
+      when a previous flag exists.
+   8. Update ENDING_RULES if you change how endings should be calculated.
+
+   HOW TO CHANGE ORACLE DIALOGUE
+   -----------------------------
+   Edit INTRO_LINES, any scenario.choices[x].oracle, ENDINGS, or FINAL_ANSWERS.
+
+   HOW TO CHANGE ENDINGS / HIDDEN STATS
+   ------------------------------------
+   Edit ENDING_RULES and the stats objects on each choice.
+   ============================================================================= */
+
+"use strict";
+
+/* ---------------------------------------------------------------------------
+   GAME SETTINGS
+   --------------------------------------------------------------------------- */
+const GAME_SETTINGS = {
+  title: "THE PATH OF WISDOM",
+  totalTrials: 20,
+  storageKey: "pathOfWisdom.save.v1",
+  musicSrc: "assets/wisdom-bg.mp3",
+  musicDuckedRatio: 0.28,
+  musicRestoreMs: 900
+};
+
+/* ---------------------------------------------------------------------------
+   VOICE SETTINGS (defaults; player can change these)
+   --------------------------------------------------------------------------- */
+const VOICE_DEFAULTS = {
+  enabled: true,
+  rate: 0.92,      // Slow / Normal / Fast maps onto this
+  volume: 0.9,
+  voiceURI: ""
+};
+
+/* ---------------------------------------------------------------------------
+   MUSIC SETTINGS
+   --------------------------------------------------------------------------- */
+const MUSIC_DEFAULTS = {
+  enabled: true,
+  volume: 0.38
+};
+
+/* ---------------------------------------------------------------------------
+   HIDDEN STATS
+   Start values. Do not display raw numbers to the player.
+   --------------------------------------------------------------------------- */
+const STAT_KEYS = ["wisdom", "compassion", "courage", "honesty", "selfishness"];
+const STAT_DEFAULTS = {
+  wisdom: 0,
+  compassion: 0,
+  courage: 0,
+  honesty: 0,
+  selfishness: 0
+};
+
+/* ---------------------------------------------------------------------------
+   ENDING REQUIREMENTS
+   --------------------------------------------------------------------------- */
+const ENDING_RULES = {
+  wise: {
+    id: "wise",
+    name: "THE WISE PATH",
+    text: "You did not always choose the easiest path. You chose the one you could live with.",
+    oracle: "The Archive keeps no trophies. It keeps the shape of a traveler who paused before acting."
+  },
+  balanced: {
+    id: "balanced",
+    name: "THE BALANCED PATH",
+    text: "Wisdom is not perfection. It is the willingness to learn from every choice.",
+    oracle: "You wandered between light and shadow. That wandering is still a kind of seeing."
+  },
+  lost: {
+    id: "lost",
+    name: "THE LOST PATH",
+    text: "You sought the shortest road. Yet the shortest road did not necessarily take you where you wished to go.",
+    oracle: "Convenience is a quiet teacher. It teaches what we are willing to trade."
+  }
+};
+
+function chooseEnding(stats) {
+  const virtue = stats.wisdom + stats.compassion + stats.honesty + stats.courage;
+  const weight = virtue - stats.selfishness * 1.35;
+  if (stats.selfishness >= 14 && weight < 8) return ENDING_RULES.lost;
+  if (weight >= 28 && stats.selfishness <= 8 && stats.wisdom >= 10) return ENDING_RULES.wise;
+  if (weight <= 6) return ENDING_RULES.lost;
+  return ENDING_RULES.balanced;
+}
+
+/* ---------------------------------------------------------------------------
+   INTRO / META DIALOGUE
+   --------------------------------------------------------------------------- */
+const INTRO_BEATS = [
+  { screen: "CONNECTION ESTABLISHED", speak: false },
+  { screen: "UNKNOWN ARCHIVE DETECTED", speak: false },
+  { screen: "GUIDE IDENTIFIED", speak: false },
+  { screen: "THE ORACLE", speak: false, revealName: true }
+];
+
+const INTRO_LINES = [
+  "You have entered a place where answers are not always given.",
+  "Only choices.",
+  "Walk carefully."
+];
+
+const FINAL_ANSWERS = {
+  values: {
+    label: "I DISCOVERED MY VALUES",
+    oracle: "Then keep them where they can be found again — not in a speech, but in the next quiet decision."
+  },
+  mistakes: {
+    label: "I DISCOVERED MY MISTAKES",
+    oracle: "A mistake named is no longer a shadow. It becomes a map of where not to hurry."
+  },
+  searching: {
+    label: "I AM STILL SEARCHING",
+    oracle: "Searching is not failure. It is the Archive's oldest occupation."
+  }
+};
+
+/* ---------------------------------------------------------------------------
+   SCENARIO DATA
+   Approximately 20 trials. Mix of school, friendship, duty, everyday ethics.
+   --------------------------------------------------------------------------- */
+const SCENARIOS = [
+  {
+    id: "wallet",
+    location: "THE EMPTY HALL",
+    story: "The corridor is longer than it should be. Light gathers in thin lines along the floor, as if the Archive itself is breathing.",
+    situation: "You discover a wallet on the empty hallway floor. Inside is money and an identification card.",
+    choices: {
+      a: {
+        label: "Return the wallet to its owner.",
+        journal: "You returned what was not yours.",
+        consequence: "You leave the wallet at a marked station. Later, a name appears in the Archive — grateful, and complete.",
+        oracle: "Integrity is easiest to understand after temptation. You met the test before it became a story you would have to carry.",
+        stats: { wisdom: 2, compassion: 1, honesty: 2, selfishness: -1 },
+        memoryFlag: "returned_wallet"
+      },
+      b: {
+        label: "Keep the money and leave the wallet behind.",
+        journal: "You kept what the hallway offered.",
+        consequence: "The money is light in your hand. The card remains on the floor, a life reduced to an unfinished sentence.",
+        oracle: "Interesting. You chose what was easiest rather than what was whole. Remember: convenience often asks for payment later.",
+        stats: { wisdom: -1, honesty: -2, selfishness: 2 },
+        memoryFlag: "kept_wallet"
+      }
+    }
+  },
+  {
+    id: "credit",
+    location: "THE CREDIT ATRIUM",
+    story: "A circle of pale glass hangs above a table of finished work. Voices gather. Praise arrives like weather — evenly, and not always fairly.",
+    situation: "A teammate did most of the work, but everyone receives equal recognition.",
+    choices: {
+      a: {
+        label: "Give the teammate proper credit.",
+        journal: "You named the one who carried the work.",
+        consequence: "The room grows quieter, then clearer. The teammate's work is seen. Yours is not smaller for it.",
+        oracle: "Credit is a kind of light. When you aim it correctly, more than one person can stand in it.",
+        stats: { wisdom: 1, compassion: 2, honesty: 2, courage: 1 },
+        memoryFlag: "gave_credit"
+      },
+      b: {
+        label: "Accept the recognition without mentioning them.",
+        journal: "You let the praise settle where it was placed.",
+        consequence: "The applause does not hurt. It simply does not belong entirely to you. The teammate looks at the floor.",
+        oracle: "Silence can be a kind of taking. The Archive records both the work and the name that was not spoken.",
+        stats: { wisdom: -1, honesty: -2, selfishness: 2, compassion: -1 },
+        memoryFlag: "kept_credit"
+      }
+    }
+  },
+  {
+    id: "secret",
+    location: "THE WHISPERING CORRIDOR",
+    story: "The walls here remember voices. A friend leans close. Their secret is warm and heavy, like a stone wrapped in cloth.",
+    situation: "A friend asks you to keep a secret, but the secret involves someone being unfairly blamed.",
+    choices: {
+      a: {
+        label: "Speak up and prevent someone else from being blamed.",
+        journal: "You broke a silence to stop an unfair blame.",
+        consequence: "The blamed person is spared. Your friend feels the draft of a door you opened without them.",
+        oracle: "Loyalty and justice rarely arrive wearing the same coat. You chose the person who had no voice in the room.",
+        oracleMemory: [
+          { flag: "returned_wallet", text: "You returned what was not yours once. Today you returned a name to its rightful place, even though it cost a friendship a little warmth." }
+        ],
+        stats: { wisdom: 1, compassion: 2, honesty: 2, courage: 2, selfishness: -1 },
+        memoryFlag: "spoke_up_secret"
+      },
+      b: {
+        label: "Remain silent to protect your friend.",
+        journal: "You kept a friend's secret while another person was blamed.",
+        consequence: "Your friend exhales. Across the corridor, an innocent person accepts a weight that is not theirs.",
+        oracle: "You protected someone. Ask yourself what you protected them from — and what you left unprotected.",
+        stats: { wisdom: -1, honesty: -1, compassion: -1, courage: -1, selfishness: 1 },
+        memoryFlag: "kept_secret"
+      }
+    }
+  },
+  {
+    id: "shortcut",
+    location: "THE COMPETITION GATE",
+    story: "A narrow arch offers a second way through the trial. No guard stands beside it. The rules are written only in small light, easy to miss if you wish to miss them.",
+    situation: "You discover a shortcut that would help you win a competition, but using it violates the rules.",
+    choices: {
+      a: {
+        label: "Follow the rules even if it costs you the advantage.",
+        journal: "You refused a hidden advantage.",
+        consequence: "You take the longer path. You may not finish first. You finish as yourself.",
+        oracle: "Winning is a loud word. Fairness is quieter. You chose the voice that would still make sense tomorrow.",
+        stats: { wisdom: 2, honesty: 2, courage: 1 },
+        memoryFlag: "followed_rules"
+      },
+      b: {
+        label: "Use the shortcut because nobody will know.",
+        journal: "You took a hidden path through the competition.",
+        consequence: "The gate closes behind you without a sound. Victory, if it comes, will have a small lock on it.",
+        oracle: "What is unseen is not uncounted. The Archive has excellent hearing for footsteps that pretend to be wind.",
+        stats: { wisdom: -1, honesty: -2, selfishness: 2 },
+        memoryFlag: "used_shortcut"
+      }
+    }
+  },
+  {
+    id: "relic",
+    location: "THE CHAMBER OF RELICS",
+    story: "A glass case holds an object older than the room. Your sleeve catches a corner. A hairline crack appears — small, bright, impossible to unsee.",
+    situation: "You accidentally damage something important.",
+    choices: {
+      a: {
+        label: "Admit what happened.",
+        journal: "You admitted to damaging what was not yours.",
+        consequence: "A keeper arrives. The repair will take time. Your name is attached to the truth, not to a rumor.",
+        oracle: "A crack can be mended. A hidden crack becomes a story that grows in the dark.",
+        stats: { wisdom: 2, honesty: 2, courage: 2 },
+        memoryFlag: "admitted_mistake"
+      },
+      b: {
+        label: "Pretend you did not notice.",
+        journal: "You left the damage unnamed.",
+        consequence: "You walk on. Behind you the relic waits with its new fault, and the next hands that touch it will not know why.",
+        oracle: "You protected yourself today. But ask yourself what you protected yourself from.",
+        oracleMemory: [
+          { flag: "returned_wallet", text: "You once returned a wallet. Today you left a fracture where a sentence should have been. Principles are not souvenirs. They ask to be used again." }
+        ],
+        stats: { wisdom: -1, honesty: -2, courage: -1, selfishness: 1 },
+        memoryFlag: "hid_mistake"
+      }
+    }
+  },
+  {
+    id: "stranger",
+    location: "THE STRANGER'S THRESHOLD",
+    story: "A figure you do not know stands with a case that is clearly too heavy for one pair of arms. They look at you the way weather looks at a window.",
+    situation: "Someone unfamiliar asks for help carrying something. The path is public and well-lit.",
+    choices: {
+      a: {
+        label: "Stop and help, since it appears safe to do so.",
+        journal: "You helped a stranger with a heavy load.",
+        consequence: "The case is shared for a short span of steps. Two people reach the door. No medal appears. Something quieter does.",
+        oracle: "You chose to help when no reward was promised. Perhaps you understand something that many forget.",
+        stats: { wisdom: 1, compassion: 2, courage: 1 },
+        memoryFlag: "helped_stranger"
+      },
+      b: {
+        label: "Keep walking because you are in a hurry.",
+        journal: "You passed a stranger who asked for help.",
+        consequence: "Your schedule remains intact. The figure adjusts their grip and continues alone.",
+        oracle: "Hurry is a kind of armor. It keeps appointments safe and people at a distance.",
+        stats: { compassion: -2, selfishness: 2, wisdom: -1 },
+        memoryFlag: "ignored_stranger"
+      }
+    }
+  },
+  {
+    id: "queue",
+    location: "THE LONG QUEUE",
+    story: "People stand in a slow ribbon of patience. A gap opens near the front — just wide enough for someone willing to pretend they had always been there.",
+    situation: "You could step into the gap and save a great deal of time.",
+    choices: {
+      a: {
+        label: "Remain in your place and wait.",
+        journal: "You waited your turn.",
+        consequence: "Minutes pass like small stones. When your turn comes, it is unquestionably yours.",
+        oracle: "Patience is not stillness. It is the decision not to steal another person's time.",
+        stats: { wisdom: 2, compassion: 1, honesty: 1 },
+        memoryFlag: "waited"
+      },
+      b: {
+        label: "Take the gap. No one will stop you.",
+        journal: "You moved ahead of others waiting.",
+        consequence: "You arrive sooner. A few faces turn, then look away, practicing a silence you also practiced.",
+        oracle: "A quiet decision can still have a loud consequence. The line remembers even when it does not speak.",
+        stats: { wisdom: -1, compassion: -1, honesty: -1, selfishness: 2 },
+        memoryFlag: "cut_line"
+      }
+    }
+  },
+  {
+    id: "letter",
+    location: "THE UNFINISHED LETTER",
+    story: "A classmate sits with a message half-written and a problem that will not untie itself. They do not demand help. They only look tired enough to be seen.",
+    situation: "You know how to finish what they are stuck on. Helping will make you late for something you wanted.",
+    choices: {
+      a: {
+        label: "Stay and help them finish.",
+        journal: "You stayed to help someone finish their work.",
+        consequence: "The letter finds its last sentence. You miss part of what you planned. The day is differently shaped, not empty.",
+        oracle: "Time spent on another person's knot is still time that belongs to the world.",
+        oracleMemory: [
+          { flag: "helped_stranger", text: "You helped a stranger when the path was simple. Today you helped again when it cost you a plan. Patterns, once begun, like to continue." }
+        ],
+        stats: { wisdom: 1, compassion: 2, courage: 1, selfishness: -1 },
+        memoryFlag: "helped_letter"
+      },
+      b: {
+        label: "Wish them luck and leave for your own plans.",
+        journal: "You left someone to finish alone so you would not be late.",
+        consequence: "Your plan proceeds. Behind you the page remains half-bright.",
+        oracle: "Not every departure is cruelty. Still, the Archive notes the difference between cannot and will not.",
+        stats: { compassion: -1, selfishness: 1 },
+        memoryFlag: "left_letter"
+      }
+    }
+  },
+  {
+    id: "lamp",
+    location: "THE SHARED LAMP",
+    story: "In a dim alcove you find a method — a way of seeing a problem that others are still circling. The lamp is small. It could stay yours.",
+    situation: "You discovered a clearer way to understand something others are struggling with.",
+    choices: {
+      a: {
+        label: "Share the method so others can use it too.",
+        journal: "You shared knowledge you could have kept.",
+        consequence: "The alcove grows brighter. Several people finish sooner. Your advantage becomes a commons.",
+        oracle: "Knowledge that is hoarded becomes a room with one chair. Knowledge that is shared becomes a hall.",
+        stats: { wisdom: 2, compassion: 2, honesty: 1 },
+        memoryFlag: "shared_knowledge"
+      },
+      b: {
+        label: "Keep the method to yourself for the advantage.",
+        journal: "You kept a useful method private.",
+        consequence: "You move ahead. The others remain in the dim, circling the same stone.",
+        oracle: "A private lamp still casts a shadow. Notice who stands in it.",
+        stats: { wisdom: -1, compassion: -1, selfishness: 2 },
+        memoryFlag: "hoarded_knowledge"
+      }
+    }
+  },
+  {
+    id: "bowl",
+    location: "THE UNWATCHED BOWL",
+    story: "A bowl of tokens sits on a table after a gathering. Each person was meant to take one. Two remain. No one is looking.",
+    situation: "You could take an extra token. It would help you. No one would see.",
+    choices: {
+      a: {
+        label: "Take only what was meant for you, or leave both.",
+        journal: "You left the extra token untouched.",
+        consequence: "The bowl stays honest. The extra token waits for a late arrival, or for no one. Either way, it was not taken by stealth.",
+        oracle: "Self-control is rarely applauded. It is the art of remaining the same person when the room is empty.",
+        oracleMemory: [
+          { flag: "kept_wallet", text: "Once you kept what a hallway offered. Today the bowl offered again. The Archive is interested in whether a pattern holds." }
+        ],
+        stats: { wisdom: 2, honesty: 2, selfishness: -1 },
+        memoryFlag: "left_token"
+      },
+      b: {
+        label: "Take the extra token. It will not be missed.",
+        journal: "You took more than your share when no one was watching.",
+        consequence: "The second token disappears into your pocket. It is small. So are most first compromises.",
+        oracle: "The unseen extra is how larger hungers begin. Not with a feast — with a pocket.",
+        stats: { wisdom: -1, honesty: -1, selfishness: 2 },
+        memoryFlag: "took_extra"
+      }
+    }
+  },
+  {
+    id: "garden",
+    location: "THE FORGIVENESS GARDEN",
+    story: "Pale geometric flowers hang in still air. A person who hurt you stands at the far path. They do not demand pardon. They only wait.",
+    situation: "Someone who wronged you asks, without ceremony, to begin again.",
+    choices: {
+      a: {
+        label: "Forgive them and let the path continue.",
+        journal: "You chose to forgive.",
+        consequence: "The air does not become simple. It becomes walkable. The past remains, but it no longer blocks the gate.",
+        oracle: "Forgiveness is not forgetting. It is refusing to let an old wound become the only map you own.",
+        stats: { wisdom: 2, compassion: 2, courage: 1 },
+        memoryFlag: "forgave"
+      },
+      b: {
+        label: "Keep the distance. They have not earned the garden.",
+        journal: "You withheld forgiveness.",
+        consequence: "You remain intact, and also alone with the story. The other person turns down a different path.",
+        oracle: "Some walls are wisdom. Some walls are only habit wearing wisdom's coat. Time will tell which you built.",
+        stats: { compassion: -1, wisdom: 0, selfishness: 1 },
+        memoryFlag: "withheld_forgiveness"
+      }
+    }
+  },
+  {
+    id: "library",
+    location: "THE SILENT LIBRARY",
+    story: "Desks stand like quiet islands. On the nearest one, a finished answer key has been left behind — complete, unattended, almost polite in its temptation.",
+    situation: "You have an assessment tomorrow. The answers are here. Using them would be easy, and hidden.",
+    choices: {
+      a: {
+        label: "Leave the answers and study what you actually know.",
+        journal: "You refused ready-made answers.",
+        consequence: "The page stays where it is. Your evening is longer. What you carry into tomorrow will be yours.",
+        oracle: "A borrowed answer can open a door. It cannot teach you how to stand once you are through it.",
+        oracleMemory: [
+          { flag: "followed_rules", text: "You refused a shortcut at the gate. Tonight you refused another. Consistency is a rare metal in the Archive." },
+          { flag: "used_shortcut", text: "You used a hidden gate once. Tonight another key lay on a desk. I wondered whether the first choice had become a habit." }
+        ],
+        stats: { wisdom: 2, honesty: 2, courage: 1 },
+        memoryFlag: "studied_honestly"
+      },
+      b: {
+        label: "Use the answers. No one will know.",
+        journal: "You used answers that were not earned.",
+        consequence: "The facts enter quickly. They sit in the mind like furniture that does not belong to the house.",
+        oracle: "Knowledge taken without the climb is lighter. It is also easier to lose when the wind changes.",
+        stats: { wisdom: -2, honesty: -2, selfishness: 2 },
+        memoryFlag: "used_answers"
+      }
+    }
+  },
+  {
+    id: "promise",
+    location: "THE PROMISE BRIDGE",
+    story: "A narrow span of pale stone crosses a dark interval. You promised to meet someone on the far side. Then a rarer invitation arrives — brighter, and only available now.",
+    situation: "Keeping your word means missing something you badly want.",
+    choices: {
+      a: {
+        label: "Keep the promise and cross as you said you would.",
+        journal: "You kept a promise that became inconvenient.",
+        consequence: "The rarer invitation fades. On the far side, someone is not left waiting in an empty geometry.",
+        oracle: "A promise is a small architecture. When you keep it, the world has one more place that holds.",
+        stats: { wisdom: 1, honesty: 2, courage: 1, compassion: 1 },
+        memoryFlag: "kept_promise"
+      },
+      b: {
+        label: "Take the new invitation and explain later.",
+        journal: "You broke a promise for a better offer.",
+        consequence: "The bright invitation is everything it claimed. On the far side of the bridge, time piles up in someone else's hands.",
+        oracle: "You can explain later. Later is where many true things go to become smaller.",
+        stats: { honesty: -2, compassion: -1, selfishness: 2, wisdom: -1 },
+        memoryFlag: "broke_promise"
+      }
+    }
+  },
+  {
+    id: "square",
+    location: "THE CROWD SQUARE",
+    story: "Voices stack into a bright, unkind weather. Someone is being mocked in the open. Most people become scenery.",
+    situation: "You could speak, or you could pass as if the square were empty.",
+    choices: {
+      a: {
+        label: "Speak up and stand with the person being mocked.",
+        journal: "You spoke up when someone was mocked.",
+        consequence: "The weather stutters. Not everyone is pleased. The isolated person is no longer a single point in a wide space.",
+        oracle: "Courage is often only a sentence said at the right volume. You found that volume.",
+        oracleMemory: [
+          { flag: "spoke_up_secret", text: "You spoke once when a secret asked you to be quiet. Today you spoke again when a crowd asked you to be scenery. The Archive notices a spine when it sees one." }
+        ],
+        stats: { courage: 2, compassion: 2, wisdom: 1 },
+        memoryFlag: "stood_up"
+      },
+      b: {
+        label: "Keep walking. It is not your quarrel.",
+        journal: "You passed by while someone was mocked.",
+        consequence: "The square continues. Your path is uninterrupted. So is the harm.",
+        oracle: "Neutrality is a comfortable chair with a view of other people's weather.",
+        stats: { courage: -2, compassion: -1, selfishness: 1 },
+        memoryFlag: "walked_past"
+      }
+    }
+  },
+  {
+    id: "bench",
+    location: "THE LAST BENCH",
+    story: "One seat remains in a crowded gallery of waiting. Your legs are tired. An older traveler arrives with the particular slowness of a long day.",
+    situation: "The last seat is yours if you take it now.",
+    choices: {
+      a: {
+        label: "Offer the seat.",
+        journal: "You offered the last seat to someone more tired.",
+        consequence: "You stand. The traveler sits as if a knot in the day has loosened. Your tiredness remains, and becomes specific rather than bitter.",
+        oracle: "A seat is a small kingdom. Giving it away is a quiet kind of rule.",
+        stats: { compassion: 2, wisdom: 1, selfishness: -1 },
+        memoryFlag: "gave_seat"
+      },
+      b: {
+        label: "Keep the seat. You were here first.",
+        journal: "You kept the last seat.",
+        consequence: "Being first is a kind of law. The traveler finds a wall to lean on.",
+        oracle: "Rights are real. So is the difference between what you may keep and what you might offer.",
+        stats: { compassion: -1, selfishness: 1 },
+        memoryFlag: "kept_seat"
+      }
+    }
+  },
+  {
+    id: "rumor",
+    location: "THE RUMOR WELL",
+    story: "A circle of voices leans over a dark basin. A story about someone you know is being passed from hand to hand. It is sharp. It may not be true.",
+    situation: "You are invited to pass the story along.",
+    choices: {
+      a: {
+        label: "Refuse to spread it, and say you will not help it travel.",
+        journal: "You stopped a rumor instead of carrying it.",
+        consequence: "The circle cools. One path for the story closes. Others may still exist. You are not one of them.",
+        oracle: "A rumor is a fire that asks to be fed. You declined to be kindling.",
+        stats: { wisdom: 2, compassion: 2, honesty: 1, courage: 1 },
+        memoryFlag: "stopped_rumor"
+      },
+      b: {
+        label: "Pass it on. It is only talk.",
+        journal: "You helped a rumor travel.",
+        consequence: "The story leaves your mouth lighter than it arrived. Somewhere ahead it will arrive heavier.",
+        oracle: "Only talk is how reputations are dismantled without tools. The Archive files the echo under your name as well.",
+        stats: { wisdom: -1, compassion: -2, honesty: -1, selfishness: 1 },
+        memoryFlag: "spread_rumor"
+      }
+    }
+  },
+  {
+    id: "task",
+    location: "THE ABANDONED TASK",
+    story: "A shared project sits unfinished on a long table. The others have gone. Their absence has the shape of an excuse already prepared.",
+    situation: "You can finish the remaining work yourself, or leave it as they did.",
+    choices: {
+      a: {
+        label: "Stay and finish what the group began.",
+        journal: "You finished work others left behind.",
+        consequence: "The table clears. You are tired in a way that can be explained. The project exists in the morning.",
+        oracle: "Responsibility is often what remains after enthusiasm has gone home.",
+        oracleMemory: [
+          { flag: "gave_credit", text: "You once gave credit where it was due. Tonight you gave labor where it was missing. Both are ways of taking a group seriously." }
+        ],
+        stats: { wisdom: 2, courage: 1, compassion: 1, selfishness: -1 },
+        memoryFlag: "finished_task"
+      },
+      b: {
+        label: "Leave it. If they could walk away, so can you.",
+        journal: "You left unfinished shared work.",
+        consequence: "Equality of abandonment is still abandonment. Morning will find the table as you left it.",
+        oracle: "Matching a small failure does not cancel it. It only doubles the silence around the work.",
+        stats: { wisdom: -1, selfishness: 2, compassion: -1 },
+        memoryFlag: "left_task"
+      }
+    }
+  },
+  {
+    id: "apology",
+    location: "THE APOLOGY DOOR",
+    story: "A door of smoked glass stands between you and someone you spoke to too sharply. The handle is ordinary. The difficulty is not.",
+    situation: "You were wrong. You can open the door and say so, or wait until the moment becomes history.",
+    choices: {
+      a: {
+        label: "Admit you were wrong and apologize.",
+        journal: "You admitted a mistake and apologized.",
+        consequence: "The words are brief. They rearrange the air. Not all damage vanishes, but the next sentence becomes possible.",
+        oracle: "An apology is a key that only works if you turn it yourself. You turned it.",
+        oracleMemory: [
+          { flag: "admitted_mistake", text: "You named a crack in a relic. Today you named a crack in your own speech. Naming is becoming a habit worth keeping." }
+        ],
+        stats: { wisdom: 2, honesty: 2, courage: 2, compassion: 1 },
+        memoryFlag: "apologized"
+      },
+      b: {
+        label: "Let it fade. Explaining would only reopen it.",
+        journal: "You let a wrong remain unnamed.",
+        consequence: "Time passes. The other person learns to expect less from your door.",
+        oracle: "Some silences heal. Others only freeze the wound in a flattering position.",
+        stats: { honesty: -2, courage: -1, compassion: -1, selfishness: 1 },
+        memoryFlag: "avoided_apology"
+      }
+    }
+  },
+  {
+    id: "scale",
+    location: "THE WEIGHING SCALE",
+    story: "Two pans hang in a pale field. On one, a prize you have wanted. On the other, a person who will miss something important unless you stay and help.",
+    situation: "You must choose between a personal gain and helping someone else.",
+    choices: {
+      a: {
+        label: "Help them, even if the prize is lost.",
+        journal: "You gave up a prize to help someone.",
+        consequence: "The prize recedes. The person reaches what they needed to reach. You walk back lighter of one desire and heavier of one fact.",
+        oracle: "Gain is easy to count. Worth is counted differently, and usually later.",
+        oracleMemory: [
+          { flag: "helped_stranger", text: "You have helped when the cost was small. Today the cost had a name: a prize. That is a sterner measure." }
+        ],
+        stats: { wisdom: 2, compassion: 2, selfishness: -2, courage: 1 },
+        memoryFlag: "chose_help"
+      },
+      b: {
+        label: "Take the prize. They will manage.",
+        journal: "You took the prize and left someone unhelped.",
+        consequence: "The prize is real and cool in the hand. Behind you, someone recalculates their day without you in it.",
+        oracle: "You kept what you reached for. Reach, in the Archive, is also a record of what you did not hold.",
+        stats: { compassion: -2, selfishness: 2, wisdom: -1 },
+        memoryFlag: "chose_prize"
+      }
+    }
+  },
+  {
+    id: "mirror",
+    location: "THE LAST MIRROR",
+    story: "The Archive shows you a final pane of dark glass. In it, an idea that was not born in your mind is about to be praised — and the room is ready to thank whoever speaks first.",
+    situation: "You can let the idea be received as yours, or you can name the person it came from.",
+    choices: {
+      a: {
+        label: "Name the true source of the idea.",
+        journal: "You gave credit for an idea that was not yours.",
+        consequence: "The praise turns, correctly. You remain in the room without wearing another person's light.",
+        oracle: "The last mirror does not flatter. It only returns what you are willing to stand beside.",
+        oracleMemory: [
+          { flag: "gave_credit", text: "You have practiced this before. The second time is quieter, and more like character than performance." },
+          { flag: "kept_credit", text: "Once you allowed praise to settle where it was convenient. Today the mirror offered the same arrangement. You chose differently. That difference is not nothing." }
+        ],
+        stats: { wisdom: 2, honesty: 2, compassion: 1, courage: 1 },
+        memoryFlag: "named_source"
+      },
+      b: {
+        label: "Accept the thanks and stay silent about the source.",
+        journal: "You allowed an idea to be received as yours.",
+        consequence: "The room smiles at you. The true source, if they learn of it, will smile differently.",
+        oracle: "A borrowed light can make a traveler look finished. It cannot make the path theirs.",
+        stats: { wisdom: -1, honesty: -2, selfishness: 2, compassion: -1 },
+        memoryFlag: "took_idea"
+      }
+    }
+  }
+];
+
+/* ---------------------------------------------------------------------------
+   STATE
+   --------------------------------------------------------------------------- */
+const state = {
+  screen: "title",
+  trialIndex: 0,
+  stats: { ...STAT_DEFAULTS },
+  flags: [],
+  journal: [],
+  lastChoiceKey: null,
+  awaitingContinue: false,
+  endingId: null,
+  finalAnswer: null,
+  lastSpoken: "",
+  settings: {
+    voice: { ...VOICE_DEFAULTS },
+    music: { ...MUSIC_DEFAULTS }
+  }
+};
+
+/* ---------------------------------------------------------------------------
+   AUDIO / VOICE
+   --------------------------------------------------------------------------- */
+const music = {
+  el: null,
+  ready: false,
+  missing: false,
+  targetVolume: MUSIC_DEFAULTS.volume,
+  ducked: false
+};
+
+function initMusic() {
+  const el = new Audio();
+  el.loop = true;
+  el.preload = "auto";
+  el.src = GAME_SETTINGS.musicSrc;
+  el.volume = state.settings.music.volume;
+  el.addEventListener("canplaythrough", () => { music.ready = true; }, { once: true });
+  el.addEventListener("error", () => { music.missing = true; music.ready = false; });
+  music.el = el;
+}
+
+function playMusic() {
+  if (!state.settings.music.enabled || music.missing || !music.el) return;
+  music.el.volume = music.ducked
+    ? state.settings.music.volume * GAME_SETTINGS.musicDuckedRatio
+    : state.settings.music.volume;
+  const p = music.el.play();
+  if (p && typeof p.catch === "function") p.catch(() => {});
+}
+
+function pauseMusic() {
+  if (music.el) music.el.pause();
+}
+
+function fadeMusicTo(vol, ms) {
+  if (!music.el || music.missing) return;
+  const start = music.el.volume;
+  const dest = Math.max(0, Math.min(1, vol));
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || ms < 40) {
+    music.el.volume = dest;
+    return;
+  }
+  const t0 = performance.now();
+  function step(now) {
+    const k = Math.min(1, (now - t0) / ms);
+    music.el.volume = start + (dest - start) * k;
+    if (k < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function duckMusic() {
+  if (!state.settings.music.enabled || !music.el || music.missing) return;
+  music.ducked = true;
+  fadeMusicTo(state.settings.music.volume * GAME_SETTINGS.musicDuckedRatio, 280);
+}
+
+function unduckMusic() {
+  if (!music.el || music.missing) return;
+  music.ducked = false;
+  if (!state.settings.music.enabled) return;
+  fadeMusicTo(state.settings.music.volume, GAME_SETTINGS.musicRestoreMs);
+}
+
+function stopMusicFade() {
+  if (!music.el) return;
+  fadeMusicTo(0, 700);
+  setTimeout(() => { if (music.el) music.el.pause(); }, 720);
+}
+
+let voicesCache = [];
+function loadVoices() {
+  if (!("speechSynthesis" in window)) return [];
+  voicesCache = window.speechSynthesis.getVoices() || [];
+  return voicesCache;
+}
+
+function preferredVoice() {
+  const list = loadVoices();
+  if (!list.length) return null;
+  const saved = state.settings.voice.voiceURI;
+  if (saved) {
+    const found = list.find((v) => v.voiceURI === saved);
+    if (found) return found;
+  }
+  const scored = list.map((v) => {
+    const n = (v.name || "").toLowerCase();
+    let s = 0;
+    if (v.lang && v.lang.toLowerCase().startsWith("en")) s += 3;
+    if (/male|daniel|fred|alex|david|george|james|thomas|reed/.test(n)) s += 2;
+    if (/calm|soft|narrat|story|premium|natural|neural/.test(n)) s += 2;
+    if (/google uk english male|microsoft david|microsoft guy/.test(n)) s += 3;
+    if (v.default) s += 1;
+    return { v, s };
+  });
+  scored.sort((a, b) => b.s - a.s);
+  return scored[0].v;
+}
+
+function canSpeak() {
+  return typeof window !== "undefined" && "speechSynthesis" in window && state.settings.voice.enabled;
+}
+
+/* ---------------------------------------------------------------------------
+   ORACLE STATES + AUDIO-REACTIVE SPHERE
+   SpeechSynthesis cannot be reliably routed into an AnalyserNode.
+   We drive a speech-synced envelope from utterance timing and text rhythm,
+   and use Web Audio only if a future capture path appears.
+   --------------------------------------------------------------------------- */
+const ORACLE_STATES = {
+  IDLE: "idle",
+  SPEAKING: "speaking",
+  THINKING: "thinking",
+  CHOOSING: "choosing",
+  CHOOSE: "choose"
+};
+
+const oracleViz = {
+  state: ORACLE_STATES.IDLE,
+  energy: 0.08,
+  target: 0.08,
+  phrase: "",
+  t0: 0,
+  speaking: false,
+  raf: 0,
+  bars: 56,
+  seqToken: 0,
+  thinkTimer: 0,
+  speechTimer: 0,
+  scenarioLocked: false
+};
+
+function showOraclePresence(show) {
+  const el = document.getElementById("oracle-presence");
+  if (!el) return;
+  el.hidden = !show;
+  if (show) resizeOracleWave();
+}
+
+function setOracleState(next) {
+  oracleViz.state = next;
+  const el = document.getElementById("oracle-presence");
+  if (el) el.setAttribute("data-state", next);
+  if (next === ORACLE_STATES.IDLE || next === ORACLE_STATES.CHOOSING) {
+    oracleViz.target = 0.08;
+    oracleViz.speaking = false;
+  } else if (next === ORACLE_STATES.THINKING) {
+    oracleViz.target = 0.16;
+    oracleViz.speaking = false;
+  } else if (next === ORACLE_STATES.SPEAKING || next === ORACLE_STATES.CHOOSE) {
+    oracleViz.speaking = true;
+    oracleViz.target = next === ORACLE_STATES.CHOOSE ? 0.72 : 0.55;
+  }
+}
+
+function showReflect(on) {
+  const box = document.getElementById("reflect-box");
+  const fill = document.getElementById("reflect-fill");
+  if (!box) return;
+  box.hidden = !on;
+  if (on && fill) {
+    fill.style.animation = "none";
+    void fill.offsetWidth;
+    fill.style.animation = "reflectFill 3s linear forwards";
+  }
+}
+
+function showChooseLine(on) {
+  const line = document.getElementById("choose-line");
+  if (line) line.hidden = !on;
+}
+
+function estimateSpeechMs(text, rate) {
+  const words = String(text || "").trim().split(/\s+/).filter(Boolean).length;
+  const wps = 2.55 * (rate || 1);
+  return Math.max(900, Math.round((words / Math.max(0.6, wps)) * 1000) + 350);
+}
+
+function speechEnvelope(now) {
+  if (!oracleViz.speaking) return oracleViz.state === ORACLE_STATES.THINKING ? 0.14 : 0.07;
+  const elapsed = (now - oracleViz.t0) / 1000;
+  const phrase = oracleViz.phrase || "";
+  const n = Math.max(8, phrase.length);
+  const idx = Math.min(n - 1, Math.floor((elapsed * 12) % n));
+  const ch = phrase.charCodeAt(idx % n) || 65;
+  const vowelBoost = /[aeiouAEIOU ,.—]/.test(phrase.charAt(idx % n)) ? 0.35 : 0.12;
+  const pulse = 0.38 + 0.38 * Math.abs(Math.sin(elapsed * 7.2 + ch)) + vowelBoost * Math.abs(Math.sin(elapsed * 13.1));
+  return Math.min(1, pulse);
+}
+
+function resizeOracleWave() {
+  const canvas = document.getElementById("oracle-wave");
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+  canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+}
+
+function updateOracleVisualizer(now) {
+  const canvas = document.getElementById("oracle-wave");
+  if (!canvas || canvas.parentElement.hidden) return;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  const w = canvas.width;
+  const h = canvas.height;
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  ctx.clearRect(0, 0, w, h);
+  const env = speechEnvelope(now || performance.now());
+  oracleViz.energy += (Math.max(oracleViz.target, env) - oracleViz.energy) * 0.18;
+  const cx = w / 2;
+  const cy = h / 2 + 8 * dpr;
+  const radius = Math.min(w, h) * 0.28;
+  const bars = oracleViz.bars;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  for (let i = 0; i < bars; i++) {
+    const a = (i / bars) * Math.PI * 2 - Math.PI / 2;
+    const wobble = reduce ? 0.15 : Math.abs(Math.sin(i * 0.55 + (now || 0) / 240));
+    const amp = (0.22 + oracleViz.energy * 0.95) * (0.45 + wobble);
+    const len = (10 + amp * 26) * dpr;
+    const inner = radius + 6 * dpr;
+    const x0 = cx + Math.cos(a) * inner;
+    const y0 = cy + Math.sin(a) * inner;
+    const x1 = cx + Math.cos(a) * (inner + len);
+    const y1 = cy + Math.sin(a) * (inner + len);
+    ctx.strokeStyle = `rgba(126, 200, 212, ${0.18 + oracleViz.energy * 0.55})`;
+    ctx.lineWidth = Math.max(1, 1.4 * dpr);
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    ctx.lineTo(x1, y1);
+    ctx.stroke();
+  }
+  ctx.beginPath();
+  ctx.strokeStyle = `rgba(138, 120, 168, ${0.12 + oracleViz.energy * 0.25})`;
+  ctx.lineWidth = Math.max(1, 1.1 * dpr);
+  ctx.arc(cx, cy, radius + (18 + oracleViz.energy * 10) * dpr, 0, Math.PI * 2);
+  ctx.stroke();
+}
+
+function startOracleVisualizer() {
+  if (oracleViz.raf) return;
+  resizeOracleWave();
+  window.addEventListener("resize", resizeOracleWave);
+  function loop(now) {
+    updateOracleVisualizer(now);
+    oracleViz.raf = requestAnimationFrame(loop);
+  }
+  oracleViz.raf = requestAnimationFrame(loop);
+}
+
+function cancelOracleSequence() {
+  oracleViz.seqToken += 1;
+  oracleViz.scenarioLocked = false;
+  clearTimeout(oracleViz.thinkTimer);
+  clearTimeout(oracleViz.speechTimer);
+  showReflect(false);
+  showChooseLine(false);
+}
+
+function speak(text, opts) {
+  opts = opts || {};
+  state.lastSpoken = text || "";
+  const token = opts.token != null ? opts.token : oracleViz.seqToken;
+  let finished = false;
+  const done = () => {
+    if (finished) return;
+    if (token !== oracleViz.seqToken && !opts.ignoreToken) return;
+    finished = true;
+    clearTimeout(oracleViz.speechTimer);
+    oracleViz.speaking = false;
+    if (!opts.keepDucked) unduckMusic();
+    if (opts.onEnd) opts.onEnd();
+  };
+  if (!text) { done(); return; }
+
+  oracleViz.phrase = text;
+  oracleViz.t0 = performance.now();
+  if (opts.visualState) setOracleState(opts.visualState);
+  else setOracleState(ORACLE_STATES.SPEAKING);
+
+  if (!("speechSynthesis" in window) || !state.settings.voice.enabled) {
+    if (!opts.keepDucked) { /* stay */ }
+    else duckMusic();
+    clearTimeout(oracleViz.speechTimer);
+    oracleViz.speechTimer = setTimeout(done, opts.silentHold || 400);
+    return;
+  }
+
+  try { window.speechSynthesis.cancel(); } catch (_) {}
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = opts.rate != null ? opts.rate : state.settings.voice.rate;
+  u.volume = state.settings.voice.volume;
+  u.pitch = 0.92;
+  const voice = preferredVoice();
+  if (voice) u.voice = voice;
+  u.onstart = () => {
+    duckMusic();
+    oracleViz.speaking = true;
+    oracleViz.t0 = performance.now();
+  };
+  u.onend = done;
+  u.onerror = done;
+  duckMusic();
+  oracleViz.speaking = true;
+  const fallback = estimateSpeechMs(text, u.rate) + 800;
+  clearTimeout(oracleViz.speechTimer);
+  oracleViz.speechTimer = setTimeout(done, fallback);
+  try {
+    window.speechSynthesis.speak(u);
+  } catch (_) {
+    done();
+  }
+}
+
+function stopSpeech() {
+  cancelOracleSequence();
+  if ("speechSynthesis" in window) {
+    try { window.speechSynthesis.cancel(); } catch (_) {}
+  }
+  oracleViz.speaking = false;
+  setOracleState(ORACLE_STATES.IDLE);
+  unduckMusic();
+}
+
+function replayVoice() {
+  if (!state.lastSpoken) return;
+  speak(state.lastSpoken, { ignoreToken: true, visualState: ORACLE_STATES.SPEAKING, onEnd: () => {
+    if (oracleViz.scenarioLocked) setOracleState(ORACLE_STATES.THINKING);
+    else setOracleState(ORACLE_STATES.IDLE);
+  }});
+}
+
+function speakScenario(text) {
+  speak(text, {
+    token: oracleViz.seqToken,
+    keepDucked: true,
+    visualState: ORACLE_STATES.SPEAKING,
+    onEnd: () => startThinkingPause()
+  });
+}
+
+function startThinkingPause() {
+  const token = oracleViz.seqToken;
+  setOracleState(ORACLE_STATES.THINKING);
+  duckMusic();
+  showReflect(true);
+  showChooseLine(false);
+  clearTimeout(oracleViz.thinkTimer);
+  oracleViz.thinkTimer = setTimeout(() => {
+    if (token !== oracleViz.seqToken) return;
+    showReflect(false);
+    speakChooseCarefully();
+  }, 3000);
+}
+
+function speakChooseCarefully() {
+  const token = oracleViz.seqToken;
+  showChooseLine(true);
+  speak("Choose carefully.", {
+    token,
+    rate: Math.min(0.84, state.settings.voice.rate),
+    keepDucked: false,
+    visualState: ORACLE_STATES.CHOOSE,
+    silentHold: 900,
+    onEnd: () => {
+      if (token !== oracleViz.seqToken) return;
+      showChoices();
+    }
+  });
+}
+
+function showChoices() {
+  oracleViz.scenarioLocked = false;
+  setOracleState(ORACLE_STATES.CHOOSING);
+  const panel = document.getElementById("choice-panel");
+  if (panel) {
+    panel.hidden = false;
+    panel.classList.remove("is-locked");
+  }
+  const a = document.getElementById("choice-a");
+  const b = document.getElementById("choice-b");
+  if (a) a.disabled = false;
+  if (b) b.disabled = false;
+  showChooseLine(true);
+}
+
+function beginScenarioSpeech(sc) {
+  oracleViz.seqToken += 1;
+  oracleViz.scenarioLocked = true;
+  showReflect(false);
+  showChooseLine(false);
+  showOraclePresence(true);
+  setOracleState(ORACLE_STATES.SPEAKING);
+  const spoken = sc.situation;
+  speakScenario(spoken);
+}
+
+/* ---------------------------------------------------------------------------
+   SAVE / LOAD
+   --------------------------------------------------------------------------- */
+function serialize() {
+  return {
+    trialIndex: state.trialIndex,
+    stats: { ...state.stats },
+    flags: [...state.flags],
+    journal: state.journal.map((j) => ({ ...j })),
+    lastChoiceKey: state.lastChoiceKey,
+    awaitingContinue: state.awaitingContinue,
+    endingId: state.endingId,
+    finalAnswer: state.finalAnswer,
+    screen: state.screen,
+    settings: {
+      voice: { ...state.settings.voice },
+      music: { ...state.settings.music }
+    }
+  };
+}
+
+function persist() {
+  try {
+    localStorage.setItem(GAME_SETTINGS.storageKey, JSON.stringify(serialize()));
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+function hasSave() {
+  try {
+    return !!localStorage.getItem(GAME_SETTINGS.storageKey);
+  } catch (_) {
+    return false;
+  }
+}
+
+function loadSave() {
+  try {
+    const raw = localStorage.getItem(GAME_SETTINGS.storageKey);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    state.trialIndex = data.trialIndex || 0;
+    state.stats = { ...STAT_DEFAULTS, ...(data.stats || {}) };
+    state.flags = Array.isArray(data.flags) ? data.flags : [];
+    state.journal = Array.isArray(data.journal) ? data.journal : [];
+    state.lastChoiceKey = data.lastChoiceKey || null;
+    state.awaitingContinue = !!data.awaitingContinue;
+    state.endingId = data.endingId || null;
+    state.finalAnswer = data.finalAnswer || null;
+    state.screen = data.screen || "title";
+    if (data.settings && data.settings.voice) {
+      state.settings.voice = { ...VOICE_DEFAULTS, ...data.settings.voice };
+    }
+    if (data.settings && data.settings.music) {
+      state.settings.music = { ...MUSIC_DEFAULTS, ...data.settings.music };
+    }
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+function clearSave() {
+  try { localStorage.removeItem(GAME_SETTINGS.storageKey); } catch (_) {}
+}
+
+function resetRun(keepSettings) {
+  stopSpeech();
+  showOraclePresence(false);
+  showReflect(false);
+  showChooseLine(false);
+  const settings = keepSettings ? {
+    voice: { ...state.settings.voice },
+    music: { ...state.settings.music }
+  } : {
+    voice: { ...VOICE_DEFAULTS },
+    music: { ...MUSIC_DEFAULTS }
+  };
+  state.screen = "title";
+  state.trialIndex = 0;
+  state.stats = { ...STAT_DEFAULTS };
+  state.flags = [];
+  state.journal = [];
+  state.lastChoiceKey = null;
+  state.awaitingContinue = false;
+  state.endingId = null;
+  state.finalAnswer = null;
+  state.lastSpoken = "";
+  state.settings = settings;
+}
+
+/* ---------------------------------------------------------------------------
+   UI HELPERS
+   --------------------------------------------------------------------------- */
+const stage = () => document.getElementById("stage");
+const topbar = () => document.getElementById("topbar");
+const progressLabel = () => document.getElementById("progress-label");
+
+function showTopbar(show) {
+  const el = topbar();
+  if (!el) return;
+  el.hidden = !show;
+  if (show) {
+    const n = Math.min(state.trialIndex + 1, SCENARIOS.length);
+    progressLabel().textContent = state.screen === "scenario" || state.screen === "consequence"
+      ? `TRIAL ${String(n).padStart(2, "0")} / ${String(SCENARIOS.length).padStart(2, "0")}`
+      : state.screen === "ending" || state.screen === "final" || state.screen === "complete"
+        ? "FINAL JUDGMENT"
+        : "THE ARCHIVE";
+  }
+}
+
+function toast(msg) {
+  const el = document.getElementById("toast");
+  el.hidden = false;
+  el.textContent = msg;
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { el.hidden = true; }, 2200);
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function voiceDockHtml() {
+  return `
+    <div class="voice-dock" role="group" aria-label="Voice and music">
+      <button type="button" class="icon-btn" id="dock-voice" aria-pressed="${state.settings.voice.enabled}">
+        ${state.settings.voice.enabled ? "🔊 VOICE ON" : "🔇 VOICE OFF"}
+      </button>
+      <button type="button" class="icon-btn" id="dock-replay">▶ REPLAY VOICE</button>
+      <button type="button" class="icon-btn" id="dock-music" aria-pressed="${state.settings.music.enabled}">
+        ${state.settings.music.enabled ? "♪ MUSIC ON" : "♪ MUSIC OFF"}
+      </button>
+    </div>`;
+}
+
+function bindDock() {
+  const v = document.getElementById("dock-voice");
+  const r = document.getElementById("dock-replay");
+  const m = document.getElementById("dock-music");
+  if (v) v.addEventListener("click", () => {
+    state.settings.voice.enabled = !state.settings.voice.enabled;
+    if (!state.settings.voice.enabled) {
+      try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (_) {}
+      oracleViz.speaking = false;
+      if (oracleViz.scenarioLocked && oracleViz.state === ORACLE_STATES.SPEAKING) {
+        startThinkingPause();
+      }
+    }
+    persist();
+    if (v) {
+      v.setAttribute("aria-pressed", String(state.settings.voice.enabled));
+      v.textContent = state.settings.voice.enabled ? "🔊 VOICE ON" : "🔇 VOICE OFF";
+    }
+  });
+  if (r) r.addEventListener("click", replayVoice);
+  if (m) m.addEventListener("click", () => {
+    state.settings.music.enabled = !state.settings.music.enabled;
+    persist();
+    if (state.settings.music.enabled) playMusic();
+    else pauseMusic();
+    if (m) {
+      m.setAttribute("aria-pressed", String(state.settings.music.enabled));
+      m.textContent = state.settings.music.enabled ? "♪ MUSIC ON" : "♪ MUSIC OFF";
+    }
+  });
+}
+
+function resolveOracle(choice) {
+  if (choice.oracleMemory && choice.oracleMemory.length) {
+    for (let i = 0; i < choice.oracleMemory.length; i++) {
+      const m = choice.oracleMemory[i];
+      if (state.flags.includes(m.flag)) return m.text;
+    }
+  }
+  return choice.oracle;
+}
+
+/* ---------------------------------------------------------------------------
+   SCREENS
+   --------------------------------------------------------------------------- */
+function renderTitle() {
+  state.screen = "title";
+  showTopbar(false);
+  showOraclePresence(false);
+  setOracleState(ORACLE_STATES.IDLE);
+  stage().innerHTML = `
+    <section class="screen title-screen" aria-labelledby="game-title">
+      <div class="sigil" aria-hidden="true"><span>◇</span></div>
+      <h1 class="game-title" id="game-title">THE PATH OF WISDOM</h1>
+      <p class="subtitle">A JOURNEY THROUGH CHOICES</p>
+      <p class="epigraph">Every path reveals something about the traveler.</p>
+      <div class="btn-stack">
+        <button type="button" class="primary-btn" id="btn-begin">BEGIN THE JOURNEY</button>
+        ${hasSave() ? `<button type="button" class="ghost-btn" id="btn-continue-save">CONTINUE JOURNEY</button>` : ""}
+        <button type="button" class="ghost-btn" id="btn-open-settings">SETTINGS</button>
+        <button type="button" class="ghost-btn" id="btn-open-credits">CREDITS</button>
+      </div>
+      ${voiceDockHtml()}
+    </section>`;
+  document.getElementById("btn-begin").addEventListener("click", () => {
+    playMusic();
+    if (hasSave() && (state.journal.length || state.trialIndex > 0)) {
+      openConfirm("Start a new journey? Your current path will be replaced.", () => {
+        resetRun(true);
+        persist();
+        startIntro();
+      });
+    } else {
+      startIntro();
+    }
+  });
+  const cont = document.getElementById("btn-continue-save");
+  if (cont) cont.addEventListener("click", () => {
+    playMusic();
+    if (loadSave()) resumeFromSave();
+    else startIntro();
+  });
+  document.getElementById("btn-open-settings").addEventListener("click", openSettings);
+  document.getElementById("btn-open-credits").addEventListener("click", openCredits);
+  bindDock();
+}
+
+function startIntro() {
+  state.screen = "intro";
+  showTopbar(false);
+  playMusic();
+  runIntroSequence();
+}
+
+function runIntroSequence() {
+  const beats = INTRO_BEATS.slice();
+  let i = 0;
+  function showBeat() {
+    const beat = beats[i];
+    stage().innerHTML = `
+      <section class="screen intro-screen">
+        <p class="intro-line show">${escapeHtml(beat.screen)}</p>
+      </section>`;
+    i += 1;
+    if (i < beats.length) {
+      setTimeout(showBeat, 900);
+    } else {
+      setTimeout(showOracleIntro, 800);
+    }
+  }
+  showBeat();
+}
+
+function showOracleIntro() {
+  showOraclePresence(true);
+  setOracleState(ORACLE_STATES.SPEAKING);
+  stage().innerHTML = `
+    <section class="screen intro-screen">
+      <p class="intro-line show">GUIDE IDENTIFIED</p>
+      <h2 class="oracle-name">THE ORACLE</h2>
+      <div id="intro-speeches"></div>
+      <div class="continue-wrap" id="intro-continue" hidden>
+        <button type="button" class="primary-btn" id="btn-intro-continue">CONTINUE</button>
+      </div>
+      ${voiceDockHtml()}
+    </section>`;
+  bindDock();
+  const box = document.getElementById("intro-speeches");
+  let n = 0;
+  function nextLine() {
+    if (n >= INTRO_LINES.length) {
+      document.getElementById("intro-continue").hidden = false;
+      document.getElementById("btn-intro-continue").addEventListener("click", () => {
+        state.trialIndex = 0;
+        state.awaitingContinue = false;
+        persist();
+        renderScenario();
+      });
+      document.getElementById("btn-intro-continue").focus();
+      return;
+    }
+    const p = document.createElement("p");
+    p.className = "oracle-speech";
+    p.textContent = INTRO_LINES[n];
+    box.appendChild(p);
+    speak(INTRO_LINES[n]);
+    n += 1;
+    setTimeout(nextLine, 2600);
+  }
+  nextLine();
+}
+
+function renderScenario() {
+  if (state.trialIndex >= SCENARIOS.length) {
+    renderJudgment();
+    return;
+  }
+  const sc = SCENARIOS[state.trialIndex];
+  state.screen = "scenario";
+  state.awaitingContinue = false;
+  state.lastChoiceKey = null;
+  showTopbar(true);
+  showOraclePresence(true);
+  showReflect(false);
+  showChooseLine(false);
+  stage().innerHTML = `
+    <section class="screen" aria-labelledby="loc">
+      <h2 class="location" id="loc">${escapeHtml(sc.location)}</h2>
+      <article class="glass scene-card">
+        <div class="scene-text">
+          <p>${escapeHtml(sc.story)}</p>
+          <p>${escapeHtml(sc.situation)}</p>
+        </div>
+      </article>
+      <div id="choice-panel" class="choice-panel is-locked" hidden>
+        <p class="choose-label">CHOOSE YOUR PATH</p>
+        <div class="choices">
+          <button type="button" class="path-btn" id="choice-a" data-choice="a" disabled>
+            <span class="path-kicker">PATH A</span>
+            <span class="path-label">${escapeHtml(sc.choices.a.label)}</span>
+          </button>
+          <button type="button" class="path-btn" id="choice-b" data-choice="b" disabled>
+            <span class="path-kicker">PATH B</span>
+            <span class="path-label">${escapeHtml(sc.choices.b.label)}</span>
+          </button>
+        </div>
+      </div>
+      ${voiceDockHtml()}
+    </section>`;
+  bindDock();
+  const a = document.getElementById("choice-a");
+  const b = document.getElementById("choice-b");
+  a.addEventListener("click", () => selectChoice("a"));
+  b.addEventListener("click", () => selectChoice("b"));
+  persist();
+  beginScenarioSpeech(sc);
+}
+
+function applyStats(delta) {
+  STAT_KEYS.forEach((k) => {
+    const d = delta[k] || 0;
+    state.stats[k] = (state.stats[k] || 0) + d;
+  });
+}
+
+function selectChoice(key) {
+  if (state.screen !== "scenario") return;
+  if (oracleViz.scenarioLocked) return;
+  const sc = SCENARIOS[state.trialIndex];
+  const choice = sc.choices[key];
+  if (!choice) return;
+  state.screen = "consequence";
+  state.lastChoiceKey = key;
+  state.awaitingContinue = true;
+  document.getElementById("choice-a").disabled = true;
+  document.getElementById("choice-b").disabled = true;
+  applyStats(choice.stats || {});
+  if (choice.memoryFlag && !state.flags.includes(choice.memoryFlag)) {
+    state.flags.push(choice.memoryFlag);
+  }
+  const oracleText = resolveOracle(choice);
+  state.journal.push({
+    trial: state.trialIndex + 1,
+    location: sc.location,
+    choice: choice.journal,
+    oracle: oracleText
+  });
+  persist();
+
+  const card = document.querySelector(".scene-card");
+  if (card) card.style.opacity = "0.72";
+
+  setTimeout(() => {
+    showReflect(false);
+    showChooseLine(false);
+    showOraclePresence(true);
+    setOracleState(ORACLE_STATES.SPEAKING);
+    stage().innerHTML = `
+      <section class="screen" aria-labelledby="loc">
+        <h2 class="location" id="loc">${escapeHtml(sc.location)}</h2>
+        <article class="glass scene-card consequence-card">
+          <p class="chosen">YOU CHOSE</p>
+          <div class="scene-text">
+            <p>${escapeHtml(choice.label)}</p>
+            <p>${escapeHtml(choice.consequence)}</p>
+          </div>
+          <div class="oracle-box">
+            <p class="oracle-kicker">THE ORACLE</p>
+            <p class="oracle-line">${escapeHtml(oracleText)}</p>
+          </div>
+        </article>
+        <div class="continue-wrap">
+          <button type="button" class="primary-btn" id="btn-next">CONTINUE</button>
+        </div>
+        ${voiceDockHtml()}
+      </section>`;
+    bindDock();
+    speak(oracleText, {
+      ignoreToken: true,
+      visualState: ORACLE_STATES.SPEAKING,
+      onEnd: () => setOracleState(ORACLE_STATES.IDLE)
+    });
+    document.getElementById("btn-next").addEventListener("click", advanceAfterChoice);
+    document.getElementById("btn-next").focus();
+  }, 280);
+}
+
+function advanceAfterChoice() {
+  stopSpeech();
+  showReflect(false);
+  showChooseLine(false);
+  state.trialIndex += 1;
+  state.awaitingContinue = false;
+  state.lastChoiceKey = null;
+  persist();
+  if (state.trialIndex >= SCENARIOS.length) renderJudgment();
+  else renderScenario();
+}
+
+function renderJudgment() {
+  state.screen = "ending";
+  showTopbar(true);
+  showOraclePresence(true);
+  showReflect(false);
+  showChooseLine(false);
+  setOracleState(ORACLE_STATES.SPEAKING);
+  const ending = chooseEnding(state.stats);
+  state.endingId = ending.id;
+  persist();
+  stopMusicFade();
+  setTimeout(() => {
+    if (state.settings.music.enabled) {
+      // keep a whisper of music if possible
+      if (music.el && !music.missing) {
+        music.el.volume = Math.min(0.12, state.settings.music.volume * 0.3);
+        playMusic();
+      }
+    }
+  }, 800);
+
+  stage().innerHTML = `
+    <section class="screen ending-screen">
+      <div class="ending-sigil" aria-hidden="true">◇</div>
+      <p class="final-q">FINAL JUDGMENT</p>
+      <h2 class="ending-name">${escapeHtml(ending.name)}</h2>
+      <p class="oracle-speech">${escapeHtml(ending.text)}</p>
+      <p class="oracle-speech">${escapeHtml(ending.oracle)}</p>
+      <div class="continue-wrap">
+        <button type="button" class="primary-btn" id="btn-final-q">THE FINAL QUESTION</button>
+      </div>
+      ${voiceDockHtml()}
+    </section>`;
+  bindDock();
+  speak(ending.text + " " + ending.oracle);
+  document.getElementById("btn-final-q").addEventListener("click", renderFinalQuestion);
+}
+
+function renderFinalQuestion() {
+  state.screen = "final";
+  showTopbar(true);
+  persist();
+  stage().innerHTML = `
+    <section class="screen ending-screen">
+      <div class="ending-sigil" aria-hidden="true">◇</div>
+      <p class="final-q">THE FINAL QUESTION</p>
+      <p class="oracle-speech">What did you discover?</p>
+      <div class="btn-stack">
+        <button type="button" class="primary-btn" data-ans="values">${FINAL_ANSWERS.values.label}</button>
+        <button type="button" class="ghost-btn" data-ans="mistakes">${FINAL_ANSWERS.mistakes.label}</button>
+        <button type="button" class="ghost-btn" data-ans="searching">${FINAL_ANSWERS.searching.label}</button>
+      </div>
+      ${voiceDockHtml()}
+    </section>`;
+  bindDock();
+  speak("What did you discover?");
+  stage().querySelectorAll("[data-ans]").forEach((btn) => {
+    btn.addEventListener("click", () => renderComplete(btn.getAttribute("data-ans")));
+  });
+}
+
+function renderComplete(ans) {
+  const reply = FINAL_ANSWERS[ans] || FINAL_ANSWERS.searching;
+  state.finalAnswer = ans;
+  state.screen = "complete";
+  persist();
+  stage().innerHTML = `
+    <section class="screen ending-screen">
+      <div class="ending-sigil" aria-hidden="true">◇</div>
+      <p class="oracle-speech">${escapeHtml(reply.oracle)}</p>
+      <p class="subtitle" style="margin-top:28px">JOURNEY COMPLETE</p>
+      <div class="btn-stack">
+        <button type="button" class="primary-btn" id="btn-again">PLAY AGAIN</button>
+        <button type="button" class="ghost-btn" id="btn-end-journal">JOURNAL</button>
+        <button type="button" class="ghost-btn" id="btn-end-title">RETURN TO TITLE</button>
+      </div>
+      ${voiceDockHtml()}
+    </section>`;
+  bindDock();
+  speak(reply.oracle);
+  document.getElementById("btn-again").addEventListener("click", () => {
+    openConfirm("Begin the journey again? Your current ending will remain in the journal until you start.", () => {
+      resetRun(true);
+      persist();
+      if (state.settings.music.enabled) {
+        if (music.el) music.el.volume = state.settings.music.volume;
+        playMusic();
+      }
+      startIntro();
+    });
+  });
+  document.getElementById("btn-end-journal").addEventListener("click", openJournal);
+  document.getElementById("btn-end-title").addEventListener("click", () => {
+    persist();
+    if (state.settings.music.enabled) {
+      if (music.el) music.el.volume = state.settings.music.volume;
+      playMusic();
+    }
+    renderTitle();
+  });
+}
+
+function resumeFromSave() {
+  playMusic();
+  if (state.screen === "complete") renderComplete(state.finalAnswer || "searching");
+  else if (state.screen === "final") renderFinalQuestion();
+  else if (state.screen === "ending") renderJudgment();
+  else if (state.screen === "consequence" && state.awaitingContinue) {
+    // re-show last consequence
+    const idx = state.trialIndex;
+    if (idx < SCENARIOS.length && state.lastChoiceKey && state.journal.length) {
+      const sc = SCENARIOS[idx];
+      const last = state.journal[state.journal.length - 1];
+      state.screen = "consequence";
+      showTopbar(true);
+      stage().innerHTML = `
+        <section class="screen">
+          <h2 class="location">${escapeHtml(sc.location)}</h2>
+          <article class="glass scene-card consequence-card">
+            <p class="chosen">YOU CHOSE</p>
+            <div class="scene-text">
+              <p>${escapeHtml(last.choice)}</p>
+            </div>
+            <div class="oracle-box">
+              <p class="oracle-kicker">THE ORACLE</p>
+              <p class="oracle-line">${escapeHtml(last.oracle)}</p>
+            </div>
+          </article>
+          <div class="continue-wrap">
+            <button type="button" class="primary-btn" id="btn-next">CONTINUE</button>
+          </div>
+          ${voiceDockHtml()}
+        </section>`;
+      bindDock();
+      document.getElementById("btn-next").addEventListener("click", advanceAfterChoice);
+    } else renderScenario();
+  } else if (state.screen === "intro") startIntro();
+  else if (state.trialIndex >= SCENARIOS.length) renderJudgment();
+  else renderScenario();
+}
+
+/* ---------------------------------------------------------------------------
+   MODALS: settings, journal, credits, confirm
+   --------------------------------------------------------------------------- */
+function openModal(title, html, after) {
+  const root = document.getElementById("modal-root");
+  document.getElementById("modal-title").textContent = title;
+  document.getElementById("modal-body").innerHTML = html;
+  root.hidden = false;
+  const close = () => { root.hidden = true; };
+  document.getElementById("modal-close").onclick = close;
+  root.querySelector("[data-close-modal]").onclick = close;
+  if (after) after();
+  document.getElementById("modal-close").focus();
+}
+
+function openSettings() {
+  const voices = loadVoices();
+  const voiceOpts = voices.map((v) => {
+    const sel = v.voiceURI === state.settings.voice.voiceURI ? "selected" : "";
+    return `<option value="${escapeHtml(v.voiceURI)}" ${sel}>${escapeHtml(v.name)} (${escapeHtml(v.lang)})</option>`;
+  }).join("");
+  const rate = state.settings.voice.rate;
+  const speed = rate <= 0.82 ? "slow" : rate >= 1.08 ? "fast" : "normal";
+  openModal("SETTINGS", `
+    <div class="settings-grid">
+      <div class="setting">
+        <label>VOICE</label>
+        <div class="toggle-row">
+          <button type="button" class="icon-btn" id="set-voice-on" aria-pressed="${state.settings.voice.enabled}">ON</button>
+          <button type="button" class="icon-btn" id="set-voice-off" aria-pressed="${!state.settings.voice.enabled}">OFF</button>
+        </div>
+      </div>
+      <div class="setting">
+        <label for="set-voice">PREFERRED VOICE</label>
+        <select id="set-voice">
+          <option value="">Browser default (calm preference when available)</option>
+          ${voiceOpts}
+        </select>
+      </div>
+      <div class="setting">
+        <label>SPEECH SPEED</label>
+        <div class="toggle-row">
+          <button type="button" class="icon-btn set-speed" data-rate="0.78" data-id="slow" aria-pressed="${speed === "slow"}">SLOW</button>
+          <button type="button" class="icon-btn set-speed" data-rate="0.92" data-id="normal" aria-pressed="${speed === "normal"}">NORMAL</button>
+          <button type="button" class="icon-btn set-speed" data-rate="1.12" data-id="fast" aria-pressed="${speed === "fast"}">FAST</button>
+        </div>
+      </div>
+      <div class="setting">
+        <label for="set-vvol">VOICE VOLUME — ${Math.round(state.settings.voice.volume * 100)}%</label>
+        <input id="set-vvol" type="range" min="0" max="100" value="${Math.round(state.settings.voice.volume * 100)}" />
+      </div>
+      <div class="setting">
+        <label>BACKGROUND MUSIC</label>
+        <div class="toggle-row">
+          <button type="button" class="icon-btn" id="set-music-on" aria-pressed="${state.settings.music.enabled}">ON</button>
+          <button type="button" class="icon-btn" id="set-music-off" aria-pressed="${!state.settings.music.enabled}">OFF</button>
+        </div>
+      </div>
+      <div class="setting">
+        <label for="set-mvol">MUSIC VOLUME — ${Math.round(state.settings.music.volume * 100)}%</label>
+        <input id="set-mvol" type="range" min="0" max="100" value="${Math.round(state.settings.music.volume * 100)}" />
+      </div>
+      <div class="setting">
+        <label>JOURNEY</label>
+        <div class="toggle-row">
+          <button type="button" class="icon-btn" id="set-save">SAVE JOURNEY</button>
+          <button type="button" class="icon-btn" id="set-new">NEW JOURNEY</button>
+        </div>
+      </div>
+    </div>
+  `, () => {
+    const on = document.getElementById("set-voice-on");
+    const off = document.getElementById("set-voice-off");
+    const syncVoiceBtns = () => {
+      on.setAttribute("aria-pressed", String(state.settings.voice.enabled));
+      off.setAttribute("aria-pressed", String(!state.settings.voice.enabled));
+    };
+    on.onclick = () => { state.settings.voice.enabled = true; persist(); syncVoiceBtns(); };
+    off.onclick = () => { state.settings.voice.enabled = false; stopSpeech(); persist(); syncVoiceBtns(); };
+    document.getElementById("set-voice").onchange = (e) => {
+      state.settings.voice.voiceURI = e.target.value;
+      persist();
+    };
+    document.querySelectorAll(".set-speed").forEach((btn) => {
+      btn.onclick = () => {
+        state.settings.voice.rate = parseFloat(btn.dataset.rate);
+        persist();
+        document.querySelectorAll(".set-speed").forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+      };
+    });
+    document.getElementById("set-vvol").oninput = (e) => {
+      state.settings.voice.volume = Number(e.target.value) / 100;
+      e.target.previousElementSibling
+        ? null
+        : null;
+      const lab = document.querySelector("label[for='set-vvol']");
+      if (lab) lab.textContent = `VOICE VOLUME — ${e.target.value}%`;
+      persist();
+    };
+    const mon = document.getElementById("set-music-on");
+    const moff = document.getElementById("set-music-off");
+    const syncMusic = () => {
+      mon.setAttribute("aria-pressed", String(state.settings.music.enabled));
+      moff.setAttribute("aria-pressed", String(!state.settings.music.enabled));
+    };
+    mon.onclick = () => { state.settings.music.enabled = true; playMusic(); persist(); syncMusic(); };
+    moff.onclick = () => { state.settings.music.enabled = false; pauseMusic(); persist(); syncMusic(); };
+    document.getElementById("set-mvol").oninput = (e) => {
+      state.settings.music.volume = Number(e.target.value) / 100;
+      const lab = document.querySelector("label[for='set-mvol']");
+      if (lab) lab.textContent = `MUSIC VOLUME — ${e.target.value}%`;
+      if (music.el && !music.ducked) music.el.volume = state.settings.music.volume;
+      persist();
+    };
+    document.getElementById("set-save").onclick = () => {
+      persist();
+      toast("JOURNEY SAVED");
+    };
+    document.getElementById("set-new").onclick = () => {
+      openConfirm("Start a new journey? Progress on this path will be cleared.", () => {
+        resetRun(true);
+        persist();
+        document.getElementById("modal-root").hidden = true;
+        if (state.settings.music.enabled) {
+          if (music.el) music.el.volume = state.settings.music.volume;
+          playMusic();
+        }
+        renderTitle();
+      });
+    };
+  });
+}
+
+function openJournal() {
+  const entries = state.journal;
+  const body = entries.length
+    ? entries.map((e) => `
+        <article class="journal-entry">
+          <h3>TRIAL ${String(e.trial).padStart(2, "0")} — ${escapeHtml(e.location)}</h3>
+          <p><strong>Choice:</strong> ${escapeHtml(e.choice)}</p>
+          <p><strong>Oracle:</strong> ${escapeHtml(e.oracle)}</p>
+        </article>`).join("")
+    : `<p class="journal-empty">The journal is still empty. Walk a little farther.</p>`;
+  openModal("JOURNAL", `
+    <p class="quiet">Trials completed: ${entries.length} / ${SCENARIOS.length}</p>
+    ${body}
+  `);
+}
+
+function openCredits() {
+  openModal("CREDITS", `
+    <div class="credits">
+      <p><strong>THE PATH OF WISDOM</strong></p>
+      <p>An independent journey for the Archive of Wisdom.</p>
+      <p>Narration by The Oracle, using the browser's built-in speech synthesis. No voice data leaves this device.</p>
+      <p>Music: local file <em>assets/wisdom-bg.mp3</em> when present.</p>
+      <p class="quiet">Built with HTML, CSS, and vanilla JavaScript. No accounts. No servers. Choices remain on this browser.</p>
+    </div>
+  `);
+}
+
+function openConfirm(message, onYes) {
+  openModal("CONFIRM", `
+    <p>${escapeHtml(message)}</p>
+    <div class="confirm-row">
+      <button type="button" class="ghost-btn" id="confirm-no">CANCEL</button>
+      <button type="button" class="primary-btn" id="confirm-yes">CONFIRM</button>
+    </div>
+  `, () => {
+    document.getElementById("confirm-no").onclick = () => {
+      document.getElementById("modal-root").hidden = true;
+    };
+    document.getElementById("confirm-yes").onclick = () => {
+      document.getElementById("modal-root").hidden = true;
+      onYes();
+    };
+    document.getElementById("confirm-yes").focus();
+  });
+}
+
+/* ---------------------------------------------------------------------------
+   PARTICLES
+   --------------------------------------------------------------------------- */
+function initParticles() {
+  const canvas = document.getElementById("particle-canvas");
+  if (!canvas) return;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ctx = canvas.getContext("2d");
+  let w = 0, h = 0, pts = [];
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  function spawn() {
+    const n = reduce ? 18 : 56;
+    pts = Array.from({ length: n }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.6 + 0.4,
+      s: Math.random() * 0.25 + 0.05,
+      a: Math.random() * 0.35 + 0.08
+    }));
+  }
+  resize();
+  spawn();
+  window.addEventListener("resize", () => { resize(); spawn(); });
+  if (reduce) {
+    function still() {
+      ctx.clearRect(0, 0, w, h);
+      pts.forEach((p) => {
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(126,200,212,${p.a})`;
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+    still();
+    return;
+  }
+  function tick() {
+    ctx.clearRect(0, 0, w, h);
+    pts.forEach((p) => {
+      p.y -= p.s;
+      if (p.y < -4) { p.y = h + 4; p.x = Math.random() * w; }
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(126,200,212,${p.a})`;
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ---------------------------------------------------------------------------
+   KEYBOARD
+   --------------------------------------------------------------------------- */
+function initKeys() {
+  document.addEventListener("keydown", (e) => {
+    const root = document.getElementById("modal-root");
+    if (e.key === "Escape" && root && !root.hidden) {
+      root.hidden = true;
+      return;
+    }
+    if (root && !root.hidden) return;
+    if (state.screen === "scenario" && !oracleViz.scenarioLocked) {
+      if (e.key === "1" || e.key === "a" || e.key === "A") {
+        e.preventDefault();
+        selectChoice("a");
+      } else if (e.key === "2" || e.key === "b" || e.key === "B") {
+        e.preventDefault();
+        selectChoice("b");
+      }
+    }
+    if ((e.key === "Enter") && state.screen === "consequence") {
+      const n = document.getElementById("btn-next");
+      if (n) n.click();
+    }
+  });
+}
+
+/* ---------------------------------------------------------------------------
+   BOOT
+   --------------------------------------------------------------------------- */
+function boot() {
+  initMusic();
+  initParticles();
+  startOracleVisualizer();
+  initKeys();
+  if ("speechSynthesis" in window) {
+    loadVoices();
+    window.speechSynthesis.addEventListener("voiceschanged", loadVoices);
+  }
+  document.getElementById("btn-journal").addEventListener("click", openJournal);
+  document.getElementById("btn-save").addEventListener("click", () => {
+    persist();
+    toast("JOURNEY SAVED");
+  });
+  document.getElementById("btn-settings").addEventListener("click", openSettings);
+
+  // Load settings from any existing save without jumping into mid-game.
+  try {
+    const raw = localStorage.getItem(GAME_SETTINGS.storageKey);
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (data.settings && data.settings.voice) {
+        state.settings.voice = { ...VOICE_DEFAULTS, ...data.settings.voice };
+      }
+      if (data.settings && data.settings.music) {
+        state.settings.music = { ...MUSIC_DEFAULTS, ...data.settings.music };
+      }
+    }
+  } catch (_) {}
+
+  renderTitle();
+
+  // Unlock audio on first gesture.
+  const unlock = () => {
+    if (state.settings.music.enabled) playMusic();
+    document.removeEventListener("pointerdown", unlock);
+    document.removeEventListener("keydown", unlock);
+  };
+  document.addEventListener("pointerdown", unlock);
+  document.addEventListener("keydown", unlock);
+}
+
+document.addEventListener("DOMContentLoaded", boot);
+
+  </script>
+</body>
+</html>
