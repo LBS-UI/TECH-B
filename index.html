@@ -190,6 +190,34 @@
             color: var(--text-secondary);
         }
 
+        /* "Tap to begin" button */
+        #boot-action-btn {
+            margin-top: 1.2rem;
+            display: none;
+            padding: 0.8rem 2.6rem;
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.08em;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-blue-dark));
+            color: #fff;
+            border: none;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: transform 0.3s var(--transition-bounce), box-shadow 0.3s ease;
+            box-shadow: 0 4px 28px rgba(59, 130, 246, 0.25);
+            user-select: none;
+        }
+
+        #boot-action-btn:hover {
+            transform: scale(1.04);
+            box-shadow: 0 6px 40px rgba(59, 130, 246, 0.35);
+        }
+
+        #boot-action-btn:active {
+            transform: scale(0.94);
+        }
+
         /* ============================================================
            COVER / LOGO SCREEN
            ============================================================ */
@@ -216,12 +244,6 @@
             transform: scale(1);
         }
 
-        #cover-screen.fade-out {
-            opacity: 0;
-            transform: scale(1.04);
-            pointer-events: none;
-        }
-
         #cover-container {
             display: flex;
             flex-direction: column;
@@ -231,7 +253,6 @@
             width: 100%;
         }
 
-        /* ---- Logo / Cover placeholder ---- */
         #cover-image {
             width: 180px;
             height: 180px;
@@ -246,7 +267,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: box-shadow 0.6s ease;
         }
 
         #cover-image::after {
@@ -277,19 +297,6 @@
             display: block;
         }
 
-        #cover-image .placeholder-text {
-            font-family: var(--font-mono);
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            text-align: center;
-            line-height: 1.5;
-            padding: 1rem;
-            user-select: none;
-        }
-
-        /* ---- Typography ---- */
         #cover-container .yearbook-title {
             font-family: var(--font-sans);
             font-weight: 800;
@@ -320,7 +327,6 @@
             letter-spacing: 0.2em;
         }
 
-        /* ---- Enter button ---- */
         .enter-btn {
             margin-top: 2.4rem;
             display: inline-block;
@@ -338,11 +344,19 @@
             cursor: pointer;
             transition: transform 0.3s var(--transition-bounce),
                 box-shadow 0.3s ease,
-                background 0.3s ease;
+                background 0.3s ease,
+                opacity 0.5s ease;
             box-shadow: 0 4px 32px rgba(59, 130, 246, 0.25);
             position: relative;
             overflow: hidden;
             user-select: none;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .enter-btn.enabled {
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .enter-btn:hover {
@@ -363,7 +377,6 @@
             pointer-events: none;
         }
 
-        /* subtle glow pulse on the button */
         .enter-btn.glow-pulse {
             animation: btn-glow 2.5s ease-in-out infinite;
         }
@@ -379,7 +392,7 @@
         }
 
         /* ============================================================
-           AMBIENT BACKGROUND (subtle particles / grid)
+           AMBIENT BACKGROUND
            ============================================================ */
         .bg-ambient {
             position: fixed;
@@ -435,7 +448,6 @@
             }
         }
 
-        /* subtle grid overlay */
         .bg-grid {
             position: fixed;
             inset: 0;
@@ -448,7 +460,6 @@
             opacity: 0.4;
         }
 
-        /* scanning line (very subtle) */
         .scan-line {
             position: fixed;
             left: 0;
@@ -484,41 +495,32 @@
             #cover-image {
                 width: 140px;
                 height: 140px;
-                border-radius: 16px;
             }
-
             #cover-container .yearbook-title {
                 font-size: 2rem;
             }
-
             #cover-container .school-name {
                 font-size: 0.7rem;
             }
-
             #cover-container .school-year {
                 font-size: 0.9rem;
             }
-
             .enter-btn {
                 font-size: 0.75rem;
                 padding: 0.75rem 2.4rem;
                 margin-top: 1.8rem;
             }
-
             #boot-message {
                 font-size: clamp(0.75rem, 4vw, 1.1rem);
                 min-height: 2.8rem;
             }
-
             .loading-ring {
                 width: 22px;
                 height: 22px;
             }
-
             .progress-wrapper {
                 max-width: 240px;
             }
-
             .bg-ambient .orb {
                 filter: blur(60px);
             }
@@ -528,22 +530,16 @@
             #cover-image {
                 width: 120px;
                 height: 120px;
-                border-radius: 14px;
             }
-
             #cover-container .yearbook-title {
                 font-size: 1.6rem;
             }
-
             #cover-container .school-name {
                 font-size: 0.6rem;
-                letter-spacing: 0.1em;
             }
-
             #cover-container .school-year {
                 font-size: 0.75rem;
             }
-
             .enter-btn {
                 font-size: 0.65rem;
                 padding: 0.6rem 1.8rem;
@@ -551,9 +547,6 @@
             }
         }
 
-        /* ============================================================
-           REDUCED MOTION
-           ============================================================ */
         @media (prefers-reduced-motion: reduce) {
             *,
             *::before,
@@ -562,21 +555,12 @@
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
-
             #boot-message {
                 transition: opacity 0.3s ease, transform 0.3s ease;
             }
-
             .enter-btn.glow-pulse {
                 animation: none;
             }
-        }
-
-        /* ============================================================
-           UTILITY
-           ============================================================ */
-        .hidden {
-            display: none !important;
         }
     </style>
 </head>
@@ -599,6 +583,7 @@
             <div id="boot-message">
                 <span id="boot-text">YEARBOOK SYSTEM</span>
                 <div id="boot-extra"></div>
+                <button id="boot-action-btn">▶ Click to begin</button>
             </div>
         </div>
     </div>
@@ -608,34 +593,26 @@
     ================================================================ -->
     <div id="cover-screen">
         <div id="cover-container">
-
-            <!-- ===== LOGO / COVER IMAGE PLACEHOLDER ===== -->
             <div id="cover-image">
-                <!--
-                ============================================================
-                REPLACE THIS <img> WITH YOUR OWN PNG/SVG
-                ============================================================
-                Simply replace the src attribute with your image path.
-                Example: <img src="yearbook-cover.png" alt="Yearbook Cover" />
-                ============================================================
-                -->
-                <img src="images/logo.png"
-                alt="Yearbook cover placeholder — replace with your image" />
+                <img src="images/logo.jpg" alt="Yearbook cover" />
             </div>
-
-            <!-- ===== TYPOGRAPHY ===== -->
-            <div class="yearbook-title">LEGACY 2025</div>
+            <div class="yearbook-title">TECHPRO B 2025</div>
             <div class="school-name">MABAYUHAN SENIOR HIGH SCHOOL [MSHS]</div>
             <div class="school-year">CLASS OF 2025 - 2027</div>
-
-            <!-- ===== ENTER BUTTON (LINK UPDATED TO main.html) ===== -->
-            <a href="main.html" class="enter-btn glow-pulse">ENTER YEARBOOK</a>
-
+            <a href="main.html" class="enter-btn glow-pulse" id="enterBtn">ENTER YEARBOOK</a>
         </div>
     </div>
 
     <!-- ================================================================
-    JAVASCRIPT
+    AUDIO ELEMENT
+    ================================================================ -->
+    <audio id="startupAudio" preload="auto">
+        <source src="MP3 Audios/startup.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- ================================================================
+    JAVASCRIPT — Fixed AudioContext resume
     ================================================================ -->
     <script>
         (function() {
@@ -648,11 +625,13 @@
             const bootMessage = document.getElementById('boot-message');
             const bootText = document.getElementById('boot-text');
             const bootExtra = document.getElementById('boot-extra');
-
+            const bootActionBtn = document.getElementById('boot-action-btn');
             const coverScreen = document.getElementById('cover-screen');
+            const enterBtn = document.getElementById('enterBtn');
+            const startupAudio = document.getElementById('startupAudio');
 
             // ============================================================
-            // BOOT SEQUENCE DATA
+            // BOOT STEPS
             // ============================================================
             const bootSteps = [
                 { text: 'YEARBOOK SYSTEM', delay: 500 },
@@ -662,7 +641,7 @@
                 { text: 'LOADING CLASS RECORDS…', delay: 600 },
                 { text: 'VERIFYING ARCHIVE INTEGRITY…', delay: 600 },
                 { text: 'CONNECTION ESTABLISHED', delay: 500, highlight: 'highlight-green' },
-                { text: 'YEARBOOK ARCHIVE ONLINE', delay: 700, highlight: 'highlight-primary' },
+                { text: '📱 TAP OR CLICK TO BEGIN', delay: 700, highlight: 'highlight-amber' },
             ];
 
             // ============================================================
@@ -671,23 +650,25 @@
             let stepIndex = 0;
             let bootTimer = null;
             let progressInterval = null;
-            let isBootComplete = false;
-
-            // ============================================================
-            // AUDIO (Web Audio – subtle beeps, optional)
-            // ============================================================
             let audioCtx = null;
 
-            function initAudio() {
+            // ============================================================
+            // WEB AUDIO (beeps)
+            // ============================================================
+            function initAudioContext() {
                 if (!audioCtx) {
                     try {
                         audioCtx = new(window.AudioContext || window.webkitAudioContext)();
-                    } catch (_) { /* no audio */ }
+                        console.log('AudioContext created. State:', audioCtx.state);
+                    } catch (_) {
+                        console.warn('Web Audio not supported');
+                    }
                 }
+                return audioCtx;
             }
 
             function playBeep(freq = 520, duration = 40, vol = 0.04) {
-                if (!audioCtx) return;
+                if (!audioCtx || audioCtx.state !== 'running') return;
                 try {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
@@ -699,11 +680,11 @@
                     gain.connect(audioCtx.destination);
                     osc.start();
                     osc.stop(audioCtx.currentTime + duration / 1000);
-                } catch (_) { /* ignore */ }
+                } catch (_) {}
             }
 
             function playChime() {
-                if (!audioCtx) return;
+                if (!audioCtx || audioCtx.state !== 'running') return;
                 try {
                     [523, 659, 784].forEach((f, i) => {
                         setTimeout(() => {
@@ -719,41 +700,152 @@
                             osc.stop(audioCtx.currentTime + 0.3);
                         }, i * 120);
                     });
-                } catch (_) { /* ignore */ }
+                } catch (_) {}
             }
 
             // ============================================================
-            // HELPERS
+            // CORE: Resume AudioContext, play audio, reveal cover
+            // ============================================================
+            let coverRevealed = false;
+            let audioPlayAttempted = false;
+
+            function resumeAudioAndReveal() {
+                if (coverRevealed) return;
+
+                const ctx = initAudioContext();
+
+                // Resume the AudioContext (this is the key fix!)
+                if (ctx && ctx.state === 'suspended') {
+                    ctx.resume().then(() => {
+                        console.log('✅ AudioContext resumed! State:', ctx.state);
+                        playAudioAndReveal();
+                    }).catch((err) => {
+                        console.warn('Failed to resume AudioContext:', err);
+                        // Fallback: still try to play the mp3
+                        playAudioAndReveal();
+                    });
+                } else {
+                    playAudioAndReveal();
+                }
+            }
+
+            function playAudioAndReveal() {
+                if (coverRevealed) return;
+                if (audioPlayAttempted) return;
+                audioPlayAttempted = true;
+
+                // Hide the boot action button
+                bootActionBtn.style.display = 'none';
+
+                // Play the startup.mp3
+                if (startupAudio) {
+                    if (startupAudio.readyState < 2) startupAudio.load();
+                    startupAudio.currentTime = 0;
+                    startupAudio.volume = 0.6;
+
+                    startupAudio.play()
+                        .then(() => {
+                            console.log('✅ startup.mp3 is playing!');
+                            revealCover();
+                        })
+                        .catch((err) => {
+                            console.warn('MP3 playback failed:', err);
+                            // Still reveal the cover even if audio fails
+                            revealCover();
+                        });
+                } else {
+                    revealCover();
+                }
+            }
+
+            function revealCover() {
+                if (coverRevealed) return;
+                coverRevealed = true;
+
+                enterBtn.classList.add('enabled');
+
+                startupOverlay.classList.add('fade-out');
+                playBeep(440, 70, 0.06);
+
+                setTimeout(() => {
+                    startupOverlay.style.display = 'none';
+                    coverScreen.classList.add('visible');
+                    playChime();
+                }, 700);
+            }
+
+            // ============================================================
+            // BOOT SEQUENCE RUNNER
+            // ============================================================
+            function runBootStep(index) {
+                if (index >= bootSteps.length) {
+                    // Boot complete → show the "tap to begin" button
+                    clearBootExtra();
+                    bootActionBtn.style.display = 'inline-block';
+                    bootText.innerHTML = '📱 <span class="highlight-amber">Tap or click to begin</span>';
+                    bootText.className = '';
+                    return;
+                }
+
+                const step = bootSteps[index];
+                let html = step.text;
+                if (step.highlight) html = `<span class="${step.highlight}">${step.text}</span>`;
+
+                setBootMessage(html);
+                clearBootExtra();
+
+                if (step.showProgress) {
+                    showProgress(true);
+                    let pct = 0;
+                    const duration = 1800;
+                    const startTime = Date.now();
+                    if (progressInterval) clearInterval(progressInterval);
+                    progressInterval = setInterval(() => {
+                        const elapsed = Date.now() - startTime;
+                        const raw = Math.min(elapsed / duration, 1);
+                        const eased = raw < 0.5 ? 2 * raw * raw : 1 - Math.pow(-2 * raw + 2, 2) / 2;
+                        pct = Math.round(eased * 100);
+                        updateProgress(pct);
+                        if (pct >= 100) {
+                            clearInterval(progressInterval);
+                            progressInterval = null;
+                            playBeep(880, 50, 0.06);
+                            setTimeout(() => runBootStep(index + 1), 350);
+                        }
+                    }, 30);
+                    playBeep(440, 30, 0.04);
+                    return;
+                }
+
+                if (index > 0 && index < 6) showLoadingRing(true);
+                else showLoadingRing(false);
+
+                if (index === 6) playBeep(740, 50, 0.06);
+                else if (index > 0) playBeep(480 + index * 20, 35, 0.04);
+
+                bootTimer = setTimeout(() => runBootStep(index + 1), step.delay || 600);
+            }
+
+            // ============================================================
+            // BOOT UI HELPERS
             // ============================================================
             function setBootMessage(html, highlightClass = '') {
                 bootText.innerHTML = html;
-                if (highlightClass) {
-                    bootText.className = highlightClass;
-                } else {
-                    bootText.className = '';
-                }
+                bootText.className = highlightClass || '';
                 bootMessage.classList.add('visible');
             }
 
-            function clearBootExtra() {
-                bootExtra.innerHTML = '';
-            }
+            function clearBootExtra() { bootExtra.innerHTML = ''; }
 
             function showLoadingRing(show) {
-                if (show) {
-                    bootExtra.innerHTML = '<div class="loading-ring"></div>';
-                } else {
-                    bootExtra.innerHTML = '';
-                }
+                bootExtra.innerHTML = show ? '<div class="loading-ring"></div>' : '';
             }
 
             function showProgress(show) {
                 if (show) {
                     bootExtra.innerHTML = `
                         <div class="progress-wrapper">
-                            <div class="progress-track">
-                                <div class="progress-fill" id="progress-fill"></div>
-                            </div>
+                            <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
                             <div class="progress-label">CONNECTING <span class="pct" id="progress-pct">0%</span></div>
                         </div>
                     `;
@@ -770,108 +862,48 @@
             }
 
             // ============================================================
-            // BOOT SEQUENCE RUNNER
+            // EVENT: Click on "Tap to begin" button
             // ============================================================
-            function runBootStep(index) {
-                if (index >= bootSteps.length) {
-                    // Boot complete
-                    isBootComplete = true;
-                    clearBootExtra();
-                    playChime();
-                    setTimeout(() => showCover(), 400);
-                    return;
+            bootActionBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                resumeAudioAndReveal();
+            });
+
+            // ============================================================
+            // EVENT: Any click/touch/key on the page will also trigger it
+            // (in case the user doesn't click the button)
+            // ============================================================
+            function handleUserGesture() {
+                if (!coverRevealed && bootActionBtn.style.display === 'inline-block') {
+                    resumeAudioAndReveal();
                 }
-
-                const step = bootSteps[index];
-                let html = step.text;
-                if (step.highlight) {
-                    html = `<span class="${step.highlight}">${step.text}</span>`;
-                }
-
-                setBootMessage(html);
-                clearBootExtra();
-
-                // Progress step
-                if (step.showProgress) {
-                    showProgress(true);
-                    let pct = 0;
-                    const duration = 1800;
-                    const startTime = Date.now();
-
-                    if (progressInterval) clearInterval(progressInterval);
-                    progressInterval = setInterval(() => {
-                        const elapsed = Date.now() - startTime;
-                        const raw = Math.min(elapsed / duration, 1);
-                        // ease-in-out
-                        const eased = raw < 0.5 ?
-                            2 * raw * raw :
-                            1 - Math.pow(-2 * raw + 2, 2) / 2;
-                        pct = Math.round(eased * 100);
-                        updateProgress(pct);
-
-                        if (pct >= 100) {
-                            clearInterval(progressInterval);
-                            progressInterval = null;
-                            playBeep(880, 50, 0.06);
-                            setTimeout(() => runBootStep(index + 1), 350);
-                        }
-                    }, 30);
-                    playBeep(440, 30, 0.04);
-                    return;
-                }
-
-                // Regular step
-                if (index > 0 && index < 6) {
-                    showLoadingRing(true);
-                } else {
-                    showLoadingRing(false);
-                }
-
-                // Play beeps
-                if (index === 6) playBeep(740, 50, 0.06);
-                else if (index === 7) playBeep(880, 60, 0.08);
-                else if (index > 0) playBeep(480 + index * 20, 35, 0.04);
-
-                const delay = step.delay || 600;
-                bootTimer = setTimeout(() => runBootStep(index + 1), delay);
+                // Remove listeners after first interaction
+                document.removeEventListener('click', handleUserGesture);
+                document.removeEventListener('touchstart', handleUserGesture);
+                document.removeEventListener('keydown', handleUserGesture);
             }
 
-            // ============================================================
-            // COVER / LOGO REVEAL
-            // ============================================================
-            function showCover() {
-                startupOverlay.classList.add('fade-out');
-                playBeep(440, 70, 0.06);
+            document.addEventListener('click', handleUserGesture, { once: true });
+            document.addEventListener('touchstart', handleUserGesture, { once: true });
+            document.addEventListener('keydown', handleUserGesture, { once: true });
 
-                setTimeout(() => {
-                    startupOverlay.style.display = 'none';
-                    coverScreen.classList.add('visible');
-                    playChime();
-                }, 700);
-            }
+            // ============================================================
+            // KEYBOARD: Enter on cover screen triggers the enter button
+            // ============================================================
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && coverScreen.classList.contains('visible') && enterBtn.classList.contains(
+                    'enabled')) {
+                    enterBtn.click();
+                }
+            });
 
             // ============================================================
             // START SEQUENCE
             // ============================================================
             function startSequence() {
-                initAudio();
-                // Click anywhere during startup to init audio
-                document.addEventListener('click', initAudio, { once: true });
-                startupOverlay.addEventListener('click', initAudio);
-
-                // Small delay before first message
+                initAudioContext();
                 setTimeout(() => runBootStep(0), 400);
             }
-
-            // ============================================================
-            // KEYBOARD: Enter to trigger ENTER YEARBOOK (when cover is visible)
-            // ============================================================
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && coverScreen.classList.contains('visible')) {
-                    const btn = document.querySelector('.enter-btn');
-                    if (btn) btn.click();
-                }
-            });
 
             // ============================================================
             // GO
@@ -884,11 +916,10 @@
             startSequence();
 
             // ============================================================
-            // PREFERS-REDUCED-MOTION: remove glow-pulse if needed
+            // PREFERS-REDUCED-MOTION
             // ============================================================
-            const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-            if (motionQuery.matches) {
-                document.querySelector('.enter-btn')?.classList.remove('glow-pulse');
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                enterBtn.classList.remove('glow-pulse');
             }
 
         })();
