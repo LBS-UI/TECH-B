@@ -38,7 +38,7 @@
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             --font-pixel: 'VT323', monospace;
             /* Sidebar vars */
-            --sidebar-width: 220px;
+            --sidebar-width: 240px;
             --sidebar-collapsed: 0px;
         }
         * {
@@ -56,7 +56,7 @@
             color: var(--text);
             font-family: var(--font-primary);
             overflow-x: hidden;
-            transition: var(--theme-transition);
+            transition: var(--theme-transition), padding-left 0.3s ease;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -65,6 +65,9 @@
             font-weight: 400;
             line-height: 1.5;
             padding-left: var(--sidebar-width);
+        }
+        body.sidebar-collapsed {
+            padding-left: 0;
         }
         body.win98-mode {
             font-family: var(--font-pixel);
@@ -118,22 +121,42 @@
             border-radius: 2px;
         }
 
+        body.sidebar-collapsed #sidebar {
+            transform: translateX(-100%);
+        }
+        @media (max-width: 768px) {
+            #sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+                max-width: 80vw;
+            }
+            #sidebar.open {
+                transform: translateX(0);
+            }
+            body.sidebar-collapsed #sidebar {
+                transform: translateX(-100%);
+            }
+        }
+
         #sidebar .sidebar-brand {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding: 8px 16px 14px 16px;
             border-bottom: 2px solid rgba(255, 255, 255, 0.1);
             margin-bottom: 10px;
-            text-align: center;
             flex-shrink: 0;
+        }
+        #sidebar .sidebar-brand .brand-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         #sidebar .sidebar-brand .brand-text {
             font-size: 0.85rem;
             font-weight: 700;
             color: #ffd700;
             letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
         }
         body.win98-mode #sidebar .sidebar-brand .brand-text {
             font-weight: 400;
@@ -146,14 +169,28 @@
             margin-top: 2px;
         }
         #sidebar .sidebar-logo {
-            width: 52px;
-            height: 52px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--border);
-            margin: 0 auto 6px;
             display: block;
             background: #132040;
+            flex-shrink: 0;
+        }
+        #sidebar .sidebar-brand #sidebarCloseBtn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 0 4px;
+            line-height: 1;
+            transition: color 0.2s, transform 0.2s;
+        }
+        #sidebar .sidebar-brand #sidebarCloseBtn:hover {
+            color: #fff;
+            transform: rotate(90deg);
         }
 
         #sidebar .nav-list {
@@ -164,6 +201,17 @@
         }
         #sidebar .nav-list li {
             margin: 2px 0;
+        }
+        #sidebar .nav-list .nav-category {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.25);
+            padding: 10px 12px 4px 12px;
+            margin-top: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: default;
+            user-select: none;
         }
         #sidebar .nav-list li a {
             display: flex;
@@ -259,12 +307,12 @@
             }
         }
 
-        /* Sidebar toggle (mobile) */
+        /* Sidebar toggle (floating button) */
         #sidebarToggle {
             display: none;
             position: fixed;
-            top: 10px;
-            left: 10px;
+            top: 12px;
+            left: 12px;
             z-index: 1100;
             background: var(--header);
             border: 2px solid var(--border);
@@ -277,6 +325,7 @@
             line-height: 1;
             transition: var(--theme-transition);
             touch-action: manipulation;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
         }
         #sidebarToggle:hover {
             background: rgba(255, 255, 255, 0.15);
@@ -297,26 +346,24 @@
         }
 
         @media (max-width: 768px) {
-            #sidebar {
-                transform: translateX(-100%);
-                width: 260px;
-                max-width: 80vw;
-            }
-            #sidebar.open {
-                transform: translateX(0);
-            }
             #sidebarToggle {
                 display: block;
             }
-            body {
-                padding-left: 0;
+            body.sidebar-collapsed #sidebarToggle {
+                display: block;
             }
-            #sidebar .sidebar-brand .brand-text {
-                font-size: 0.75rem;
+        }
+        @media (min-width: 769px) {
+            #sidebarToggle {
+                display: block;
+                top: 12px;
+                left: 12px;
             }
-            #sidebar .nav-list li a {
-                font-size: 0.75rem;
-                padding: 10px 14px;
+            body.sidebar-collapsed #sidebarToggle {
+                display: block;
+            }
+            body:not(.sidebar-collapsed) #sidebarToggle {
+                display: none;
             }
         }
 
@@ -2763,9 +2810,6 @@
             flex-shrink: 0;
             background: #132040;
         }
-        .poll-option .ai-icon {
-            font-size: 1.1rem;
-        }
         .poll-option .vote-count {
             font-size: 0.7rem;
             opacity: 0.6;
@@ -3725,14 +3769,25 @@
     <!-- ===== CRT OVERLAY ===== -->
     <div id="crtOverlay"></div>
 
+    <!-- ===== SIDEBAR TOGGLE (floating button) ===== -->
+    <button id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+    <div id="sidebarOverlay"></div>
+
     <!-- ===== SIDEBAR ===== -->
     <aside id="sidebar" role="navigation" aria-label="Main navigation">
         <div class="sidebar-brand">
-            <img src="images/logo.jpg" class="sidebar-logo" alt="TechPro B Logo" onerror="this.style.display='none'">
-            <div class="brand-text">◆ TechPro B</div>
-            <div class="brand-sub">SY 2025–2027</div>
+            <div class="brand-left">
+                <img src="images/logo.jpg" class="sidebar-logo" alt="TechPro B Logo" onerror="this.style.display='none'">
+                <div>
+                    <div class="brand-text">◆ TechPro B</div>
+                    <div class="brand-sub">SY 2025–2027</div>
+                </div>
+            </div>
+            <button id="sidebarCloseBtn" aria-label="Close sidebar">✕</button>
         </div>
         <ul class="nav-list">
+            <!-- YEARBOOK -->
+            <li class="nav-category">📖 YEARBOOK</li>
             <li><a href="#" class="active" data-target="mainHeader"><span class="nav-icon">🏠</span><span class="nav-label">Yearbook</span></a></li>
             <li><a href="#students" data-target="students"><span class="nav-icon">🎓</span><span class="nav-label">Students</span></a></li>
             <li><a href="#teachers" data-target="teachers"><span class="nav-icon">👩‍🏫</span><span class="nav-label">Teachers</span></a></li>
@@ -3740,12 +3795,22 @@
             <li><a href="#gallery" data-target="gallery"><span class="nav-icon">📸</span><span class="nav-label">Gallery</span></a></li>
             <li><a href="#memories" data-target="memories"><span class="nav-icon">📖</span><span class="nav-label">Memories</span></a></li>
             <li><a href="#graduation" data-target="graduation"><span class="nav-icon">🎓</span><span class="nav-label">Graduation</span></a></li>
-            <li><a href="#aipoll" data-target="aipoll"><span class="nav-icon">🎮</span><span class="nav-label">Poll</span></a></li>
+
+            <!-- INTERACTIVE -->
+            <li class="nav-category">🎮 INTERACTIVE</li>
             <li><a href="#aigames" data-target="aigames"><span class="nav-icon">🕹️</span><span class="nav-label">AI Games</span></a></li>
+            <li><a href="#aipoll" data-target="aipoll"><span class="nav-icon">🎮</span><span class="nav-label">Poll</span></a></li>
             <li><a href="#aichat" data-target="aichat"><span class="nav-icon">💬</span><span class="nav-label">AI Chat</span></a></li>
+
+            <!-- UTILITIES -->
+            <li class="nav-category">🔧 UTILITIES</li>
             <li><a href="#stats" data-target="stats"><span class="nav-icon">📊</span><span class="nav-label">Stats</span></a></li>
             <li><a href="#search" data-target="search"><span class="nav-icon">🔍</span><span class="nav-label">Search</span></a></li>
-            <!-- New sidebar links -->
+            <li><a href="#" id="sidebarJukeboxBtn"><span class="nav-icon">🎵</span><span class="nav-label">Jukebox</span></a></li>
+            <li><a href="#" id="sidebarThemeBtn"><span class="nav-icon">🎨</span><span class="nav-label">Theme</span></a></li>
+
+            <!-- INFO -->
+            <li class="nav-category">ℹ️ INFO</li>
             <li><a href="about.html" target="_self"><span class="nav-icon">ℹ️</span><span class="nav-label">About</span></a></li>
             <li><a href="halloffame.html" target="_self"><span class="nav-icon">🏆</span><span class="nav-label">Hall of Fame</span></a></li>
             <li><a href="ai-chat.html" target="_self"><span class="nav-icon">🤖</span><span class="nav-label">AI Chat App</span></a></li>
@@ -3758,10 +3823,6 @@
             </div>
         </div>
     </aside>
-
-    <!-- ===== SIDEBAR TOGGLE (mobile) ===== -->
-    <button id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
-    <div id="sidebarOverlay"></div>
 
     <!-- ===== PANELS ===== -->
     <div id="secretPanel">
@@ -4028,28 +4089,28 @@
             <p style="text-align:center; opacity:0.6; margin-bottom:16px;">Explore these fun and mind-bending AI-powered games!</p>
             <div class="retro-grid">
                 <div class="retro-card">
-                    <h3>School Adventure(CHATGPT)</h3>
-                    <p>An adventure game were you must survive</p>
+                    <h3>School Adventure</h3>
+                    <p>(CHATGPT)</p>
                     <a href="AI Games/chatgpt.html" class="ai-game-link">Play Now</a>
                 </div>
                 <div class="retro-card">
-                    <h3>RPG(CLAUDE)</h3>
-                    <p>Fantasy game for TECHPRO B</p>
+                    <h3>RPG</h3>
+                    <p>(CLAUDE)</p>
                     <a href="AI Games/claude.html" class="ai-game-link">Play Now</a>
                 </div>
                 <div class="retro-card">
-                    <h3>Neon Drift(DEEPSEEK)</h3>
-                    <p>Space ship game. may the longest survivor wins</p>
+                    <h3>Neon Drift</h3>
+                    <p>(DEEPSEEK)</p>
                     <a href="AI Games/deepseek.html" class="ai-game-link">Play Now</a>
                 </div>
                 <div class="retro-card">
-                    <h3>Neon Rush(GEMINI)</h3>
-                    <p>Simple 2D Shoot and Run game</p>
+                    <h3>YearBook Archive(Lost Memories)</h3>
+                    <p>(GEMINI)</p>
                     <a href="AI Games/gemini.htm" class="ai-game-link">Play Now</a>
                 </div>
                 <div class="retro-card">
-                    <h3>Stellar Assault(GROK)</h3>
-                    <p>Pixel space ship game</p>
+                    <h3>The Path Of Wisdom</h3>
+                    <p>(GROK)</p>
                     <a href="AI Games/grok.html" class="ai-game-link">Play Now</a>
                 </div>
             </div>
@@ -4767,13 +4828,13 @@
         }
 
         // ======================= POLL =======================
-        // AI options with logo paths
+        // AI options with logo paths (removed icon)
         const aiOptions = [
-            { id: 'deepseek', label: 'DeepSeek', icon: '🔷', logo: 'images/deepseek.jpg', color: '#4a6a8a' },
-            { id: 'chatgpt', label: 'ChatGPT', icon: '💬', logo: 'images/chatgpt.jpg', color: '#10a37f' },
-            { id: 'grok', label: 'Grok', icon: '🪐', logo: 'images/grok.jpg', color: '#ff6b6b' },
-            { id: 'gemini', label: 'Gemini', icon: '♊', logo: 'images/gemini.jpg', color: '#4285f4' },
-            { id: 'claude', label: 'Claude', icon: '🧠', logo: 'images/claude.jpg', color: '#d97706' }
+            { id: 'deepseek', label: 'DeepSeek', logo: 'images/deepseek.jpg', color: '#4a6a8a' },
+            { id: 'chatgpt', label: 'ChatGPT', logo: 'images/chatgpt.jpg', color: '#10a37f' },
+            { id: 'grok', label: 'Grok', logo: 'images/grok.jpg', color: '#ff6b6b' },
+            { id: 'gemini', label: 'Gemini', logo: 'images/gemini.jpg', color: '#4285f4' },
+            { id: 'claude', label: 'Claude', logo: 'images/claude.jpg', color: '#d97706' }
         ];
         let pollVotes = {};
 
@@ -4795,14 +4856,13 @@
             aiOptions.forEach(opt => {
                 const votes = pollVotes[opt.id] || 0;
                 const pct = total > 0 ? Math.round((votes / total) * 100) : 0;
-                // Use logo if available, fallback to icon
+                // Use logo if available, fallback to nothing (we removed the icon)
                 const logoImg = opt.logo ? `<img src="${opt.logo}" class="ai-logo" alt="${opt.label}" onerror="this.style.display='none'">` : '';
                 html += `
                     <div class="poll-option" onclick="document.getElementById('poll_${opt.id}').checked = true; updatePollSelection();">
                         <input type="radio" name="aiVote" id="poll_${opt.id}" value="${opt.id}">
                         <label for="poll_${opt.id}">
                             ${logoImg}
-                            <span class="ai-icon">${opt.icon}</span>
                             ${opt.label}
                         </label>
                         <span class="vote-count">${votes} votes</span>
@@ -4834,7 +4894,7 @@
                     html += `
                         <div class="poll-result-item">
                             <div class="poll-result-label">
-                                <span>${opt.icon} ${opt.label}</span>
+                                <span>${opt.label}</span>
                                 <span>${pct}% (${votes} votes)</span>
                             </div>
                             <div class="poll-bar-bg">
@@ -5677,7 +5737,7 @@
                         aiOptions.forEach(opt => {
                             const v = pollVotes[opt.id] || 0;
                             const pct = Math.round((v / totalVotes) * 100);
-                            appendCmdOutput('   ' + opt.icon + ' ' + opt.label + ': ' + v + ' votes (' + pct +
+                            appendCmdOutput('   ' + opt.label + ': ' + v + ' votes (' + pct +
                                 '%)', '');
                         });
                         appendCmdOutput('   Total votes: ' + totalVotes, 'info');
@@ -6030,37 +6090,80 @@
             updateCmdTime();
         }
 
-        // ======================= SIDEBAR TOGGLE (mobile) =======================
+        // ======================= SIDEBAR TOGGLE (mobile & desktop) =======================
         const sidebarToggle = document.getElementById('sidebarToggle');
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+        const sidebarJukeboxBtn = document.getElementById('sidebarJukeboxBtn');
+        const sidebarThemeBtn = document.getElementById('sidebarThemeBtn');
 
         function openSidebar() {
             sidebar.classList.add('open');
             sidebarOverlay.classList.add('open');
+            document.body.classList.remove('sidebar-collapsed');
             document.body.style.overflow = 'hidden';
         }
 
         function closeSidebar() {
             sidebar.classList.remove('open');
             sidebarOverlay.classList.remove('open');
+            // On desktop, collapse it; on mobile, hide it.
+            if (window.innerWidth > 768) {
+                document.body.classList.add('sidebar-collapsed');
+            }
             document.body.style.overflow = '';
         }
 
-        sidebarToggle.addEventListener('click', () => {
-            if (sidebar.classList.contains('open')) { closeSidebar(); } else { openSidebar(); }
-        });
-        sidebarOverlay.addEventListener('click', closeSidebar);
+        function toggleSidebar() {
+            if (sidebar.classList.contains('open') || (!document.body.classList.contains('sidebar-collapsed') && window
+                    .innerWidth > 768)) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        }
 
-        // Close sidebar when a link is clicked (mobile)
+        // Event Listeners
+        sidebarToggle.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+        sidebarCloseBtn.addEventListener('click', closeSidebar);
+
+        // Jukebox Button
+        sidebarJukeboxBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('jukeboxPanel').classList.toggle('open');
+            if (window.innerWidth <= 768) closeSidebar();
+            playClickSound();
+        });
+
+        // Theme Button
+        sidebarThemeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const menu = document.getElementById('themeMenu');
+            if (menu.style.display === 'block') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'block';
+                // Position the menu near the button if needed
+            }
+            if (window.innerWidth <= 768) closeSidebar();
+            playClickSound();
+        });
+
+        // Sidebar link clicks - close on mobile and set active
         document.querySelectorAll('#sidebar .nav-list a').forEach(link => {
-            link.addEventListener('click', () => {
+            link.addEventListener('click', function(e) {
+                // Don't close for the special buttons (they have their own handlers)
+                if (this.id === 'sidebarJukeboxBtn' || this.id === 'sidebarThemeBtn') return;
+
                 if (window.innerWidth <= 768) { closeSidebar(); }
                 // Update active state
                 document.querySelectorAll('#sidebar .nav-list a').forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
+                this.classList.add('active');
+
                 // If it's an internal anchor, scroll to target
-                const href = link.getAttribute('href');
+                const href = this.getAttribute('href');
                 if (href && href.startsWith('#')) {
                     const targetId = href.substring(1);
                     const el = document.getElementById(targetId);
@@ -6070,6 +6173,26 @@
                 }
                 playClickSound();
             });
+        });
+
+        // Close sidebar when clicking on the main content (desktop/mobile)
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== sidebarToggle) {
+                    closeSidebar();
+                }
+            }
+        });
+
+        // Handle resize: if desktop, ensure sidebar state is correct
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                if (document.body.classList.contains('sidebar-collapsed')) {
+                    // Keep it collapsed
+                } else {
+                    sidebar.classList.remove('open');
+                }
+            }
         });
 
         // ======================= EVENT LISTENERS =======================
@@ -6146,6 +6269,13 @@
             updateClocks();
             // Update view count again on load
             setTimeout(updateLiveViewCount, 500);
+            // Ensure sidebar is closed on load for mobile
+            if (window.innerWidth <= 768) {
+                closeSidebar();
+            } else {
+                // On desktop, default to collapsed or open? Let's keep it open by default on desktop.
+                document.body.classList.remove('sidebar-collapsed');
+            }
         });
 
         // ======================= BACKGROUND EFFECTS =======================
@@ -6338,6 +6468,8 @@
         console.log('🎨 Removed Halloween & Christmas themes.');
         console.log('🖼️ Poll now displays AI logos from images/ folder.');
         console.log('🔗 Added About, Hall of Fame, and AI Chat App links to sidebar.');
+        console.log('🎵 Jukebox and Theme buttons added to UTILITIES section.');
+        console.log('✕ Sidebar close button added for better UX.');
     </script>
 </body>
 </html>
