@@ -1,0 +1,1875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Yearbook Archive: Lost Memories</title>
+  <style>
+    /* ==========================================================================
+       YEARBOOK ARCHIVE: LOST MEMORIES - STYLE SHEET
+       Dark Navy + Cyan + Purple Futuristic RPG Theme
+       ========================================================================== */
+
+    :root {
+      --bg-dark: #080d1a;
+      --panel-bg: rgba(13, 23, 42, 0.85);
+      --panel-border: #1e3a8a;
+      --cyan-bright: #00f0ff;
+      --cyan-dim: #008b99;
+      --purple-glow: #a855f7;
+      --purple-dark: #4c1d95;
+      --text-main: #e2e8f0;
+      --text-dim: #94a3b8;
+      --gold-color: #f59e0b;
+      --hp-color: #ef4444;
+      --xp-color: #3b82f6;
+      --danger-color: #dc2626;
+      --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: #030712;
+      color: var(--text-main);
+      font-family: var(--font-family);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #game-container {
+      position: relative;
+      width: 640px;
+      height: 600px;
+      background-color: var(--bg-dark);
+      border: 2px solid var(--cyan-dim);
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.2), inset 0 0 15px rgba(168, 85, 247, 0.15);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Screens System */
+    .screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      background-color: var(--bg-dark);
+      z-index: 10;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* Title Screen */
+    #screen-title {
+      justify-content: space-around;
+      align-items: center;
+      padding: 40px 20px;
+      text-align: center;
+      background: radial-gradient(circle at center, #1e1b4b 0%, #080d1a 100%);
+    }
+
+    .title-logo .subtitle {
+      color: var(--cyan-bright);
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      margin-bottom: 5px;
+    }
+
+    .title-logo h1 {
+      font-size: 2.2rem;
+      color: #ffffff;
+      text-shadow: 0 0 12px var(--cyan-bright);
+      letter-spacing: 2px;
+    }
+
+    .title-logo .tagline {
+      font-size: 1.3rem;
+      color: var(--purple-glow);
+      letter-spacing: 4px;
+      font-weight: bold;
+    }
+
+    .menu-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 220px;
+    }
+
+    button {
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      font-size: 0.9rem;
+      border: 1px solid var(--cyan-bright);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7, #4f46e5);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #0369a1, #4338ca);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+    }
+
+    .btn-secondary {
+      background: rgba(30, 58, 138, 0.5);
+      color: var(--text-main);
+      border-color: var(--panel-border);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: rgba(30, 58, 138, 0.9);
+      border-color: var(--cyan-bright);
+    }
+
+    .btn-danger {
+      background: rgba(220, 38, 38, 0.3);
+      color: #fca5a5;
+      border-color: var(--danger-color);
+    }
+
+    .btn-danger:hover {
+      background: rgba(220, 38, 38, 0.7);
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      border-color: #475569;
+    }
+
+    .title-footer {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    /* Gameplay Screen & HUD */
+    #screen-gameplay {
+      justify-content: space-between;
+    }
+
+    #hud {
+      background: var(--panel-bg);
+      border-bottom: 2px solid var(--panel-border);
+      padding: 8px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .hud-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    .hud-stat .label { color: var(--cyan-bright); margin-right: 4px; }
+    .hud-stat .val { color: #fff; }
+
+    .hud-bars {
+      display: flex;
+      gap: 10px;
+    }
+
+    .bar-container {
+      flex: 1;
+      height: 16px;
+      background-color: #1e293b;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid #334155;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 50%;
+      transition: width 0.3s ease;
+    }
+
+    .hp-fill { background: linear-gradient(90deg, #dc2626, #ef4444); }
+    .xp-fill { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+
+    .bar-text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      font-size: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px #000;
+    }
+
+    .hud-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .hud-controls button {
+      flex: 1;
+      padding: 4px 0;
+      font-size: 0.75rem;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--panel-border);
+      color: var(--cyan-bright);
+    }
+
+    .hud-controls button:hover {
+      border-color: var(--cyan-bright);
+    }
+
+    /* Canvas Wrapper */
+    #canvas-wrapper {
+      position: relative;
+      width: 640px;
+      height: 400px;
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    canvas {
+      width: 640px;
+      height: 400px;
+      image-rendering: pixelated;
+    }
+
+    .toast {
+      position: absolute;
+      top: 15px;
+      background: rgba(8, 13, 26, 0.9);
+      border: 1px solid var(--cyan-bright);
+      color: var(--cyan-bright);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0,240,255,0.4);
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .toast-notify {
+      position: absolute;
+      bottom: 20px;
+      background: rgba(76, 29, 149, 0.95);
+      border: 1px solid var(--purple-glow);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .hidden { opacity: 0 !important; pointer-events: none !important; display: none !important; }
+
+    /* Dialogue Overlay Panel */
+    .ui-panel {
+      position: absolute;
+      bottom: 90px;
+      left: 20px;
+      right: 20px;
+      background: var(--panel-bg);
+      border: 2px solid var(--cyan-bright);
+      border-radius: 8px;
+      padding: 12px 16px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      z-index: 20;
+    }
+
+    .dialogue-header {
+      color: var(--cyan-bright);
+      font-weight: bold;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+      padding-bottom: 4px;
+    }
+
+    .dialogue-body {
+      font-size: 0.85rem;
+      line-height: 1.3;
+      min-height: 40px;
+    }
+
+    .dialogue-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 6px;
+    }
+
+    .btn-small {
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      background: var(--purple-dark);
+      color: #fff;
+      border-color: var(--purple-glow);
+    }
+
+    /* Controls Footer Area */
+    #controls-wrapper {
+      background: var(--panel-bg);
+      border-top: 1px solid var(--panel-border);
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+    }
+
+    #desktop-controls-hint {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    .touch-only { display: none; }
+
+    /* Combat Screen */
+    #screen-combat {
+      padding: 16px;
+      justify-content: space-between;
+      background: radial-gradient(circle at center, #0f172a 0%, #030712 100%);
+    }
+
+    .combat-header {
+      text-align: center;
+    }
+
+    .combat-header h2 {
+      font-size: 1.2rem;
+      color: var(--cyan-bright);
+      letter-spacing: 2px;
+    }
+
+    #combat-turn-indicator {
+      font-size: 0.8rem;
+      color: var(--purple-glow);
+      font-weight: bold;
+      margin-top: 2px;
+    }
+
+    .combat-arena {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 15px 0;
+    }
+
+    .combat-entity {
+      width: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .entity-name {
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    .entity-sprite {
+      width: 70px;
+      height: 70px;
+      border-radius: 8px;
+      border: 2px solid var(--cyan-bright);
+      background-size: cover;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    .player-sprite { background: #1e3a8a; border-color: var(--cyan-bright); }
+    .enemy-sprite { background: #581c87; border-color: var(--purple-glow); }
+
+    .combat-vs {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--danger-color);
+      font-style: italic;
+    }
+
+    .combat-log-box {
+      height: 60px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      overflow-y: auto;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    .combat-actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .btn-combat {
+      background: rgba(30, 58, 138, 0.4);
+      color: #fff;
+      padding: 10px 4px;
+      font-size: 0.8rem;
+      border-color: var(--cyan-dim);
+    }
+
+    .btn-combat:hover {
+      background: rgba(30, 58, 138, 0.8);
+      border-color: var(--cyan-bright);
+    }
+
+    /* Modals Overlay & Content */
+    .modal-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(5px);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      width: 440px;
+      max-height: 480px;
+      background: var(--panel-bg);
+      border: 2px solid var(--cyan-bright);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      color: var(--text-main);
+    }
+
+    .modal-content h3 {
+      color: var(--cyan-bright);
+      text-align: center;
+      border-bottom: 1px solid var(--panel-border);
+      padding-bottom: 6px;
+    }
+
+    .item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--panel-border);
+    }
+
+    .item-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .item-title { font-weight: bold; font-size: 0.85rem; color: #fff; }
+    .item-desc { font-size: 0.7rem; color: var(--text-dim); }
+
+    .quest-objectives {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.85rem;
+    }
+
+    .quest-objectives li {
+      padding: 6px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 4px;
+    }
+
+    .quest-objectives li.completed {
+      color: var(--cyan-bright);
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    .map-nodes {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .map-node {
+      width: 80%;
+      padding: 8px;
+      text-align: center;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .map-node.active-location {
+      border-color: var(--cyan-bright);
+      background: rgba(0, 240, 255, 0.15);
+      color: var(--cyan-bright);
+      box-shadow: 0 0 10px rgba(0,240,255,0.3);
+    }
+
+    .map-node.unlocked { color: #fff; cursor: pointer; }
+    .map-node.unlocked:hover { border-color: var(--purple-glow); }
+    .map-node.locked { opacity: 0.5; }
+
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--panel-border);
+      font-size: 0.85rem;
+    }
+
+    .setting-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    /* Victory & Game Over Screens */
+    #screen-victory, #screen-gameover {
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .victory-box, .gameover-box {
+      background: var(--panel-bg);
+      border: 2px solid var(--cyan-bright);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
+      max-width: 450px;
+      width: 100%;
+    }
+
+    .victory-box h1 { color: var(--cyan-bright); font-size: 1.8rem; margin-bottom: 5px; }
+    .victory-box h2 { color: var(--purple-glow); font-size: 1rem; margin-bottom: 10px; }
+    .victory-sub { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 15px; }
+
+    .victory-stats {
+      background: rgba(15, 23, 42, 0.8);
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+
+    .gameover-box { border-color: var(--danger-color); box-shadow: 0 0 30px rgba(220, 38, 38, 0.4); }
+    .gameover-box h1 { color: var(--danger-color); font-size: 1.6rem; margin-bottom: 10px; }
+    .gameover-box p { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px; }
+
+    /* Responsive & Touch Controls */
+    @media (max-width: 680px) {
+      #game-container {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+
+      #canvas-wrapper {
+        width: 100%;
+        height: 60vw;
+      }
+
+      canvas {
+        width: 100%;
+        height: 100%;
+      }
+
+      #desktop-controls-hint { display: none; }
+      .touch-only { display: flex; }
+
+      #controls-wrapper {
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 6px;
+        background: #080d1a;
+      }
+
+      #mobile-dpad {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .dpad-row { display: flex; gap: 4px; }
+      
+      .dpad-btn {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        font-size: 0.9rem;
+        background: rgba(30, 58, 138, 0.6);
+        border-color: var(--cyan-dim);
+      }
+
+      .btn-action {
+        height: 60px;
+        padding: 0 15px;
+        background: linear-gradient(135deg, #4c1d95, #0284c7);
+      }
+
+      .modal-content {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    
+    <!-- Title / Main Menu Screen -->
+    <div id="screen-title" class="screen active">
+      <div class="title-logo">
+        <div class="subtitle">DIGITAL ARCHIVE SYSTEM v2.6</div>
+        <h1>YEARBOOK ARCHIVE</h1>
+        <div class="tagline">LOST MEMORIES</div>
+      </div>
+      <div class="menu-buttons">
+        <button id="btn-new-game" class="btn-primary">NEW GAME</button>
+        <button id="btn-continue" class="btn-secondary" disabled>CONTINUE</button>
+        <button id="btn-title-settings" class="btn-secondary">SETTINGS</button>
+      </div>
+      <div class="title-footer">Use Keyboard (WASD/Arrows) or On-Screen Controls on Mobile</div>
+    </div>
+
+    <!-- Gameplay Viewport Screen -->
+    <div id="screen-gameplay" class="screen">
+      
+      <!-- Top Persistent HUD -->
+      <header id="hud">
+        <div class="hud-bar">
+          <div class="hud-stat"><span class="label">LVL</span> <span id="hud-level" class="val">1</span></div>
+          <div class="hud-stat"><span class="label">GOLD</span> <span id="hud-gold" class="val">20</span></div>
+          <div class="hud-stat"><span class="label">FRAGMENTS</span> <span id="hud-frags" class="val">0/5</span></div>
+        </div>
+        <div class="hud-bars">
+          <div class="bar-container">
+            <div id="hud-hp-bar" class="bar-fill hp-fill" style="width: 100%;"></div>
+            <span id="hud-hp-text" class="bar-text">HP 100/100</span>
+          </div>
+          <div class="bar-container">
+            <div id="hud-xp-bar" class="bar-fill xp-fill" style="width: 0%;"></div>
+            <span id="hud-xp-text" class="bar-text">XP 0/100</span>
+          </div>
+        </div>
+        <div class="hud-controls">
+          <button id="btn-hud-inventory">BAG</button>
+          <button id="btn-hud-quest">QUEST</button>
+          <button id="btn-hud-map">MAP</button>
+          <button id="btn-hud-save">SAVE</button>
+          <button id="btn-hud-settings">⚙</button>
+        </div>
+      </header>
+
+      <!-- Main Game Canvas -->
+      <div id="canvas-wrapper">
+        <canvas id="gameCanvas" width="640" height="400"></canvas>
+        <div id="area-toast" class="toast hidden">LOCATION</div>
+        <div id="notification-toast" class="toast-notify hidden">NOTIFICATION</div>
+      </div>
+
+      <!-- Dialogue System Box -->
+      <div id="dialogue-box" class="ui-panel hidden">
+        <div class="dialogue-header">
+          <span id="dialogue-speaker">NPC NAME</span>
+        </div>
+        <div id="dialogue-text" class="dialogue-body">Dialogue text goes here...</div>
+        <div class="dialogue-footer">
+          <button id="btn-dialogue-next" class="btn-small">NEXT ▶</button>
+        </div>
+      </div>
+
+      <!-- Controls Guide & On-Screen Virtual D-Pad -->
+      <div id="controls-wrapper">
+        <div id="desktop-controls-hint">W A S D / ARROW KEYS — MOVE</div>
+        <div id="mobile-dpad" class="touch-only">
+          <div class="dpad-row">
+            <button id="btn-dpad-up" class="dpad-btn">▲</button>
+          </div>
+          <div class="dpad-row">
+            <button id="btn-dpad-left" class="dpad-btn">◀</button>
+            <button id="btn-dpad-down" class="dpad-btn">▼</button>
+            <button id="btn-dpad-right" class="dpad-btn">▶</button>
+          </div>
+        </div>
+        <div id="mobile-actions" class="touch-only">
+          <button id="btn-touch-action" class="btn-action">INTERACT / A</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Combat View Screen -->
+    <div id="screen-combat" class="screen">
+      <div class="combat-header">
+        <h2>DEFEND THE ARCHIVE!</h2>
+        <div id="combat-turn-indicator">YOUR TURN</div>
+      </div>
+      
+      <div class="combat-arena">
+        <!-- Player Stats Block -->
+        <div class="combat-entity" id="combat-player">
+          <div class="entity-name">PLAYER</div>
+          <div class="bar-container">
+            <div id="combat-player-hp-bar" class="bar-fill hp-fill"></div>
+            <span id="combat-player-hp-text" class="bar-text">100/100</span>
+          </div>
+          <div class="entity-sprite player-sprite"></div>
+        </div>
+
+        <div class="combat-vs">VS</div>
+
+        <!-- Enemy Stats Block -->
+        <div class="combat-entity" id="combat-enemy">
+          <div id="combat-enemy-name" class="entity-name">MEMORY SLIME</div>
+          <div class="bar-container">
+            <div id="combat-enemy-hp-bar" class="bar-fill hp-fill"></div>
+            <span id="combat-enemy-hp-text" class="bar-text">35/35</span>
+          </div>
+          <div id="combat-enemy-sprite" class="entity-sprite enemy-sprite"></div>
+        </div>
+      </div>
+
+      <!-- Combat Log -->
+      <div id="combat-log" class="combat-log-box">An encounter begins!</div>
+
+      <!-- Combat Actions Panel -->
+      <div class="combat-actions">
+        <button id="btn-combat-attack" class="btn-combat">⚔ ATTACK</button>
+        <button id="btn-combat-defend" class="btn-combat">🛡 DEFEND</button>
+        <button id="btn-combat-special" class="btn-combat">✨ SPECIAL</button>
+        <button id="btn-combat-item" class="btn-combat">🎒 ITEM</button>
+        <button id="btn-combat-escape" class="btn-combat">🏃 ESCAPE</button>
+      </div>
+    </div>
+
+    <!-- Modals Overlay System -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+      
+      <!-- Inventory Modal -->
+      <div id="modal-inventory" class="modal-content hidden">
+        <h3>INVENTORY</h3>
+        <div id="inventory-list" class="item-list"></div>
+        <button class="btn-close-modal">CLOSE</button>
+      </div>
+
+      <!-- Quest Modal -->
+      <div id="modal-quest" class="modal-content hidden">
+        <h3>QUEST LOG</h3>
+        <div id="quest-title" class="quest-title">MAIN QUEST: RECOVER MEMORIES</div>
+        <ul id="quest-list" class="quest-objectives"></ul>
+        <button class="btn-close-modal">CLOSE</button>
+      </div>
+
+      <!-- Map Modal -->
+      <div id="modal-map" class="modal-content hidden">
+        <h3>ARCHIVE MAP</h3>
+        <div class="map-nodes">
+          <div class="map-node" data-area="hub">ARCHIVE HUB</div>
+          <div class="map-arrow">↓</div>
+          <div class="map-node" data-area="forest">MEMORY FOREST</div>
+          <div class="map-arrow">↓</div>
+          <div class="map-node" data-area="ruins">DIGITAL RUINS</div>
+          <div class="map-arrow">↓</div>
+          <div class="map-node" data-area="classroom">CLASSROOM DISTRICT</div>
+          <div class="map-arrow">↓</div>
+          <div class="map-node" data-area="core">YEARBOOK CORE</div>
+        </div>
+        <button class="btn-close-modal">CLOSE</button>
+      </div>
+
+      <!-- Shop Modal -->
+      <div id="modal-shop" class="modal-content hidden">
+        <h3>ARCHIVE HUB SHOP</h3>
+        <p>Spend Gold to purchase restoration items & boosters.</p>
+        <div id="shop-list" class="item-list"></div>
+        <button class="btn-close-modal">CLOSE</button>
+      </div>
+
+      <!-- Combat Item Select Modal -->
+      <div id="modal-combat-item" class="modal-content hidden">
+        <h3>SELECT ITEM</h3>
+        <div id="combat-item-list" class="item-list"></div>
+        <button id="btn-close-combat-item" class="btn-secondary">CANCEL</button>
+      </div>
+
+      <!-- Settings Modal -->
+      <div id="modal-settings" class="modal-content hidden">
+        <h3>SETTINGS</h3>
+        <div class="setting-row">
+          <label for="setting-typewriter">Typewriter Text Effect</label>
+          <input type="checkbox" id="setting-typewriter" checked>
+        </div>
+        <div class="setting-row">
+          <label for="setting-audio">Audio System Enabled</label>
+          <input type="checkbox" id="setting-audio" checked>
+        </div>
+        <div class="setting-actions">
+          <button id="btn-reset-save" class="btn-danger">RESET SAVE DATA</button>
+          <button class="btn-close-modal">CLOSE</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Victory Screen -->
+    <div id="screen-victory" class="screen">
+      <div class="victory-box">
+        <h1>ARCHIVE RESTORED!</h1>
+        <h2>ALL MEMORY FRAGMENTS RECOVERED</h2>
+        <p class="victory-sub">YEARBOOK CORE RESTORED</p>
+        <div class="victory-stats">
+          <div>FINAL LEVEL: <span id="vic-level">0</span></div>
+          <div>ENEMIES DEFEATED: <span id="vic-enemies">0</span></div>
+          <div>MEMORY FRAGMENTS: <span id="vic-frags">5/5</span></div>
+          <div>GOLD REMAINING: <span id="vic-gold">0</span></div>
+          <div>PLAY TIME: <span id="vic-time">0m 0s</span></div>
+        </div>
+        <div class="menu-buttons">
+          <button id="btn-vic-return" class="btn-primary">RETURN TO ARCHIVE</button>
+          <button id="btn-vic-replay" class="btn-secondary">PLAY AGAIN</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="screen-gameover" class="screen">
+      <div class="gameover-box">
+        <h1 class="glitch-text">ARCHIVE CONNECTION LOST</h1>
+        <p>Your memory stream was disrupted by corrupted data.</p>
+        <div class="menu-buttons">
+          <button id="btn-retry" class="btn-primary">RETRY (LAST SAVE)</button>
+          <button id="btn-title-return" class="btn-secondary">RETURN TO TITLE</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* ==========================================================================
+       YEARBOOK ARCHIVE: LOST MEMORIES - MAIN GAME ENGINE
+       Vanilla JS RPG Architecture
+       ========================================================================== */
+
+    // ==========================================================================
+    // 1. EDITABLE GAME CONFIGURATION & DATA
+    // ==========================================================================
+
+    const PLAYER_START_STATS = {
+      level: 1,
+      hp: 100,
+      maxHp: 100,
+      attack: 12,
+      defense: 5,
+      xp: 0,
+      xpToNext: 100,
+      gold: 20,
+      speed: 3
+    };
+
+    const XP_TABLE = [0, 100, 180, 300, 450, 650, 900, 1200];
+
+    const ITEMS_DATABASE = {
+      memory_potion: { id: 'memory_potion', name: 'Memory Potion', desc: 'Restores 30 HP', price: 15, hpRestore: 30 },
+      archive_potion: { id: 'archive_potion', name: 'Archive Potion', desc: 'Restores 60 HP', price: 30, hpRestore: 60 },
+      power_chip: { id: 'power_chip', name: 'Power Chip', desc: 'Boosts Attack by 5 for combat', price: 25, atkBoost: 5 },
+      shield_chip: { id: 'shield_chip', name: 'Shield Chip', desc: 'Boosts Defense by 5 for combat', price: 25, defBoost: 5 }
+    };
+
+    const ENEMIES_DATABASE = {
+      slime: { name: 'Memory Slime', hp: 35, maxHp: 35, attack: 7, defense: 2, xp: 20, gold: 8, color: '#3b82f6' },
+      note: { name: 'Corrupted Note', hp: 50, maxHp: 50, attack: 11, defense: 4, xp: 35, gold: 15, color: '#e11d48' },
+      guardian: { name: 'Data Guardian', hp: 75, maxHp: 75, attack: 15, defense: 7, xp: 55, gold: 25, color: '#0284c7' }
+    };
+
+    const BOSS_DATA = {
+      name: 'THE ARCHIVE KEEPER',
+      hp: 300,
+      maxHp: 300,
+      attack: 22,
+      defense: 10,
+      xp: 500,
+      gold: 200,
+      color: '#a855f7'
+    };
+
+    const NPC_DIALOGUES = {
+      archivist: [
+        "Archivist: Welcome to the Digital Yearbook Archive.",
+        "Archivist: A sudden system glitch corrupted our school history and scattered 5 Memory Fragments!",
+        "Archivist: Please retrieve all 5 fragments from the sectors to unlock the Yearbook Core and restore our memories."
+      ],
+      rep: [
+        "Class Rep: Hey! Watch out in the Memory Forest ahead.",
+        "Class Rep: Corrupted Data Slimes are lurking around. Make sure your HP is full before moving forward!"
+      ],
+      technician: [
+        "Technician: Beep boop! I am the Archive Repair Specialist.",
+        "Technician: Let me run a system diagnostic... System clean! Your HP has been fully restored!"
+      ],
+      student: [
+        "Mysterious Student: Legend says the Archive Keeper in the Yearbook Core was created to protect our memories...",
+        "Mysterious Student: ...but when the data got corrupted, it locked everyone out."
+      ]
+    };
+
+    const MAP_CONFIGS = {
+      hub: {
+        name: 'ARCHIVE HUB',
+        width: 640, height: 400,
+        bgColor: '#0f172a',
+        walls: [{x:0, y:0, w:640, h:20}, {x:0, y:380, w:640, h:20}, {x:0, y:0, w:20, h:400}, {x:620, y:0, w:20, h:400}],
+        portals: [{x: 580, y: 180, w: 30, h: 60, targetArea: 'forest', targetX: 40, targetY: 200, name: 'Memory Forest'}],
+        npcs: [
+          { id: 'archivist', x: 150, y: 120, w: 24, h: 24, color: '#00f0ff', label: 'Archivist' },
+          { id: 'technician', x: 450, y: 120, w: 24, h: 24, color: '#10b981', label: 'Technician' }
+        ],
+        items: [],
+        encounters: []
+      },
+      forest: {
+        name: 'MEMORY FOREST',
+        width: 640, height: 400,
+        bgColor: '#064e3b',
+        walls: [
+          {x:0, y:0, w:640, h:20}, {x:0, y:380, w:640, h:20}, {x:0, y:0, w:20, h:400}, {x:620, y:0, w:20, h:400},
+          {x:150, y:80, w:80, h:120}, {x:350, y:200, w:120, h:80}
+        ],
+        portals: [
+          {x: 10, y: 180, w: 20, h: 60, targetArea: 'hub', targetX: 550, targetY: 200, name: 'Archive Hub'},
+          {x: 580, y: 180, w: 30, h: 60, targetArea: 'ruins', targetX: 40, targetY: 200, name: 'Digital Ruins'}
+        ],
+        npcs: [{ id: 'rep', x: 100, y: 280, w: 24, h: 24, color: '#f59e0b', label: 'Class Rep' }],
+        items: [{ id: 'frag_1', type: 'fragment', index: 1, x: 520, y: 80, w: 18, h: 18 }],
+        encounters: ['slime']
+      },
+      ruins: {
+        name: 'DIGITAL RUINS',
+        width: 640, height: 400,
+        bgColor: '#311b92',
+        walls: [
+          {x:0, y:0, w:640, h:20}, {x:0, y:380, w:640, h:20}, {x:0, y:0, w:20, h:400}, {x:620, y:0, w:20, h:400},
+          {x:200, y:20, w:40, h:240}, {x:400, y:140, w:40, h:240}
+        ],
+        portals: [
+          {x: 10, y: 180, w: 20, h: 60, targetArea: 'forest', targetX: 550, targetY: 200, name: 'Memory Forest'},
+          {x: 580, y: 180, w: 30, h: 60, targetArea: 'classroom', targetX: 40, targetY: 200, name: 'Classroom District'}
+        ],
+        npcs: [],
+        items: [
+          { id: 'frag_2', type: 'fragment', index: 2, x: 100, y: 80, w: 18, h: 18 },
+          { id: 'frag_3', type: 'fragment', index: 3, x: 500, y: 320, w: 18, h: 18 }
+        ],
+        encounters: ['slime', 'note']
+      },
+      classroom: {
+        name: 'CLASSROOM DISTRICT',
+        width: 640, height: 400,
+        bgColor: '#1e293b',
+        walls: [
+          {x:0, y:0, w:640, h:20}, {x:0, y:380, w:640, h:20}, {x:0, y:0, w:20, h:400}, {x:620, y:0, w:20, h:400},
+          {x:100, y:100, w:180, h:30}, {x:360, y:250, w:180, h:30}
+        ],
+        portals: [
+          {x: 10, y: 180, w: 20, h: 60, targetArea: 'ruins', targetX: 550, targetY: 200, name: 'Digital Ruins'},
+          {x: 580, y: 180, w: 30, h: 60, targetArea: 'core', targetX: 60, targetY: 200, name: 'Yearbook Core'}
+        ],
+        npcs: [{ id: 'student', x: 280, y: 60, w: 24, h: 24, color: '#ec4899', label: 'Student' }],
+        items: [{ id: 'frag_4', type: 'fragment', index: 4, x: 520, y: 80, w: 18, h: 18 }],
+        encounters: ['note', 'guardian']
+      },
+      core: {
+        name: 'YEARBOOK CORE',
+        width: 640, height: 400,
+        bgColor: '#4c1d95',
+        walls: [{x:0, y:0, w:640, h:20}, {x:0, y:380, w:640, h:20}, {x:0, y:0, w:20, h:400}, {x:620, y:0, w:20, h:400}],
+        portals: [{x: 10, y: 180, w: 20, h: 60, targetArea: 'classroom', targetX: 550, targetY: 200, name: 'Classroom District'}],
+        npcs: [],
+        items: [{ id: 'frag_5', type: 'fragment', index: 5, x: 310, y: 80, w: 18, h: 18 }],
+        encounters: []
+      }
+    };
+
+    // ==========================================================================
+    // 2. GAME STATE MANAGEMENT
+    // ==========================================================================
+
+    let gameState = {
+      player: { ...PLAYER_START_STATS, x: 300, y: 200, w: 20, h: 20 },
+      currentArea: 'hub',
+      unlockedAreas: ['hub'],
+      inventory: { memory_potion: 2, power_chip: 1 },
+      fragmentsCollected: [],
+      enemiesDefeated: 0,
+      startTime: Date.now(),
+      settings: { typewriter: true, audio: true },
+      bossDefeated: false
+    };
+
+    let keys = {};
+    let activeDialogue = null;
+    let dialogueIndex = 0;
+    let currentEncounter = null;
+    let combatTurn = 'player';
+    let combatTempBuffs = { attack: 0, defense: 0, defending: false };
+    let isTypewriterActive = false;
+    let typewriterTimer = null;
+
+    // ==========================================================================
+    // 3. CORE INITIALIZATION
+    // ==========================================================================
+
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initEventListeners();
+      loadGameFromStorage();
+      gameLoop();
+    });
+
+    function initEventListeners() {
+      // Key events
+      window.addEventListener('keydown', e => { keys[e.key.toLowerCase()] = true; });
+      window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+
+      // Buttons
+      document.getElementById('btn-new-game').onclick = startNewGame;
+      document.getElementById('btn-continue').onclick = () => switchScreen('screen-gameplay');
+      document.getElementById('btn-title-settings').onclick = () => openModal('modal-settings');
+      
+      // HUD Buttons
+      document.getElementById('btn-hud-inventory').onclick = openInventoryModal;
+      document.getElementById('btn-hud-quest').onclick = openQuestModal;
+      document.getElementById('btn-hud-map').onclick = openMapModal;
+      document.getElementById('btn-hud-save').onclick = manualSave;
+      document.getElementById('btn-hud-settings').onclick = () => openModal('modal-settings');
+
+      // Dialogue
+      document.getElementById('btn-dialogue-next').onclick = advanceDialogue;
+
+      // Combat Actions
+      document.getElementById('btn-combat-attack').onclick = combatPlayerAttack;
+      document.getElementById('btn-combat-defend').onclick = combatPlayerDefend;
+      document.getElementById('btn-combat-special').onclick = combatPlayerSpecial;
+      document.getElementById('btn-combat-item').onclick = openCombatItemModal;
+      document.getElementById('btn-combat-escape').onclick = combatAttemptEscape;
+      document.getElementById('btn-close-combat-item').onclick = () => closeModal('modal-combat-item');
+
+      // Modals close button generic
+      document.querySelectorAll('.btn-close-modal').forEach(btn => {
+        btn.onclick = () => closeModal();
+      });
+
+      // Settings
+      document.getElementById('btn-reset-save').onclick = resetSaveData;
+      document.getElementById('setting-typewriter').onchange = (e) => gameState.settings.typewriter = e.target.checked;
+      document.getElementById('setting-audio').onchange = (e) => gameState.settings.audio = e.target.checked;
+
+      // Game over / Victory buttons
+      document.getElementById('btn-retry').onclick = retryFromLastSave;
+      document.getElementById('btn-title-return').onclick = () => switchScreen('screen-title');
+      document.getElementById('btn-vic-return').onclick = () => switchScreen('screen-gameplay');
+      document.getElementById('btn-vic-replay').onclick = startNewGame;
+
+      // Touch Virtual Controls
+      setupTouchControls();
+    }
+
+    function switchScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+      updateHUD();
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('area-toast');
+      toast.innerText = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2500);
+    }
+
+    function showNotification(msg) {
+      const toast = document.getElementById('notification-toast');
+      toast.innerText = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+
+    // ==========================================================================
+    // 4. GAME LOOP & MOVEMENT ENGINE
+    // ==========================================================================
+
+    function gameLoop() {
+      updateGameplay();
+      renderCanvas();
+      requestAnimationFrame(gameLoop);
+    }
+
+    function updateGameplay() {
+      if (!document.getElementById('screen-gameplay').classList.contains('active')) return;
+      if (activeDialogue) return;
+
+      const map = MAP_CONFIGS[gameState.currentArea];
+      let dx = 0, dy = 0;
+
+      if (keys['w'] || keys['arrowup']) dy -= gameState.player.speed;
+      if (keys['s'] || keys['arrowdown']) dy += gameState.player.speed;
+      if (keys['a'] || keys['arrowleft']) dx -= gameState.player.speed;
+      if (keys['d'] || keys['arrowright']) dx += gameState.player.speed;
+
+      if (dx !== 0 || dy !== 0) {
+        let nextX = gameState.player.x + dx;
+        let nextY = gameState.player.y + dy;
+
+        // Boundary & Wall Collision Test
+        if (!checkWallCollision(nextX, gameState.player.y, gameState.player.w, gameState.player.h, map.walls)) {
+          gameState.player.x = nextX;
+        }
+        if (!checkWallCollision(gameState.player.x, nextY, gameState.player.w, gameState.player.h, map.walls)) {
+          gameState.player.y = nextY;
+        }
+
+        // Portal Collision Check
+        map.portals.forEach(portal => {
+          if (checkRectOverlap(gameState.player, portal)) {
+            if (portal.targetArea === 'core' && gameState.fragmentsCollected.length < 5) {
+              showNotification("YEARBOOK CORE LOCKED! Recover all 5 Memory Fragments first.");
+              return;
+            }
+            changeArea(portal.targetArea, portal.targetX, portal.targetY);
+          }
+        });
+
+        // NPC Interaction Collision Check
+        map.npcs.forEach(npc => {
+          if (checkRectOverlap(gameState.player, npc)) {
+            startNPCDialogue(npc.id);
+          }
+        });
+
+        // Item/Fragment Pickup
+        map.items.forEach((item, idx) => {
+          if (checkRectOverlap(gameState.player, item)) {
+            if (item.type === 'fragment' && !gameState.fragmentsCollected.includes(item.index)) {
+              gameState.fragmentsCollected.push(item.index);
+              map.items.splice(idx, 1);
+              showNotification(`MEMORY FRAGMENT ACQUIRED (${gameState.fragmentsCollected.length}/5)`);
+              updateHUD();
+            }
+          }
+        });
+
+        // Random Encounter Engine
+        if (map.encounters.length > 0 && Math.random() < 0.008) {
+          triggerRandomEncounter(map.encounters);
+        }
+
+        // Boss Encounter Check in Core
+        if (gameState.currentArea === 'core' && !gameState.bossDefeated && gameState.player.y < 150) {
+          triggerBossEncounter();
+        }
+      }
+    }
+
+    function checkWallCollision(x, y, w, h, walls) {
+      const box = { x, y, w, h };
+      return walls.some(wall => checkRectOverlap(box, wall));
+    }
+
+    function checkRectOverlap(r1, r2) {
+      return r1.x < r2.x + r2.w &&
+             r1.x + r1.w > r2.x &&
+             r1.y < r2.y + r2.h &&
+             r1.y + r1.h > r2.y;
+    }
+
+    function changeArea(areaKey, spawnX, spawnY) {
+      gameState.currentArea = areaKey;
+      if (!gameState.unlockedAreas.includes(areaKey)) {
+        gameState.unlockedAreas.push(areaKey);
+      }
+      gameState.player.x = spawnX;
+      gameState.player.y = spawnY;
+      showToast(MAP_CONFIGS[areaKey].name);
+      autoSave();
+    }
+
+    // ==========================================================================
+    // 5. CANVAS RENDERER
+    // ==========================================================================
+
+    function renderCanvas() {
+      const map = MAP_CONFIGS[gameState.currentArea];
+      
+      // Background
+      ctx.fillStyle = map.bgColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw Grid Lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < canvas.width; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += 40) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+      }
+
+      // Draw Walls
+      ctx.fillStyle = '#1e3a8a';
+      ctx.strokeStyle = '#00f0ff';
+      map.walls.forEach(w => {
+        ctx.fillRect(w.x, w.y, w.w, w.h);
+        ctx.strokeRect(w.x, w.y, w.w, w.h);
+      });
+
+      // Draw Portals
+      map.portals.forEach(p => {
+        ctx.fillStyle = 'rgba(168, 85, 247, 0.6)';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+        ctx.strokeStyle = '#a855f7';
+        ctx.strokeRect(p.x, p.y, p.w, p.h);
+      });
+
+      // Draw Memory Fragments
+      map.items.forEach(item => {
+        if (item.type === 'fragment') {
+          ctx.fillStyle = '#00f0ff';
+          ctx.beginPath();
+          ctx.arc(item.x + 9, item.y + 9, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.stroke();
+        }
+      });
+
+      // Draw NPCs
+      map.npcs.forEach(npc => {
+        ctx.fillStyle = npc.color;
+        ctx.fillRect(npc.x, npc.y, npc.w, npc.h);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '10px sans-serif';
+        ctx.fillText(npc.label, npc.x - 5, npc.y - 4);
+      });
+
+      // Draw Boss in Core Map
+      if (gameState.currentArea === 'core' && !gameState.bossDefeated) {
+        ctx.fillStyle = BOSS_DATA.color;
+        ctx.fillRect(290, 80, 60, 60);
+        ctx.strokeStyle = '#ffffff';
+        ctx.strokeRect(290, 80, 60, 60);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '12px sans-serif';
+        ctx.fillText("ARCHIVE KEEPER", 270, 70);
+      }
+
+      // Draw Player Character
+      ctx.fillStyle = '#00f0ff';
+      ctx.fillRect(gameState.player.x, gameState.player.y, gameState.player.w, gameState.player.h);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(gameState.player.x + 4, gameState.player.y + 4, 4, 4);
+      ctx.fillRect(gameState.player.x + 12, gameState.player.y + 4, 4, 4);
+    }
+
+    // ==========================================================================
+    // 6. DIALOGUE SYSTEM
+    // ==========================================================================
+
+    function startNPCDialogue(npcId) {
+      if (npcId === 'technician') {
+        gameState.player.hp = gameState.player.maxHp;
+        updateHUD();
+      }
+      
+      if (npcId === 'archivist' && gameState.currentArea === 'hub') {
+        openShopModal();
+      }
+
+      activeDialogue = NPC_DIALOGUES[npcId] || ["..."];
+      dialogueIndex = 0;
+      document.getElementById('dialogue-box').classList.remove('hidden');
+      renderDialogueLine();
+    }
+
+    function renderDialogueLine() {
+      const line = activeDialogue[dialogueIndex];
+      const parts = line.split(': ');
+      const speaker = parts.length > 1 ? parts[0] : 'SYSTEM';
+      const text = parts.length > 1 ? parts[1] : parts[0];
+
+      document.getElementById('dialogue-speaker').innerText = speaker;
+      const bodyEl = document.getElementById('dialogue-text');
+      bodyEl.innerText = '';
+
+      if (gameState.settings.typewriter) {
+        isTypewriterActive = true;
+        let i = 0;
+        clearInterval(typewriterTimer);
+        typewriterTimer = setInterval(() => {
+          bodyEl.innerText += text.charAt(i);
+          i++;
+          if (i >= text.length) {
+            clearInterval(typewriterTimer);
+            isTypewriterActive = false;
+          }
+        }, 25);
+      } else {
+        bodyEl.innerText = text;
+      }
+    }
+
+    function advanceDialogue() {
+      if (isTypewriterActive) {
+        clearInterval(typewriterTimer);
+        isTypewriterActive = false;
+        const parts = activeDialogue[dialogueIndex].split(': ');
+        document.getElementById('dialogue-text').innerText = parts.length > 1 ? parts[1] : parts[0];
+        return;
+      }
+
+      dialogueIndex++;
+      if (dialogueIndex < activeDialogue.length) {
+        renderDialogueLine();
+      } else {
+        activeDialogue = null;
+        document.getElementById('dialogue-box').classList.add('hidden');
+      }
+    }
+
+    // ==========================================================================
+    // 7. COMBAT SYSTEM
+    // ==========================================================================
+
+    function triggerRandomEncounter(pool) {
+      const enemyType = pool[Math.floor(Math.random() * pool.length)];
+      const base = ENEMIES_DATABASE[enemyType];
+      startCombat({ ...base, currentHp: base.hp, isBoss: false });
+    }
+
+    function triggerBossEncounter() {
+      startCombat({ ...BOSS_DATA, currentHp: BOSS_DATA.hp, isBoss: true, phase: 1 });
+    }
+
+    function startCombat(enemyObj) {
+      currentEncounter = enemyObj;
+      combatTurn = 'player';
+      combatTempBuffs = { attack: 0, defense: 0, defending: false };
+
+      document.getElementById('combat-enemy-name').innerText = enemyObj.name;
+      document.getElementById('combat-turn-indicator').innerText = 'YOUR TURN';
+      document.getElementById('btn-combat-escape').disabled = enemyObj.isBoss;
+
+      updateCombatDisplay();
+      logCombat(`A wild ${enemyObj.name} appeared!`);
+      switchScreen('screen-combat');
+    }
+
+    function updateCombatDisplay() {
+      const pPct = Math.max(0, (gameState.player.hp / gameState.player.maxHp) * 100);
+      const ePct = Math.max(0, (currentEncounter.currentHp / currentEncounter.maxHp) * 100);
+
+      document.getElementById('combat-player-hp-bar').style.width = pPct + '%';
+      document.getElementById('combat-player-hp-text').innerText = `${gameState.player.hp}/${gameState.player.maxHp}`;
+
+      document.getElementById('combat-enemy-hp-bar').style.width = ePct + '%';
+      document.getElementById('combat-enemy-hp-text').innerText = `${currentEncounter.currentHp}/${currentEncounter.maxHp}`;
+    }
+
+    function logCombat(msg) {
+      const logBox = document.getElementById('combat-log');
+      logBox.innerHTML += `<div>${msg}</div>`;
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function combatPlayerAttack() {
+      if (combatTurn !== 'player') return;
+
+      const totalAtk = gameState.player.attack + combatTempBuffs.attack;
+      const damage = Math.max(1, totalAtk - currentEncounter.defense + Math.floor(Math.random() * 4));
+      currentEncounter.currentHp -= damage;
+
+      logCombat(`You attacked for <strong>${damage}</strong> damage!`);
+      updateCombatDisplay();
+
+      if (checkCombatWin()) return;
+      startEnemyTurn();
+    }
+
+    function combatPlayerDefend() {
+      if (combatTurn !== 'player') return;
+      combatTempBuffs.defending = true;
+      logCombat(`You take a defensive stance!`);
+      startEnemyTurn();
+    }
+
+    function combatPlayerSpecial() {
+      if (combatTurn !== 'player') return;
+
+      const totalAtk = gameState.player.attack + combatTempBuffs.attack;
+      const damage = Math.max(5, Math.floor(totalAtk * 1.6) - currentEncounter.defense);
+      currentEncounter.currentHp -= damage;
+
+      logCombat(`✨ ARCHIVE STRIKE deals <strong>${damage}</strong> critical damage!`);
+      updateCombatDisplay();
+
+      if (checkCombatWin()) return;
+      startEnemyTurn();
+    }
+
+    function openCombatItemModal() {
+      if (combatTurn !== 'player') return;
+      const listEl = document.getElementById('combat-item-list');
+      listEl.innerHTML = '';
+
+      Object.keys(gameState.inventory).forEach(itemId => {
+        const qty = gameState.inventory[itemId];
+        if (qty > 0) {
+          const item = ITEMS_DATABASE[itemId];
+          const row = document.createElement('div');
+          row.className = 'item-row';
+          row.innerHTML = `
+            <div class="item-info">
+              <span class="item-title">${item.name} (x${qty})</span>
+              <span class="item-desc">${item.desc}</span>
+            </div>
+            <button class="btn-primary">USE</button>
+          `;
+          row.querySelector('button').onclick = () => {
+            useItemInCombat(itemId);
+            closeModal('modal-combat-item');
+          };
+          listEl.appendChild(row);
+        }
+      });
+
+      openModal('modal-combat-item');
+    }
+
+    function useItemInCombat(itemId) {
+      const item = ITEMS_DATABASE[itemId];
+      gameState.inventory[itemId]--;
+
+      if (item.hpRestore) {
+        gameState.player.hp = Math.min(gameState.player.maxHp, gameState.player.hp + item.hpRestore);
+        logCombat(`Used ${item.name}! Restored ${item.hpRestore} HP.`);
+      }
+      if (item.atkBoost) {
+        combatTempBuffs.attack += item.atkBoost;
+        logCombat(`Used ${item.name}! Attack increased by ${item.atkBoost}.`);
+      }
+      if (item.defBoost) {
+        combatTempBuffs.defense += item.defBoost;
+        logCombat(`Used ${item.name}! Defense increased by ${item.defBoost}.`);
+      }
+
+      updateCombatDisplay();
+      startEnemyTurn();
+    }
+
+    function combatAttemptEscape() {
+      if (combatTurn !== 'player') return;
+      if (Math.random() < 0.6) {
+        logCombat(`Successfully escaped!`);
+        setTimeout(() => switchScreen('screen-gameplay'), 1000);
+      } else {
+        logCombat(`Escape failed!`);
+        startEnemyTurn();
+      }
+    }
+
+    function startEnemyTurn() {
+      combatTurn = 'enemy';
+      document.getElementById('combat-turn-indicator').innerText = 'ENEMY TURN...';
+
+      setTimeout(() => {
+        if (currentEncounter.currentHp <= 0) return;
+
+        let baseDmg = currentEncounter.attack;
+
+        // Boss Phase AI Adjustments
+        if (currentEncounter.isBoss) {
+          const hpRatio = currentEncounter.currentHp / currentEncounter.maxHp;
+          if (hpRatio < 0.3) {
+            baseDmg += 8;
+            logCombat(`🔥 ARCHIVE KEEPER enters PHASE 3: OVERCLOCK!`);
+          } else if (hpRatio < 0.6) {
+            baseDmg += 4;
+            logCombat(`⚡ ARCHIVE KEEPER enters PHASE 2: SYSTEM PURGE!`);
+          }
+        }
+
+        let def = gameState.player.defense + combatTempBuffs.defense;
+        if (combatTempBuffs.defending) def *= 2;
+
+        const damage = Math.max(1, baseDmg - def + Math.floor(Math.random() * 3));
+        gameState.player.hp -= damage;
+        combatTempBuffs.defending = false;
+
+        logCombat(`${currentEncounter.name} attacked for <strong>${damage}</strong> damage!`);
+        updateCombatDisplay();
+
+        if (gameState.player.hp <= 0) {
+          gameState.player.hp = 0;
+          setTimeout(() => switchScreen('screen-gameover'), 1200);
+          return;
+        }
+
+        combatTurn = 'player';
+        document.getElementById('combat-turn-indicator').innerText = 'YOUR TURN';
+      }, 1000);
+    }
+
+    function checkCombatWin() {
+      if (currentEncounter.currentHp <= 0) {
+        currentEncounter.currentHp = 0;
+        logCombat(`<strong>ENEMY DEFEATED!</strong>`);
+        gameState.enemiesDefeated++;
+        
+        // Rewards
+        gameState.player.gold += currentEncounter.gold;
+        logCombat(`Earned ${currentEncounter.gold} Gold & ${currentEncounter.xp} XP!`);
+        
+        addXP(currentEncounter.xp);
+
+        if (currentEncounter.isBoss) {
+          gameState.bossDefeated = true;
+          setTimeout(triggerVictoryScreen, 1500);
+        } else {
+          setTimeout(() => switchScreen('screen-gameplay'), 1200);
+        }
+        return true;
+      }
+      return false;
+    }
+
+    // ==========================================================================
+    // 8. XP & LEVELING SYSTEM
+    // ==========================================================================
+
+    function addXP(amount) {
+      gameState.player.xp += amount;
+      if (gameState.player.xp >= gameState.player.xpToNext) {
+        levelUp();
+      }
+      updateHUD();
+    }
+
+    function levelUp() {
+      gameState.player.level++;
+      gameState.player.xp -= gameState.player.xpToNext;
+      gameState.player.xpToNext = XP_TABLE[gameState.player.level] || (gameState.player.level * 250);
+
+      // Stat Increases
+      gameState.player.maxHp += 20;
+      gameState.player.hp = gameState.player.maxHp;
+      gameState.player.attack += 4;
+      gameState.player.defense += 2;
+
+      showNotification(`LEVEL UP! You reached Level ${gameState.player.level}!`);
+    }
+
+    // ==========================================================================
+    // 9. UI & MODAL MANAGERS
+    // ==========================================================================
+
+    function updateHUD() {
+      document.getElementById('hud-level').innerText = gameState.player.level;
+      document.getElementById('hud-gold').innerText = gameState.player.gold;
+      document.getElementById('hud-frags').innerText = `${gameState.fragmentsCollected.length}/5`;
+
+      const hpPct = (gameState.player.hp / gameState.player.maxHp) * 100;
+      document.getElementById('hud-hp-bar').style.width = hpPct + '%';
+      document.getElementById('hud-hp-text').innerText = `HP ${gameState.player.hp}/${gameState.player.maxHp}`;
+
+      const xpPct = (gameState.player.xp / gameState.player.xpToNext) * 100;
+      document.getElementById('hud-xp-bar').style.width = xpPct + '%';
+      document.getElementById('hud-xp-text').innerText = `XP ${gameState.player.xp}/${gameState.player.xpToNext}`;
+    }
+
+    function openModal(modalId) {
+      document.getElementById('modal-overlay').classList.remove('hidden');
+      document.querySelectorAll('.modal-content').forEach(m => m.classList.add('hidden'));
+      document.getElementById(modalId).classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+      if (modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+      } else {
+        document.querySelectorAll('.modal-content').forEach(m => m.classList.add('hidden'));
+      }
+      document.getElementById('modal-overlay').classList.add('hidden');
+    }
+
+    function openInventoryModal() {
+      const listEl = document.getElementById('inventory-list');
+      listEl.innerHTML = '';
+
+      Object.keys(gameState.inventory).forEach(itemId => {
+        const qty = gameState.inventory[itemId];
+        if (qty > 0) {
+          const item = ITEMS_DATABASE[itemId];
+          const row = document.createElement('div');
+          row.className = 'item-row';
+          row.innerHTML = `
+            <div class="item-info">
+              <span class="item-title">${item.name} (x${qty})</span>
+              <span class="item-desc">${item.desc}</span>
+            </div>
+            ${item.hpRestore ? '<button class="btn-primary">USE</button>' : ''}
+          `;
+          if (item.hpRestore) {
+            row.querySelector('button').onclick = () => {
+              if (gameState.player.hp >= gameState.player.maxHp) {
+                showNotification("HP is already full!");
+                return;
+              }
+              gameState.inventory[itemId]--;
+              gameState.player.hp = Math.min(gameState.player.maxHp, gameState.player.hp + item.hpRestore);
+              updateHUD();
+              openInventoryModal();
+            };
+          }
+          listEl.appendChild(row);
+        }
+      });
+
+      openModal('modal-inventory');
+    }
+
+    function openQuestModal() {
+      const listEl = document.getElementById('quest-list');
+      listEl.innerHTML = '';
+
+      for (let i = 1; i <= 5; i++) {
+        const done = gameState.fragmentsCollected.includes(i);
+        const li = document.createElement('li');
+        li.className = done ? 'completed' : '';
+        li.innerText = `${done ? '☑' : '☐'} Find Memory Fragment ${i}`;
+        listEl.appendChild(li);
+      }
+
+      const coreLi = document.createElement('li');
+      coreLi.className = gameState.unlockedAreas.includes('core') ? 'completed' : '';
+      coreLi.innerText = `${gameState.unlockedAreas.includes('core') ? '☑' : '☐'} Enter the Yearbook Core`;
+      listEl.appendChild(coreLi);
+
+      const bossLi = document.createElement('li');
+      bossLi.className = gameState.bossDefeated ? 'completed' : '';
+      bossLi.innerText = `${gameState.bossDefeated ? '☑' : '☐'} Defeat the Archive Keeper`;
+      listEl.appendChild(bossLi);
+
+      openModal('modal-quest');
+    }
+
+    function openMapModal() {
+      document.querySelectorAll('.map-node').forEach(node => {
+        const areaKey = node.dataset.area;
+        node.className = 'map-node';
+
+        if (areaKey === gameState.currentArea) node.classList.add('active-location');
+        
+        if (gameState.unlockedAreas.includes(areaKey)) {
+          node.classList.add('unlocked');
+          node.onclick = () => {
+            closeModal();
+            changeArea(areaKey, 300, 200);
+          };
+        } else {
+          node.classList.add('locked');
+          node.onclick = null;
+        }
+      });
+
+      openModal('modal-map');
+    }
+
+    function openShopModal() {
+      const listEl = document.getElementById('shop-list');
+      listEl.innerHTML = '';
+
+      Object.keys(ITEMS_DATABASE).forEach(itemId => {
+        const item = ITEMS_DATABASE[itemId];
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.innerHTML = `
+          <div class="item-info">
+            <span class="item-title">${item.name} - ${item.price} Gold</span>
+            <span class="item-desc">${item.desc}</span>
+          </div>
+          <button class="btn-primary">BUY</button>
+        `;
+        row.querySelector('button').onclick = () => {
+          if (gameState.player.gold >= item.price) {
+            gameState.player.gold -= item.price;
+            gameState.inventory[itemId] = (gameState.inventory[itemId] || 0) + 1;
+            updateHUD();
+            showNotification(`Purchased ${item.name}!`);
+          } else {
+            showNotification("Not enough Gold!");
+          }
+        };
+        listEl.appendChild(row);
+      });
+
+      openModal('modal-shop');
+    }
+
+    // ==========================================================================
+    // 10. SAVE / LOAD / VICTORY / GAMEOVER
+    // ==========================================================================
+
+    function autoSave() {
+      localStorage.setItem('yearbook_archive_save', JSON.stringify(gameState));
+    }
+
+    function manualSave() {
+      autoSave();
+      showNotification("GAME SAVED SUCCESSFULLY!");
+      document.getElementById('btn-continue').disabled = false;
+    }
+
+    function loadGameFromStorage() {
+      const data = localStorage.getItem('yearbook_archive_save');
+      if (data) {
+        try {
+          gameState = JSON.parse(data);
+          document.getElementById('btn-continue').disabled = false;
+          updateHUD();
+        } catch(e) { console.error("Save load failed", e); }
+      }
+    }
+
+    function startNewGame() {
+      gameState = {
+        player: { ...PLAYER_START_STATS, x: 300, y: 200, w: 20, h: 20 },
+        currentArea: 'hub',
+        unlockedAreas: ['hub'],
+        inventory: { memory_potion: 2, power_chip: 1 },
+        fragmentsCollected: [],
+        enemiesDefeated: 0,
+        startTime: Date.now(),
+        settings: { typewriter: true, audio: true },
+        bossDefeated: false
+      };
+      autoSave();
+      switchScreen('screen-gameplay');
+      showToast('ARCHIVE HUB');
+    }
+
+    function retryFromLastSave() {
+      loadGameFromStorage();
+      gameState.player.hp = gameState.player.maxHp;
+      switchScreen('screen-gameplay');
+    }
+
+    function resetSaveData() {
+      if (confirm("Are you sure you want to delete your saved game data?")) {
+        localStorage.removeItem('yearbook_archive_save');
+        location.reload();
+      }
+    }
+
+    function triggerVictoryScreen() {
+      const elapsedSecs = Math.floor((Date.now() - gameState.startTime) / 1000);
+      const mins = Math.floor(elapsedSecs / 60);
+      const secs = elapsedSecs % 60;
+
+      document.getElementById('vic-level').innerText = gameState.player.level;
+      document.getElementById('vic-enemies').innerText = gameState.enemiesDefeated;
+      document.getElementById('vic-gold').innerText = gameState.player.gold;
+      document.getElementById('vic-time').innerText = `${mins}m ${secs}s`;
+
+      switchScreen('screen-victory');
+    }
+
+    // ==========================================================================
+    // 11. MOBILE VIRTUAL CONTROLS
+    // ==========================================================================
+
+    function setupTouchControls() {
+      const bindTouch = (id, key) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('touchstart', (e) => { e.preventDefault(); keys[key] = true; });
+        el.addEventListener('touchend', (e) => { e.preventDefault(); keys[key] = false; });
+      };
+
+      bindTouch('btn-dpad-up', 'arrowup');
+      bindTouch('btn-dpad-down', 'arrowdown');
+      bindTouch('btn-dpad-left', 'arrowleft');
+      bindTouch('btn-dpad-right', 'arrowright');
+
+      const actionBtn = document.getElementById('btn-touch-action');
+      if (actionBtn) {
+        actionBtn.addEventListener('click', () => {
+          if (activeDialogue) advanceDialogue();
+        });
+      }
+    }
+  </script>
+</body>
+</html>
