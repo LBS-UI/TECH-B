@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
     <title>Hall of Fame — Digital Yearbook</title>
     <style>
         /* ---------- RESET & BASE ---------- */
@@ -17,13 +18,13 @@
         :root {
             --bg-deep: #030914;
             --bg-mid: #07182D;
-            --bg-card: rgba(11, 35, 64, 0.55);
-            --bg-card-hover: rgba(17, 47, 82, 0.7);
-            --border-glass: rgba(80, 160, 255, 0.12);
+            --bg-card: rgba(11, 35, 64, 0.82);
+            --bg-card-hover: rgba(18, 50, 90, 0.9);
+            --border-glass: rgba(80, 160, 255, 0.18);
             --border-glow: rgba(60, 140, 255, 0.25);
-            --text-primary: #e8f0ff;
-            --text-secondary: #a0c0e8;
-            --text-muted: #6a8aaa;
+            --text-primary: #f4f8ff;
+            --text-secondary: #cfe0f7;
+            --text-muted: #a7bdd9;
             --accent: #5b9aff;
             --accent-glow: rgba(60, 140, 255, 0.15);
             --accent-glow-strong: rgba(60, 140, 255, 0.35);
@@ -42,12 +43,24 @@
             background: var(--bg-deep);
             color: var(--text-primary);
             min-height: 100vh;
-            line-height: 1.6;
-            padding: 1.5rem 1.2rem 0;
+            font-size: 1.0625rem;      /* 17px base — easier to read */
+            line-height: 1.7;
+            padding: 1.5rem 1.2rem 7rem;  /* extra bottom space for the music player */
             display: flex;
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        /* Make keyboard focus clearly visible everywhere */
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible {
+            outline: 3px solid #8ab4ff;
+            outline-offset: 3px;
+            border-radius: 8px;
         }
 
         /* ---------- ANIMATED BACKGROUND ---------- */
@@ -63,7 +76,7 @@
             position: absolute;
             border-radius: 50%;
             filter: blur(120px);
-            opacity: 0.30;
+            opacity: 0.28;
             animation: orbFloat 20s ease-in-out infinite alternate;
         }
 
@@ -98,18 +111,10 @@
         }
 
         @keyframes orbFloat {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-            33% {
-                transform: translate(40px, -30px) scale(1.05);
-            }
-            66% {
-                transform: translate(-20px, 20px) scale(0.95);
-            }
-            100% {
-                transform: translate(30px, -10px) scale(1.02);
-            }
+            0%   { transform: translate(0, 0) scale(1); }
+            33%  { transform: translate(40px, -30px) scale(1.05); }
+            66%  { transform: translate(-20px, 20px) scale(0.95); }
+            100% { transform: translate(30px, -10px) scale(1.02); }
         }
 
         .bg-canvas .grid {
@@ -123,12 +128,8 @@
         }
 
         @keyframes gridDrift {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(60px, 60px);
-            }
+            0%   { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
         }
 
         .bg-canvas .particle {
@@ -140,58 +141,16 @@
             animation: particleFloat 15s ease-in-out infinite alternate;
         }
 
-        .bg-canvas .particle:nth-child(5) {
-            top: 15%;
-            left: 20%;
-            animation-duration: 18s;
-            width: 4px;
-            height: 4px;
-        }
-        .bg-canvas .particle:nth-child(6) {
-            top: 70%;
-            left: 80%;
-            animation-duration: 22s;
-            animation-delay: -3s;
-            width: 2px;
-            height: 2px;
-        }
-        .bg-canvas .particle:nth-child(7) {
-            top: 30%;
-            left: 75%;
-            animation-duration: 16s;
-            animation-delay: -7s;
-            width: 5px;
-            height: 5px;
-        }
-        .bg-canvas .particle:nth-child(8) {
-            top: 80%;
-            left: 15%;
-            animation-duration: 20s;
-            animation-delay: -5s;
-            width: 3px;
-            height: 3px;
-        }
-        .bg-canvas .particle:nth-child(9) {
-            top: 50%;
-            left: 45%;
-            animation-duration: 14s;
-            animation-delay: -2s;
-            width: 2px;
-            height: 2px;
-        }
+        .bg-canvas .particle:nth-child(5) { top: 15%; left: 20%; animation-duration: 18s; width: 4px; height: 4px; }
+        .bg-canvas .particle:nth-child(6) { top: 70%; left: 80%; animation-duration: 22s; animation-delay: -3s; width: 2px; height: 2px; }
+        .bg-canvas .particle:nth-child(7) { top: 30%; left: 75%; animation-duration: 16s; animation-delay: -7s; width: 5px; height: 5px; }
+        .bg-canvas .particle:nth-child(8) { top: 80%; left: 15%; animation-duration: 20s; animation-delay: -5s; width: 3px; height: 3px; }
+        .bg-canvas .particle:nth-child(9) { top: 50%; left: 45%; animation-duration: 14s; animation-delay: -2s; width: 2px; height: 2px; }
 
         @keyframes particleFloat {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 0.15;
-            }
-            50% {
-                opacity: 0.5;
-            }
-            100% {
-                transform: translate(40px, -60px) scale(1.5);
-                opacity: 0.1;
-            }
+            0%   { transform: translate(0, 0) scale(1); opacity: 0.15; }
+            50%  { opacity: 0.5; }
+            100% { transform: translate(40px, -60px) scale(1.5); opacity: 0.1; }
         }
 
         /* ---------- PAGE CONTAINER ---------- */
@@ -226,39 +185,38 @@
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            padding: 1.2rem 2rem;
+            padding: 1.4rem 2rem;
             margin-bottom: 2.5rem;
-            gap: 0.8rem 1.5rem;
-            background: rgba(3, 9, 20, 0.6);
+            gap: 1rem 1.5rem;
+            background: rgba(4, 12, 26, 0.85);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-glass);
             border-radius: 60px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
 
         .header-left {
             display: flex;
             flex-direction: column;
-            gap: 0.1rem;
+            gap: 0.25rem;
         }
 
         .header-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-            background: linear-gradient(135deg, #ffffff 0%, #8ab4ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.2;
+            font-size: 1.95rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: #ffffff;
+            text-shadow: 0 0 24px rgba(120, 175, 255, 0.45);
+            line-height: 1.25;
         }
 
         .header-subtitle {
-            font-size: 0.85rem;
+            font-size: 1rem;
             color: var(--text-secondary);
-            font-weight: 300;
-            letter-spacing: 0.03em;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+            line-height: 1.6;
         }
 
         .header-actions {
@@ -272,21 +230,21 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.55rem 1.4rem;
+            padding: 0.65rem 1.5rem;
             border-radius: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            font-weight: 500;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
             text-decoration: none;
             transition: all var(--transition);
-            letter-spacing: 0.01em;
             white-space: nowrap;
         }
 
         .btn-nav:hover {
-            background: rgba(60, 140, 255, 0.15);
+            background: rgba(60, 140, 255, 0.22);
             border-color: var(--accent);
             color: #fff;
             box-shadow: 0 0 30px var(--accent-glow);
@@ -294,8 +252,8 @@
         }
 
         .btn-nav svg {
-            width: 17px;
-            height: 17px;
+            width: 18px;
+            height: 18px;
             flex-shrink: 0;
             transition: transform var(--transition);
         }
@@ -315,29 +273,27 @@
             font-size: 3.5rem;
             margin-bottom: 0.5rem;
             display: block;
-            opacity: 0.8;
+            opacity: 0.9;
         }
 
         .hero-title {
-            font-size: 3rem;
+            font-size: 2.9rem;
             font-weight: 700;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #ffffff 0%, #8ab4ff 60%, #5b9aff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.1;
-            margin-bottom: 0.8rem;
+            letter-spacing: 0.02em;
+            color: #ffffff;
+            text-shadow: 0 0 30px rgba(120, 175, 255, 0.45);
+            line-height: 1.15;
+            margin-bottom: 0.9rem;
         }
 
         .hero-desc {
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             color: var(--text-secondary);
-            max-width: 720px;
+            max-width: 760px;
             margin: 0 auto 1.8rem;
-            font-weight: 300;
-            letter-spacing: 0.01em;
-            line-height: 1.8;
+            font-weight: 400;
+            letter-spacing: 0.005em;
+            line-height: 1.85;
         }
 
         .hero-divider {
@@ -350,15 +306,8 @@
         }
 
         @keyframes dividerPulse {
-            0%,
-            100% {
-                opacity: 0.4;
-                transform: scaleX(1);
-            }
-            50% {
-                opacity: 1;
-                transform: scaleX(1.15);
-            }
+            0%, 100% { opacity: 0.4; transform: scaleX(1); }
+            50%      { opacity: 1;   transform: scaleX(1.15); }
         }
 
         /* ---------- SECTION COMMON ---------- */
@@ -367,20 +316,21 @@
         }
 
         .section-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            letter-spacing: -0.01em;
+            font-size: 1.95rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
             margin-bottom: 1.8rem;
             position: relative;
             display: inline-block;
             color: var(--text-primary);
+            line-height: 1.3;
         }
 
         .section-title::after {
             content: '';
             position: absolute;
             left: 0;
-            bottom: -4px;
+            bottom: -6px;
             width: 50%;
             height: 2px;
             background: linear-gradient(90deg, var(--accent), transparent);
@@ -395,20 +345,20 @@
         .section-title-center::after {
             left: 50%;
             transform: translateX(-50%);
-            width: 80px;
+            width: 90px;
             background: linear-gradient(90deg, transparent, var(--accent), transparent);
         }
 
         /* ---------- DISTINGUISHED ACHIEVERS ---------- */
         .distinguished-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin-top: 1rem;
         }
 
         .distinguished-card {
-            padding: 2rem 1.5rem 1.8rem;
+            padding: 2rem 1.7rem 1.9rem;
             text-align: center;
             border-radius: var(--radius-card);
             background: var(--bg-card);
@@ -439,12 +389,12 @@
         }
 
         .distinguished-card .student-img {
-            width: 140px;
-            height: 140px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             object-fit: cover;
             background: #0a1a30;
-            border: 2px solid rgba(60, 140, 255, 0.2);
+            border: 3px solid rgba(90, 160, 255, 0.35);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-glow);
             transition: all var(--transition);
             margin-bottom: 1rem;
@@ -457,43 +407,45 @@
         }
 
         .distinguished-card .student-name {
-            font-size: 1.3rem;
-            font-weight: 600;
+            font-size: 1.45rem;
+            font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.35;
         }
 
         .distinguished-card .student-award {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #ffd966;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #ffe08a;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-bottom: 0.5rem;
-            background: rgba(255, 215, 0, 0.08);
-            padding: 0.2rem 0.8rem;
+            letter-spacing: 0.07em;
+            margin-bottom: 0.8rem;
+            background: rgba(255, 215, 0, 0.12);
+            padding: 0.35rem 1rem;
             border-radius: 40px;
             display: inline-block;
-            border: 1px solid rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.28);
+            line-height: 1.5;
         }
 
         .distinguished-card .student-desc {
-            font-size: 0.92rem;
+            font-size: 1.02rem;
             color: var(--text-secondary);
-            line-height: 1.5;
-            max-width: 240px;
+            line-height: 1.7;
+            max-width: 30ch;
         }
 
         /* ---------- HONOR STUDENTS GRID ---------- */
         .honor-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
             gap: 1.8rem;
             margin-top: 0.5rem;
         }
 
         .honor-card {
-            padding: 1.5rem 1.2rem 1.5rem;
+            padding: 1.7rem 1.4rem 1.7rem;
             text-align: center;
             border-radius: 18px;
             background: var(--bg-card);
@@ -506,21 +458,21 @@
 
         .honor-card:hover {
             background: var(--bg-card-hover);
-            border-color: rgba(60, 140, 255, 0.2);
+            border-color: rgba(60, 140, 255, 0.28);
             transform: translateY(-5px);
             box-shadow: 0 16px 50px rgba(0, 0, 0, 0.4), 0 0 30px var(--accent-glow);
         }
 
         .honor-card .student-img {
-            width: 100px;
-            height: 100px;
+            width: 108px;
+            height: 108px;
             border-radius: 50%;
             object-fit: cover;
             background: #0a1a30;
-            border: 2px solid rgba(60, 140, 255, 0.15);
+            border: 3px solid rgba(90, 160, 255, 0.28);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             transition: all var(--transition);
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.9rem;
         }
 
         .honor-card:hover .student-img {
@@ -530,60 +482,74 @@
         }
 
         .honor-card .student-name {
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 1.18rem;
+            font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 0.15rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
         }
 
         .honor-card .student-award {
-            font-size: 0.7rem;
-            font-weight: 500;
+            font-size: 0.82rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
-            padding: 0.15rem 0.6rem;
+            letter-spacing: 0.07em;
+            padding: 0.3rem 0.85rem;
             border-radius: 30px;
             display: inline-block;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.7rem;
             border: 1px solid transparent;
+            line-height: 1.5;
         }
 
-        /* Award level variations */
+        /* Award level variations (all high-contrast on dark) */
         .award-honors {
-            color: #a0c0e8;
-            background: rgba(160, 192, 232, 0.08);
-            border-color: rgba(160, 192, 232, 0.15);
+            color: #cfe0f7;
+            background: rgba(160, 192, 232, 0.14);
+            border-color: rgba(160, 192, 232, 0.35);
         }
         .award-high {
-            color: #ffd966;
-            background: rgba(255, 215, 0, 0.08);
-            border-color: rgba(255, 215, 0, 0.15);
+            color: #ffe08a;
+            background: rgba(255, 215, 0, 0.14);
+            border-color: rgba(255, 215, 0, 0.35);
         }
         .award-highest {
-            color: #ffaa6a;
-            background: rgba(255, 170, 106, 0.08);
-            border-color: rgba(255, 170, 106, 0.2);
+            color: #ffbe8a;
+            background: rgba(255, 170, 106, 0.14);
+            border-color: rgba(255, 170, 106, 0.4);
         }
 
         .honor-card .student-desc {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-            max-width: 180px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 26ch;
+        }
+
+        .honor-card .student-meta {
+            display: block;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+
+        .honor-card .student-meta strong {
+            color: var(--text-primary);
+            font-weight: 700;
         }
 
         /* ---------- STATISTICS ---------- */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1.5rem;
-            max-width: 700px;
+            max-width: 780px;
             margin: 0 auto;
             text-align: center;
         }
 
         .stat-item {
-            padding: 1.2rem 0.8rem;
+            padding: 1.4rem 0.9rem;
             background: var(--bg-card);
             border-radius: 16px;
             border: 1px solid var(--border-glass);
@@ -592,30 +558,32 @@
 
         .stat-item:hover {
             background: var(--bg-card-hover);
-            border-color: rgba(60, 140, 255, 0.15);
+            border-color: rgba(60, 140, 255, 0.25);
             transform: translateY(-2px);
         }
 
         .stat-number {
-            font-size: 2.4rem;
+            font-size: 2.5rem;
             font-weight: 700;
-            color: var(--text-primary);
+            color: #ffffff;
             display: block;
-            line-height: 1.2;
+            line-height: 1.25;
+            text-shadow: 0 0 20px rgba(120, 175, 255, 0.35);
         }
 
         .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.07em;
+            line-height: 1.6;
         }
 
         /* ---------- QUOTE SECTION ---------- */
         .quote-card {
             padding: 2.5rem 2rem;
             text-align: center;
-            max-width: 740px;
+            max-width: 780px;
             margin: 0 auto;
             background: var(--bg-card);
             border-radius: var(--radius-card);
@@ -623,18 +591,18 @@
         }
 
         .quote-card blockquote {
-            font-size: 1.2rem;
-            font-weight: 300;
+            font-size: 1.25rem;
+            font-weight: 400;
             color: var(--text-secondary);
             font-style: italic;
-            line-height: 1.8;
-            max-width: 600px;
+            line-height: 1.9;
+            max-width: 640px;
             margin: 0 auto;
         }
 
         .quote-card .attribution {
-            margin-top: 0.8rem;
-            font-size: 0.85rem;
+            margin-top: 1rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
             letter-spacing: 0.04em;
         }
@@ -644,31 +612,32 @@
             margin-top: 3.5rem;
             padding: 2rem 1.5rem 1.5rem;
             text-align: center;
-            border-top: 1px solid rgba(60, 140, 255, 0.06);
+            border-top: 1px solid rgba(60, 140, 255, 0.12);
         }
 
         .footer-brand {
-            font-size: 1.1rem;
-            font-weight: 500;
-            letter-spacing: 0.04em;
-            background: linear-gradient(135deg, #ffffff 0%, #8ab4ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(120, 175, 255, 0.4);
         }
 
         .footer-copy {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 0.2rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-top: 0.4rem;
+            line-height: 1.7;
         }
 
         .footer-link {
             display: inline-block;
-            margin-top: 0.6rem;
+            margin-top: 0.8rem;
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
             transition: color var(--transition), border-color var(--transition);
             border-bottom: 1px solid transparent;
         }
@@ -678,16 +647,149 @@
             border-bottom-color: var(--accent);
         }
 
+        /* ---------- MUSIC PLAYER ---------- */
+        .music-player {
+            position: fixed;
+            right: 1.2rem;
+            bottom: 1.2rem;
+            z-index: 60;
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.7rem 1.1rem 0.7rem 0.7rem;
+            border-radius: 60px;
+            background: rgba(5, 15, 32, 0.94);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(90, 160, 255, 0.35);
+            box-shadow: 0 12px 45px rgba(0, 0, 0, 0.65);
+            max-width: calc(100vw - 2.4rem);
+        }
+
+        .music-toggle {
+            width: 50px;
+            height: 50px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #2b6fd6, #5b9aff);
+            border: none;
+            color: #fff;
+            font-size: 1.1rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: transform var(--transition), box-shadow var(--transition);
+            box-shadow: 0 4px 18px rgba(60, 140, 255, 0.45);
+        }
+
+        .music-toggle:hover {
+            transform: scale(1.06);
+            box-shadow: 0 6px 26px rgba(60, 140, 255, 0.65);
+        }
+
+        .music-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+            min-width: 0;
+        }
+
+        .music-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .music-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        .music-status {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .music-volume {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 110px;
+            height: 6px;
+            margin-top: 0.35rem;
+            border-radius: 6px;
+            background: rgba(120, 175, 255, 0.3);
+            cursor: pointer;
+        }
+
+        .music-volume::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #8ab4ff;
+            border: 2px solid #0a1a30;
+            box-shadow: 0 0 10px rgba(120, 175, 255, 0.8);
+        }
+
+        .music-volume::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #8ab4ff;
+            border: 2px solid #0a1a30;
+            box-shadow: 0 0 10px rgba(120, 175, 255, 0.8);
+        }
+
+        /* Visual "now playing" indicator — helpful if you can't hear the audio */
+        .equalizer {
+            display: inline-flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 15px;
+            opacity: 0.3;
+            transition: opacity 0.3s;
+        }
+
+        .equalizer i {
+            display: block;
+            width: 3px;
+            height: 5px;
+            border-radius: 2px;
+            background: var(--accent);
+        }
+
+        .music-player.playing .equalizer { opacity: 1; }
+        .music-player.playing .equalizer i { animation: eqBounce 0.9s ease-in-out infinite; }
+        .equalizer i:nth-child(1) { animation-delay: 0s; }
+        .equalizer i:nth-child(2) { animation-delay: 0.15s; }
+        .equalizer i:nth-child(3) { animation-delay: 0.3s; }
+        .equalizer i:nth-child(4) { animation-delay: 0.45s; }
+
+        @keyframes eqBounce {
+            0%, 100% { height: 4px; }
+            50%      { height: 15px; }
+        }
+
         /* ---------- RESPONSIVE ---------- */
         @media (max-width: 820px) {
             body {
-                padding: 0.8rem 0.8rem 0;
+                padding: 0.8rem 0.8rem 9rem;
+                font-size: 1.0625rem;
             }
 
             .header {
-                padding: 1rem 1.5rem;
+                padding: 1.2rem 1.5rem;
                 border-radius: 30px;
-                gap: 0.6rem;
+                gap: 0.8rem;
                 flex-direction: column;
                 align-items: stretch;
             }
@@ -697,91 +799,75 @@
                 text-align: center;
             }
 
-            .header-title {
-                font-size: 1.5rem;
-            }
+            .header-title { font-size: 1.65rem; }
+            .header-subtitle { font-size: 0.95rem; }
 
-            .header-actions {
-                justify-content: center;
-            }
+            .header-actions { justify-content: center; }
 
             .btn-nav {
-                font-size: 0.8rem;
-                padding: 0.45rem 1rem;
+                font-size: 0.9rem;
+                padding: 0.55rem 1.1rem;
             }
 
-            .hero {
-                padding: 2rem 1rem 1.5rem;
-            }
-            .hero-title {
-                font-size: 2.4rem;
-            }
-            .hero-desc {
-                font-size: 1rem;
-            }
+            .hero { padding: 2rem 1rem 1.5rem; }
+            .hero-title { font-size: 2.3rem; }
+            .hero-desc { font-size: 1.08rem; }
+
+            .section-title { font-size: 1.6rem; }
 
             .distinguished-grid {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             }
-            .distinguished-card .student-img {
-                width: 110px;
-                height: 110px;
-            }
+            .distinguished-card .student-img { width: 120px; height: 120px; }
 
             .honor-grid {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
                 gap: 1.2rem;
             }
-
-            .honor-card .student-img {
-                width: 80px;
-                height: 80px;
-            }
+            .honor-card .student-img { width: 90px; height: 90px; }
 
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
-                max-width: 400px;
+                max-width: 460px;
             }
 
-            .quote-card {
-                padding: 1.8rem 1.2rem;
-            }
-            .quote-card blockquote {
-                font-size: 1rem;
-            }
+            .quote-card { padding: 1.9rem 1.3rem; }
+            .quote-card blockquote { font-size: 1.08rem; }
         }
 
         @media (max-width: 480px) {
-            .header-title {
-                font-size: 1.3rem;
-            }
-            .hero-title {
-                font-size: 1.8rem;
-            }
-            .hero-desc {
-                font-size: 0.9rem;
-            }
+            .header-title { font-size: 1.45rem; }
+            .hero-title { font-size: 1.85rem; }
+            .hero-desc { font-size: 1rem; }
 
             .honor-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 1rem;
             }
+            .honor-card { padding: 1.3rem 0.9rem; }
+            .honor-card .student-name { font-size: 1.05rem; }
+            .honor-card .student-desc,
+            .honor-card .student-meta { font-size: 0.88rem; }
 
             .distinguished-grid {
                 grid-template-columns: 1fr;
-                max-width: 320px;
+                max-width: 340px;
                 margin-left: auto;
                 margin-right: auto;
             }
 
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 0.8rem;
-            }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+            .stat-number { font-size: 2rem; }
+            .stat-label { font-size: 0.8rem; }
 
-            .stat-number {
-                font-size: 2rem;
+            .music-player {
+                right: 0.7rem;
+                bottom: 0.7rem;
+                left: 0.7rem;
+                max-width: none;
+                justify-content: flex-start;
             }
+            .music-volume { width: 90px; }
         }
 
         /* ---------- REDUCED MOTION ---------- */
@@ -793,35 +879,30 @@
                 transition-duration: 0.01ms !important;
             }
 
-            html {
-                scroll-behavior: auto;
-            }
+            html { scroll-behavior: auto; }
 
             .bg-canvas .orb,
             .bg-canvas .grid,
             .bg-canvas .particle,
-            .hero-divider {
+            .hero-divider,
+            .equalizer i {
                 animation: none !important;
             }
 
             .distinguished-card:hover,
             .honor-card:hover,
-            .stat-item:hover {
+            .stat-item:hover,
+            .btn-nav:hover,
+            .music-toggle:hover {
                 transform: none !important;
             }
 
-            .btn-nav:hover {
-                transform: none !important;
-            }
-            .btn-nav:hover svg {
-                transform: none !important;
-            }
+            .btn-nav:hover svg,
             .distinguished-card:hover .student-img,
             .honor-card:hover .student-img {
                 transform: none !important;
             }
 
-            /* fade-in still works but we can keep it */
             .fade-in {
                 animation: none !important;
                 opacity: 1 !important;
@@ -835,54 +916,24 @@
         }
 
         @keyframes fadeUp {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            0%   { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
-        .delay-1 {
-            animation-delay: 0.1s;
-        }
-        .delay-2 {
-            animation-delay: 0.2s;
-        }
-        .delay-3 {
-            animation-delay: 0.3s;
-        }
-        .delay-4 {
-            animation-delay: 0.4s;
-        }
-        .delay-5 {
-            animation-delay: 0.5s;
-        }
-        .delay-6 {
-            animation-delay: 0.6s;
-        }
-        .delay-7 {
-            animation-delay: 0.7s;
-        }
-        .delay-8 {
-            animation-delay: 0.8s;
-        }
-        .delay-9 {
-            animation-delay: 0.9s;
-        }
-        .delay-10 {
-            animation-delay: 1.0s;
-        }
+        .delay-1  { animation-delay: 0.1s; }
+        .delay-2  { animation-delay: 0.2s; }
+        .delay-3  { animation-delay: 0.3s; }
+        .delay-4  { animation-delay: 0.4s; }
+        .delay-5  { animation-delay: 0.5s; }
+        .delay-6  { animation-delay: 0.6s; }
+        .delay-7  { animation-delay: 0.7s; }
+        .delay-8  { animation-delay: 0.8s; }
+        .delay-9  { animation-delay: 0.9s; }
+        .delay-10 { animation-delay: 1.0s; }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
-        .text-muted {
-            color: var(--text-muted);
-        }
+        .text-muted { color: var(--text-muted); }
     </style>
 </head>
 <body>
@@ -912,7 +963,7 @@
             <div class="header-actions">
                 <a href="about.html" class="btn-nav">ABOUT</a>
                 <a href="yearbook.html" class="btn-nav">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M19 12H5" />
                         <path d="M12 19l-7-7 7-7" />
                     </svg>
@@ -923,7 +974,7 @@
 
         <!-- ===== HERO ===== -->
         <section class="hero fade-in delay-1">
-            <span class="hero-icon">🏆</span>
+            <span class="hero-icon" aria-hidden="true">🏆</span>
             <h2 class="hero-title">ACADEMIC ACHIEVERS</h2>
             <p class="hero-desc">
                 A collection honoring the students who demonstrated outstanding dedication,
@@ -965,7 +1016,7 @@
                     <span class="stat-label">Highest Honors</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">[SCHOOL YEAR]</span>
+                    <span class="stat-number">[2025 - 2027]</span>
                     <span class="stat-label">Academic Year</span>
                 </div>
             </div>
@@ -974,7 +1025,7 @@
         <!-- ===== QUOTE ===== -->
         <section class="fade-in delay-5">
             <div class="quote-card glass">
-                <h2 class="section-title section-title-center" style="font-size:1.4rem; margin-bottom:0.8rem;">A CELEBRATION OF EXCELLENCE</h2>
+                <h2 class="section-title section-title-center" style="font-size:1.5rem; margin-bottom:0.9rem;">A CELEBRATION OF EXCELLENCE</h2>
                 <blockquote>
                     “Achievement is not only measured by results, but by the dedication,
                     perseverance, and effort behind them.”
@@ -986,11 +1037,37 @@
         <!-- ===== FOOTER ===== -->
         <footer class="footer fade-in delay-6">
             <div class="footer-brand">DIGITAL YEARBOOK</div>
-            <div class="footer-copy">© [SCHOOL YEAR] — [SCHOOL / CLASS NAME]</div>
+            <div class="footer-copy">© [2025 - 2027] — [MSHS / TECHPRO B]</div>
             <a href="main.html" class="footer-link">RETURN TO YEARBOOK</a>
         </footer>
 
     </div>
+
+    <!-- ===== BACKGROUND MUSIC PLAYER ===== -->
+    <!-- Put your audio file at:  music/background-music.mp3  (and/or .ogg) -->
+    <div class="music-player" id="musicPlayer">
+        <button class="music-toggle" id="musicToggle" type="button"
+                aria-pressed="false" aria-label="Play background music">&#9654;</button>
+
+        <div class="music-info">
+            <div class="music-row">
+                <span class="music-title">Background Music</span>
+                <span class="equalizer" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            </div>
+            <div class="music-status" id="musicStatus" role="status" aria-live="polite">
+                Tap play to start the music
+            </div>
+            <input class="music-volume" id="musicVolume" type="range"
+                   min="0" max="1" step="0.01" value="0.35"
+                   aria-label="Background music volume" />
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop preload="auto">
+        <source src="music/background-music.mp3" type="audio/mpeg" />
+        <source src="music/background-music.ogg" type="audio/ogg" />
+        Your browser does not support the audio element.
+    </audio>
 
     <!-- ===== JAVASCRIPT ===== -->
     <script>
@@ -1006,10 +1083,10 @@
             // If empty, the section will be hidden.
             const distinguishedAchievers = [
                 {
-                    name: "[STUDENT NAME]",
-                    image: "images/distinguished-01.jpg",
+                    name: "[N/A]",
+                    image: "images/pfp.jpg",
                     award: "WITH HIGHEST HONORS",
-                    description: "[ACHIEVEMENT DESCRIPTION]"
+                    description: "[WHO WILL BE THE PERSON TO ACHIEVE THIS?]"
                 }
                 // Add more objects as needed.
             ];
@@ -1017,36 +1094,88 @@
             // Honor Students (main list)
             const honorStudents = [
                 {
-                    name: "[STUDENT NAME]",
-                    image: "images/honor-student-01.jpg",
+                    name: "[Ron Matthew B. Ferreras]",
+                    image: "images/student4.jpg",
                     award: "WITH HONORS",
-                    description: "[SHORT ACHIEVEMENT DESCRIPTION]"
+                    Achievement: "[4th Achievement]",
+                    AchiverPercentage: "93%"
                 },
                 {
-                    name: "[STUDENT NAME]",
-                    image: "images/honor-student-02.jpg",
-                    award: "WITH HIGH HONORS",
-                    description: "[SHORT ACHIEVEMENT DESCRIPTION]"
+                    name: "[Zie Cliza Ballejos Sablada]",
+                    image: "images/student23.jpg",
+                    award: "WITH HONORS",
+                    Achievement: "[4th Achivement]",
+                    AchiverPercentage: "89%"
                 },
                 {
-                    name: "[STUDENT NAME]",
-                    image: "images/honor-student-03.jpg",
+                    name: "[Prince Saimon Del Birut]",
+                    image: "images/student3.jpg",
                     award: "WITH HONORS",
-                    description: "[SHORT ACHIEVEMENT DESCRIPTION]"
+                    Achievement: "[4th Achivement]",
+                    AchiverPercentage: "86%"
+                },
+                {
+                    name: "[Ryan Gaebriel B. Ferreras]",
+                    image: "images/student5.jpg",
+                    award: "WITH HONORS",
+                    Achievement: "[4th Achivement]",
+                    AchiverPercentage: "79%"
+                },
+                {
+                    name: "[Gian Lee San Jose]",
+                    image: "images/student11.jpg",
+                    award: "WITH HONORS",
+                    Achievement: "[4th Achivement]",
+                    AchiverPercentage: "92%"
+                },
+                {
+                    name: "[Eziekiel Sobremonte]",
+                    image: "images/student12.jpg",
+                    award: "WITH HONORS",
+                    Achievement: "[4th Achivement]",
+                    AchiverPercentage: "96%"
+                },
+                {
+                    name: "[Jace Labicani]",
+                    image: "images/student6.jpg",
+                    award: "WITH HONORS",
+                    Achievement: "[2nd Achivement]",
+                    AchiverPercentage: "57%"
+                },
+                {
+                    name: "[Aira Natividad]",
+                    image: "images/student19.jpg",
+                    award: "WITH HONORS",
+                    Achievement: "[3rd Achivement]",
+                    AchiverPercentage: "68%"
                 }
                 // Add more as needed.
             ];
 
+            const achievementStudents = [
+                {
+                    name: "[Zie Cliza Ballejos Sablada]",
+                    image: "images/student23.jpg",
+                    award: "PERFECT ATTENDANCE (2025)",
+                    Achievement: "[PERFECT ATTENDANCE (2025)]"
+                }
+            ];
+
             // ------------------------------------------------------------------
-            //  DO NOT EDIT BELOW THIS LINE UNLESS YOU KNOW WHAT YOU'RE DOING
+            //  RENDERING
             // ------------------------------------------------------------------
 
             // Helper: map award text to CSS class
             function awardClass(award) {
-                const lower = award.toLowerCase();
+                const lower = String(award || '').toLowerCase();
                 if (lower.includes('highest')) return 'award-highest';
                 if (lower.includes('high')) return 'award-high';
                 return 'award-honors';
+            }
+
+            // Small helper so nothing renders as "undefined"
+            function safe(value) {
+                return (value === undefined || value === null) ? '' : String(value);
             }
 
             // Render distinguished achievers
@@ -1060,11 +1189,12 @@
                 let html = '';
                 distinguishedAchievers.forEach((student, index) => {
                     html += `
-                        <div class="distinguished-card fade-in delay-${Math.min(index+1, 10)}">
-                            <img src="${student.image}" alt="${student.name}" class="student-img" loading="lazy" />
-                            <div class="student-name">${student.name}</div>
-                            <div class="student-award">${student.award}</div>
-                            <div class="student-desc">${student.description}</div>
+                        <div class="distinguished-card fade-in delay-${Math.min(index + 1, 10)}">
+                            <img src="${safe(student.image)}" alt="Portrait of ${safe(student.name)}"
+                                 class="student-img" loading="lazy" />
+                            <div class="student-name">${safe(student.name)}</div>
+                            <div class="student-award">${safe(student.award)}</div>
+                            <div class="student-desc">${safe(student.description)}</div>
                         </div>
                     `;
                 });
@@ -1074,43 +1204,150 @@
             // Render honor students
             const honorContainer = document.getElementById('honorContainer');
             let honorHtml = '';
+
             honorStudents.forEach((student, index) => {
                 const cls = awardClass(student.award);
+
+                // Read the achievement + percentage fields (supports a few spellings)
+                const achievement = safe(
+                    student.Achievement || student.achievement || student.Achivement
+                );
+                const percent = safe(
+                    student.AchiverPercentage || student.achieverPercentage ||
+                    student.AchieverPercentage || student.percentage
+                );
+                const description = safe(student.description);
+
+                let metaHtml = '';
+                if (achievement) {
+                    metaHtml += `<span class="student-meta"><strong>Achievement:</strong> ${achievement}</span>`;
+                }
+                if (percent) {
+                    metaHtml += `<span class="student-meta"><strong>Average:</strong> ${percent}</span>`;
+                }
+                if (description) {
+                    metaHtml += `<span class="student-meta">${description}</span>`;
+                }
+
                 honorHtml += `
-                    <div class="honor-card fade-in delay-${Math.min(index+1, 10)}">
-                        <img src="${student.image}" alt="${student.name}" class="student-img" loading="lazy" />
-                        <div class="student-name">${student.name}</div>
-                        <div class="student-award ${cls}">${student.award}</div>
-                        <div class="student-desc">${student.description}</div>
+                    <div class="honor-card fade-in delay-${Math.min(index + 1, 10)}">
+                        <img src="${safe(student.image)}" alt="Portrait of ${safe(student.name)}"
+                             class="student-img" loading="lazy" />
+                        <div class="student-name">${safe(student.name)}</div>
+                        <div class="student-award ${cls}">${safe(student.award)}</div>
+                        <div class="student-desc">${metaHtml}</div>
                     </div>
                 `;
             });
             honorContainer.innerHTML = honorHtml;
 
-            // Update statistics (placeholders)
-            // Count awards
+            // Update statistics
             let totalHonor = 0,
                 totalHigh = 0,
                 totalHighest = 0;
+
             honorStudents.forEach(s => {
-                const a = s.award.toLowerCase();
+                const a = String(s.award || '').toLowerCase();
                 if (a.includes('highest')) totalHighest++;
                 else if (a.includes('high')) totalHigh++;
                 else totalHonor++;
             });
-            // also include distinguished in totals (they are part of honor students? Usually they are included as well, but we can combine)
-            // For simplicity, we'll just use the honorStudents array counts, but we can add distinguished too if they are not in honorStudents.
-            // We'll treat them separately, but we'll combine for stats if desired.
-            // We'll just show placeholders, as per requirement.
-            document.getElementById('totalHonor').textContent = honorStudents.length; // total honor students
+
+            document.getElementById('totalHonor').textContent = honorStudents.length;
             document.getElementById('totalHigh').textContent = totalHigh;
             document.getElementById('totalHighest').textContent = totalHighest;
 
-            // If you want to include distinguished in stats, you can add logic, but we'll keep as is.
+            // ------------------------------------------------------------------
+            //  BACKGROUND MUSIC
+            // ------------------------------------------------------------------
+            const bgMusic      = document.getElementById('bgMusic');
+            const musicPlayer  = document.getElementById('musicPlayer');
+            const musicToggle  = document.getElementById('musicToggle');
+            const musicStatus  = document.getElementById('musicStatus');
+            const musicVolume  = document.getElementById('musicVolume');
+
+            let userPaused = false;
+
+            // Restore saved volume
+            const savedVolume = parseFloat(localStorage.getItem('yearbookMusicVolume'));
+            if (!isNaN(savedVolume)) {
+                musicVolume.value = String(savedVolume);
+            }
+            bgMusic.volume = parseFloat(musicVolume.value);
+
+            function setPlayingUI(isPlaying) {
+                musicToggle.innerHTML = isPlaying ? '&#10074;&#10074;' : '&#9654;';
+                musicToggle.setAttribute('aria-pressed', String(isPlaying));
+                musicToggle.setAttribute(
+                    'aria-label',
+                    isPlaying ? 'Pause background music' : 'Play background music'
+                );
+                musicPlayer.classList.toggle('playing', isPlaying);
+                musicStatus.textContent = isPlaying
+                    ? 'Now playing — music is on'
+                    : 'Music paused — tap play to listen';
+            }
+
+            function startMusic() {
+                bgMusic.volume = parseFloat(musicVolume.value);
+                const promise = bgMusic.play();
+                if (promise && typeof promise.catch === 'function') {
+                    promise.catch(function() {
+                        setPlayingUI(false);
+                        musicStatus.textContent = 'Tap the play button to start the music';
+                    });
+                }
+            }
+
+            // Autoplay attempt (most browsers block it until the user interacts)
+            function attemptAutoplay(event) {
+                if (userPaused || !bgMusic.paused) return;
+
+                // Don't hijack clicks on the player itself
+                if (event && event.target && event.target.nodeType === 1 &&
+                    musicPlayer.contains(event.target)) {
+                    return;
+                }
+                startMusic();
+            }
+
+            window.addEventListener('load', attemptAutoplay);
+            document.addEventListener('pointerdown', attemptAutoplay, { passive: true });
+            document.addEventListener('keydown', attemptAutoplay);
+
+            musicToggle.addEventListener('click', function() {
+                if (bgMusic.paused) {
+                    userPaused = false;
+                    startMusic();
+                } else {
+                    userPaused = true;
+                    bgMusic.pause();
+                }
+            });
+
+            musicVolume.addEventListener('input', function() {
+                const vol = parseFloat(musicVolume.value);
+                bgMusic.volume = vol;
+                try {
+                    localStorage.setItem('yearbookMusicVolume', String(vol));
+                } catch (e) { /* storage may be blocked — ignore */ }
+            });
+
+            bgMusic.addEventListener('play',  function() { setPlayingUI(true); });
+            bgMusic.addEventListener('pause', function() { setPlayingUI(false); });
+
+            bgMusic.addEventListener('error', function() {
+                setPlayingUI(false);
+                musicStatus.textContent =
+                    'Music file not found — add music/background-music.mp3';
+            });
+
+            // Set the correct initial state
+            setPlayingUI(!bgMusic.paused);
 
             console.log('Hall of Fame loaded. Edit distinguishedAchievers and honorStudents arrays.');
-            console.log('Place student images in images/ folder.');
-
+            console.log('Place student images in the images/ folder.');
+            console.log('Place the music file at music/background-music.mp3');
         })();
     </script>
 

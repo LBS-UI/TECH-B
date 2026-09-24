@@ -591,7 +591,7 @@
             padding-top: 8px;
         }
 
-        /* ===== THEME STYLES (removed halloween & christmas) ===== */
+        /* ===== THEME STYLES ===== */
         body.cat-theme {
             --bg: #2a1a2a;
             --text: #f0d8b0;
@@ -3996,7 +3996,6 @@
         <button onclick="setTheme('winter')">❄️ Winter</button>
         <button onclick="setTheme('mushroom')">🍄 Mushroom</button>
         <button onclick="setTheme('galaxy')">🌌 Galaxy</button>
-        <!-- Halloween & Christmas REMOVED -->
         <button onclick="toggleDayNight()">🌗 Day/Night</button>
         <button onclick="document.getElementById('themeMenu').style.display='none'" style="background:#a00; border-color:#faa;">✕ Close</button>
     </div>
@@ -4022,7 +4021,7 @@
             <h1>TechPro B (ICT)</h1>
             <p>Mabayuhan Senior High School (MSHS)</p>
             <p>School Year 2025-2027</p>
-            <p class="motto">"We may walk different paths tomorrow, but the memories we built together will always connect us."</p>
+            <p class="motto">"We may walk different paths, but the memories we built together will always connect us."</p>
             <div class="slideshow-dots" id="slideshowDots"></div>
         </header>
 
@@ -4357,28 +4356,21 @@
 
         // ======================= LIVE VIEW COUNT =======================
         function updateLiveViewCount() {
-            // Use a combination of localStorage and sessionStorage for "live" feel
-            // Each unique browser session counts as a view
             const viewKey = 'techproLiveViews';
             const sessionKey = 'techproViewSession';
 
             let count = parseInt(localStorage.getItem(viewKey) || '0', 10);
 
-            // Check if this session has already been counted
             const sessionId = sessionStorage.getItem(sessionKey);
             if (!sessionId) {
-                // New session → increment count
                 count += 1;
                 localStorage.setItem(viewKey, String(count));
-                // Mark this session as counted
                 sessionStorage.setItem(sessionKey, Date.now().toString());
             }
 
-            // Animate the counter
             const el = document.getElementById('liveViewCount');
             if (el) {
                 const current = parseInt(el.textContent || '0', 10);
-                // If the stored count is higher, animate up
                 const target = count;
                 if (target > current) {
                     let step = Math.max(1, Math.floor((target - current) / 20));
@@ -4394,11 +4386,9 @@
                 }
             }
 
-            // Also update the visitor count on the stats page
             const visitEl = document.getElementById('visitCount');
             if (visitEl) visitEl.textContent = count;
 
-            // Store the count for the stats page
             localStorage.setItem('visitorCount', String(count));
             return count;
         }
@@ -4826,7 +4816,6 @@
         }
 
         // ======================= POLL =======================
-        // AI options with logo paths (removed icon)
         const aiOptions = [
             { id: 'deepseek', label: 'DeepSeek', logo: 'images/deepseek.jpg', color: '#4a6a8a' },
             { id: 'chatgpt', label: 'ChatGPT', logo: 'images/chatgpt.jpg', color: '#10a37f' },
@@ -4853,8 +4842,6 @@
             let html = '';
             aiOptions.forEach(opt => {
                 const votes = pollVotes[opt.id] || 0;
-                const pct = total > 0 ? Math.round((votes / total) * 100) : 0;
-                // Use logo if available, fallback to nothing (we removed the icon)
                 const logoImg = opt.logo ? `<img src="${opt.logo}" class="ai-logo" alt="${opt.label}" onerror="this.style.display='none'">` : '';
                 html += `
                     <div class="poll-option" onclick="document.getElementById('poll_${opt.id}').checked = true; updatePollSelection();">
@@ -5567,7 +5554,6 @@
             jbInitialize();
             renderTeachers();
             playPageAudio();
-            // Update live view count
             updateLiveViewCount();
 
             setTimeout(() => { openGreeting(); }, 500);
@@ -6106,7 +6092,6 @@
         function closeSidebar() {
             sidebar.classList.remove('open');
             sidebarOverlay.classList.remove('open');
-            // On desktop, collapse it; on mobile, hide it.
             if (window.innerWidth > 768) {
                 document.body.classList.add('sidebar-collapsed');
             }
@@ -6122,45 +6107,57 @@
             }
         }
 
-        // Event Listeners
         sidebarToggle.addEventListener('click', toggleSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
         sidebarCloseBtn.addEventListener('click', closeSidebar);
 
-        // Jukebox Button
+        // ===== FIXED: Jukebox button — stopPropagation so outside-click doesn't close it =====
         sidebarJukeboxBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            document.getElementById('jukeboxPanel').classList.toggle('open');
+            e.stopPropagation();
+            markUserInteraction();
+            const panel = document.getElementById('jukeboxPanel');
+            panel.classList.toggle('open');
             if (window.innerWidth <= 768) closeSidebar();
             playClickSound();
         });
 
-        // Theme Button
+        // ===== FIXED: Theme button — stopPropagation so document click doesn't close menu =====
         sidebarThemeBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
+            markUserInteraction();
             const menu = document.getElementById('themeMenu');
             if (menu.style.display === 'block') {
                 menu.style.display = 'none';
             } else {
                 menu.style.display = 'block';
-                // Position the menu near the button if needed
             }
             if (window.innerWidth <= 768) closeSidebar();
             playClickSound();
         });
 
+        // ===== OPTIONAL: click outside the jukebox panel closes it (but not when clicking the sidebar button) =====
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('jukeboxPanel');
+            if (!panel.classList.contains('open')) return;
+            if (e.target === sidebarJukeboxBtn) return;
+            if (panel.contains(e.target)) return;
+            // don't close if user clicked a button inside the panel or the sidebar
+            if (e.target.closest('#jukeboxPanel')) return;
+            if (e.target.closest('#sidebar')) return;
+            panel.classList.remove('open');
+        });
+
         // Sidebar link clicks - close on mobile and set active
         document.querySelectorAll('#sidebar .nav-list a').forEach(link => {
             link.addEventListener('click', function(e) {
-                // Don't close for the special buttons (they have their own handlers)
                 if (this.id === 'sidebarJukeboxBtn' || this.id === 'sidebarThemeBtn') return;
 
                 if (window.innerWidth <= 768) { closeSidebar(); }
-                // Update active state
                 document.querySelectorAll('#sidebar .nav-list a').forEach(l => l.classList.remove('active'));
                 this.classList.add('active');
 
-                // If it's an internal anchor, scroll to target
                 const href = this.getAttribute('href');
                 if (href && href.startsWith('#')) {
                     const targetId = href.substring(1);
@@ -6173,7 +6170,6 @@
             });
         });
 
-        // Close sidebar when clicking on the main content (desktop/mobile)
         document.addEventListener('click', function(e) {
             if (window.innerWidth <= 768) {
                 if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== sidebarToggle) {
@@ -6182,11 +6178,10 @@
             }
         });
 
-        // Handle resize: if desktop, ensure sidebar state is correct
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 if (document.body.classList.contains('sidebar-collapsed')) {
-                    // Keep it collapsed
+                    // Keep collapsed
                 } else {
                     sidebar.classList.remove('open');
                 }
@@ -6209,7 +6204,6 @@
         document.addEventListener('click', e => { if (!e.target.closest('#startMenu') && e.target !== document.getElementById(
                 'startBtn')) document.getElementById('startMenu').style.display = 'none'; });
 
-        // Theme clicks secret
         document.querySelectorAll('#themeMenu button').forEach(btn => {
             btn.addEventListener('click', () => { if (++themeClicks === 10) unlockSecret('theme', 'Theme Master',
                     's5'); });
@@ -6265,13 +6259,10 @@
             }
             setInterval(updateClocks, 1000);
             updateClocks();
-            // Update view count again on load
             setTimeout(updateLiveViewCount, 500);
-            // Ensure sidebar is closed on load for mobile
             if (window.innerWidth <= 768) {
                 closeSidebar();
             } else {
-                // On desktop, default to collapsed or open? Let's keep it open by default on desktop.
                 document.body.classList.remove('sidebar-collapsed');
             }
         });
@@ -6381,10 +6372,14 @@
         }
 
         // ======================= CLOSE THEME MENU ======
+        // Only close when clicking truly outside the menu AND not on the sidebar Theme button
         document.addEventListener('click', function(e) {
             const themeMenu = document.getElementById('themeMenu');
-            if (themeMenu.style.display === 'block' && !e.target.closest('#themeMenu')) { themeMenu.style.display =
-                    'none'; }
+            if (themeMenu.style.display !== 'block') return;
+            if (e.target === sidebarThemeBtn) return;
+            if (e.target.closest('#themeMenu')) return;
+            if (e.target.closest('#sidebar')) return;
+            themeMenu.style.display = 'none';
         });
 
         // ======================= UI SOUNDS ======
@@ -6458,16 +6453,8 @@
             }
         }
 
-        console.log('🚀 TechPro B Digital Yearbook — Default fallback image set to images/pfp.jpg for all missing photos.');
-        console.log('🖼️ Students, teachers, and AI avatars now use pfp.jpg if their image is missing.');
-        console.log('💬 Added new AI Chat section with link to ai-chat.html');
-        console.log('🧭 Sidebar navigation added for cleaner layout.');
-        console.log('👁️ Live view counter tracks unique visitors.');
-        console.log('🎨 Removed Halloween & Christmas themes.');
-        console.log('🖼️ Poll now displays AI logos from images/ folder.');
-        console.log('🔗 Added About, Hall of Fame, and AI Chat App links to sidebar.');
-        console.log('🎵 Jukebox and Theme buttons added to UTILITIES section.');
-        console.log('✕ Sidebar close button added for better UX.');
+        console.log('✅ Sidebar Theme & Jukebox buttons fixed — now open reliably.');
+        console.log('🚀 TechPro B Digital Yearbook loaded.');
     </script>
 </body>
 </html>
