@@ -388,9 +388,9 @@
             animation-delay: calc(5.1s * var(--intro-speed));
         }
         @keyframes cta-in {
-            0%   { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
-            60%  { opacity: 1; transform: translate(-50%, 0) scale(1.08); }
-            100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            0%   { opacity: 0; transform: translate(-50%, 0) scale(0.5); pointer-events: none; }
+            60%  { opacity: 1; transform: translate(-50%, 0) scale(1.08); pointer-events: none; }
+            100% { opacity: 1; transform: translate(-50%, 0) scale(1); pointer-events: auto; }
         }
         .intro__cta::after {
             content: "";
@@ -3298,6 +3298,10 @@
                 window.addEventListener('resize', positionCta);
                 setTimeout(positionCta, 200);
                 setTimeout(positionCta, 800);
+                // Enable button clicks after the entrance animation finishes
+                setTimeout(() => {
+                    if (ctaButton) ctaButton.style.pointerEvents = 'auto';
+                }, Math.round((5.1 + 0.9) * SPEED * 1000) + 100);
                 // NO auto-exit — user must click to reveal (for audio autoplay to work)
             }
         })();
@@ -3311,27 +3315,58 @@
             const dotsContainer = document.getElementById('slideshowDots');
             if (!dotsContainer) return;
             dotsContainer.innerHTML = '';
-            for (let i = 0; i < totalSlides; i++) {
-                const dot = document.createElement('span');
-                dot.className = 'dot' + (i === 0 ? ' active' : '');
-                dot.dataset.index = i;
-                dotsContainer.appendChild(dot);
-            }
-            for (let i = 0; i < totalSlides; i++) {
-                const el = document.getElementById('slide' + i);
-                if (el) { slideElements.push(el); }
-                else {
-                    const newEl = document.createElement('div');
-                    newEl.className = 'header-slide-overlay';
-                    newEl.id = 'slide' + i;
-                    newEl.style.backgroundImage = 'url(\'' + headerSlides[i] + '\')';
-                    document.getElementById('mainHeader').appendChild(newEl);
-                    slideElements.push(newEl);
+            const validSlides = [];
+            let loadedCount = 0;
+
+            headerSlides.forEach((src, i) => {
+                const img = new Image();
+                img.onload = () => {
+                    validSlides.push({ src, index: i });
+                    loadedCount++;
+                    checkReady();
+                };
+                img.onerror = () => {
+                    console.warn('Failed to load slide:', src);
+                    loadedCount++;
+                    checkReady();
+                };
+                img.src = src;
+            });
+
+            function checkReady() {
+                if (loadedCount < headerSlides.length) return;
+                // Use only successfully loaded images
+                const slidesToUse = validSlides.length > 0 ? validSlides : headerSlides.map((src, i) => ({ src, index: i }));
+                const total = slidesToUse.length;
+
+                for (let i = 0; i < total; i++) {
+                    const dot = document.createElement('span');
+                    dot.className = 'dot' + (i === 0 ? ' active' : '');
+                    dot.dataset.index = i;
+                    dotsContainer.appendChild(dot);
+                }
+
+                slidesToUse.forEach((item, idx) => {
+                    let el = document.getElementById('slide' + item.index);
+                    if (!el) {
+                        el = document.createElement('div');
+                        el.className = 'header-slide-overlay';
+                        el.id = 'slide' + item.index;
+                        document.getElementById('mainHeader').appendChild(el);
+                    }
+                    el.style.backgroundImage = `url('${item.src}')`;
+                    el.style.backgroundSize = 'cover';
+                    el.style.backgroundPosition = 'center';
+                    slideElements.push(el);
+                });
+
+                if (slideElements.length > 0) {
+                    slideElements.forEach((el, idx) => { el.classList.toggle('show', idx === 0); });
+                    if (slideTimer) clearInterval(slideTimer);
+                    // Faster refresh (1.8s) so it feels instant
+                    slideTimer = setInterval(nextSlide, 1800);
                 }
             }
-            if (slideElements.length > 0) slideElements.forEach((el, idx) => { el.classList.toggle('show', idx === 0); });
-            if (slideTimer) clearInterval(slideTimer);
-            slideTimer = setInterval(nextSlide, 2500);
         }
         function nextSlide() {
             if (slideElements.length === 0) return;
