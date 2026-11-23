@@ -3790,6 +3790,7 @@
             <li class="nav-category">📖 YEARBOOK</li>
             <li><a href="#" class="active" data-target="mainHeader"><span class="nav-icon">🏠</span><span class="nav-label">Yearbook</span></a></li>
             <li><a href="#students" data-target="students"><span class="nav-icon">🎓</span><span class="nav-label">Students</span></a></li>
+            <li><a href="#announcements" data-target="announcements"><span class="nav-icon">📢</span><span class="nav-label">Announcements</span></a></li>
             <li><a href="#teachers" data-target="teachers"><span class="nav-icon">👩‍🏫</span><span class="nav-label">Teachers</span></a></li>
             <li><a href="#schedule" data-target="schedule"><span class="nav-icon">📅</span><span class="nav-label">Schedule</span></a></li>
             <li><a href="#gallery" data-target="gallery"><span class="nav-icon">📸</span><span class="nav-label">Gallery</span></a></li>
@@ -3798,8 +3799,6 @@
 
             <!-- INTERACTIVE -->
             <li class="nav-category">🎮 INTERACTIVE</li>
-            <li><a href="#aigames" data-target="aigames"><span class="nav-icon">🕹️</span><span class="nav-label">AI Games</span></a></li>
-            <li><a href="#aipoll" data-target="aipoll"><span class="nav-icon">🎮</span><span class="nav-label">Poll</span></a></li>
             <li><a href="#aichat" data-target="aichat"><span class="nav-icon">💬</span><span class="nav-label">AI Chat</span></a></li>
 
             <!-- UTILITIES -->
@@ -3884,7 +3883,6 @@
 
     <!-- ===== HIDDEN AUDIO ELEMENTS ===== -->
     <audio id="jbAudioPlayer" preload="none"></audio>
-    <audio id="startupSound" preload="none"><source src="MP3 Audios/startup.mp3" type="audio/mpeg"></audio>
     <audio id="track1" preload="none"><source src="MP3 Audios/track1.mp3" type="audio/mpeg"></audio>
     <audio id="track2" preload="none"><source src="MP3 Audios/track2.mp3" type="audio/mpeg"></audio>
     <audio id="track3" preload="none"><source src="MP3 Audios/track3.mp3" type="audio/mpeg"></audio>
@@ -4068,47 +4066,23 @@
 
         <section id="students"><h2>🎓 Student Profiles</h2><p style="text-align:center; opacity:0.6; margin-bottom:12px;" class="flip-hint">👆 Tap a card to flip it and see more info!</p><div class="retro-grid" id="studentGrid"></div></section>
 
-        <section id="aipoll">
-            <h2>🎮 Vote for Your Favorite AI Game!</h2>
-            <div class="poll-container" id="pollContainer">
-                <div class="poll-title">🤖 Which AI game is the best?</div>
-                <div id="pollOptions"></div>
-                <button class="poll-submit" id="pollSubmitBtn" onclick="submitPoll()">🗳️ Submit Your Vote</button>
-                <div class="poll-status" id="pollStatus"></div>
-                <div class="poll-results" id="pollResults"></div>
-                <div class="poll-total-votes" id="pollTotalVotes"></div>
-                <button class="poll-reset" onclick="resetPoll()">🔄 Reset All Votes</button>
-            </div>
-        </section>
-
-        <section id="aigames">
-            <h2>🎮 AI Games</h2>
-            <p style="text-align:center; opacity:0.6; margin-bottom:16px;">Explore these fun and mind-bending AI-powered games!</p>
-            <div class="retro-grid">
-                <div class="retro-card">
-                    <h3>School Adventure</h3>
-                    <p>(CHATGPT)</p>
-                    <a href="AI Games/chatgpt.html" class="ai-game-link">Play Now</a>
+        <section id="announcements">
+            <h2>📢 Announcements</h2>
+            <div class="retro-grid" style="max-width: 900px; margin: 0 auto;">
+                <div class="retro-card" style="text-align: left;">
+                    <h3>Welcome to TechPro B!</h3>
+                    <p style="margin: 8px 0; opacity: 0.9;">This is the official digital yearbook for School Year 2025–2027. Explore memories, profiles, and more.</p>
+                    <p style="font-size: 0.75rem; opacity: 0.6;">Posted: November 2026</p>
                 </div>
-                <div class="retro-card">
-                    <h3>RPG</h3>
-                    <p>(CLAUDE)</p>
-                    <a href="AI Games/claude.html" class="ai-game-link">Play Now</a>
+                <div class="retro-card" style="text-align: left;">
+                    <h3>Important Reminders</h3>
+                    <p style="margin: 8px 0; opacity: 0.9;">• Check the schedule regularly — it may change.<br>• Update your student profile if anything is missing.<br>• Have fun exploring the yearbook!</p>
+                    <p style="font-size: 0.75rem; opacity: 0.6;">Stay tuned for more updates.</p>
                 </div>
-                <div class="retro-card">
-                    <h3>Neon Drift</h3>
-                    <p>(DEEPSEEK)</p>
-                    <a href="AI Games/deepseek.html" class="ai-game-link">Play Now</a>
-                </div>
-                <div class="retro-card">
-                    <h3>YearBook Archive(Lost Memories)</h3>
-                    <p>(GEMINI)</p>
-                    <a href="AI Games/gemini.htm" class="ai-game-link">Play Now</a>
-                </div>
-                <div class="retro-card">
-                    <h3>The Path Of Wisdom</h3>
-                    <p>(GROK)</p>
-                    <a href="AI Games/grok.html" class="ai-game-link">Play Now</a>
+                <div class="retro-card" style="text-align: left; border-color: #ffd700;">
+                    <h3>✨ New Feature</h3>
+                    <p style="margin: 8px 0; opacity: 0.9;">Announcements section is now live! We’ll use this space for class news, events, and important notices.</p>
+                    <p style="font-size: 0.75rem; opacity: 0.6;">Latest</p>
                 </div>
             </div>
         </section>
@@ -4935,7 +4909,8 @@
         }
 
         // ======================= AUDIO GLOBALS =======================
-        const startupSound = document.getElementById('startupSound');
+        // Startup sound removed
+        const startupSound = null;
         const track1 = document.getElementById('track1');
         const track2 = document.getElementById('track2');
         const track3 = document.getElementById('track3');
@@ -5249,8 +5224,10 @@
         }
 
         function stopAllMusic() {
-            [startupSound, track1, track2, track3, track4, themeMusic, pageAudio].forEach(audio => { audio.pause();
-                audio.currentTime = 0; });
+            [startupSound, track1, track2, track3, track4, themeMusic, pageAudio].filter(Boolean).forEach(audio => { 
+                audio.pause();
+                audio.currentTime = 0; 
+            });
             jbAudio.pause();
             jbIsPlaying = false;
             jbUpdatePlayIcon();
@@ -5272,7 +5249,6 @@
                 else if (currentAudio === track3) name = 'Track 3';
                 else if (currentAudio === track4) name = 'Track 4';
                 else if (currentAudio === themeMusic) name = 'Theme Music';
-                else if (currentAudio === startupSound) name = 'Startup';
                 else if (currentAudio === pageAudio) name = 'Page Music';
                 globalNowPlaying.textContent = name.length > 12 ? name.substring(0, 10) + '…' : name;
             } else {
@@ -5521,12 +5497,7 @@
             if (introFinished) return;
             introFinished = true;
             playWindowOpenSound();
-            if (startupSound && startupSound.src && startupSound.src !== '' && startupSound.src !== window.location.href) {
-                startupSound.volume = parseFloat(globalVolumeSlider.value);
-                startupSound.play().catch(() => {});
-                setCurrentAudio(startupSound, 'Startup');
-            }
-            setTimeout(() => { if (currentAudio === startupSound) playThemeMusic(); }, 3000);
+            // Startup sound removed
 
             document.getElementById('mainContent').style.display = 'block';
             animateValue('studentCount', 24);
@@ -5544,8 +5515,6 @@
             setTimeout(() => { if (currentAudio) { audioControls.classList.remove('hidden');
                     updateGlobalControls(); } }, 500);
             setTimeout(() => { showLegacyGreeting(); }, 1500);
-            loadPollData();
-            renderPoll();
             renderUpdateLog();
             startHeaderSlideshow();
             const savedTheme = localStorage.getItem('theme') || 'blue';
